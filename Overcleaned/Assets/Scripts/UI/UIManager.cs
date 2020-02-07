@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class UIManager : ServiceOfType
 {
 	private Dictionary<string, UIWindow> allwindows = new Dictionary<string, UIWindow>();
+
+	private void Start()
+	{
+		HideAllWindows();
+	}
 
 	public void AddWindowToList(UIWindow window)
 	{

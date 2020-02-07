@@ -22,6 +22,13 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 	{
 		ConnectWithPhoton();
 	}
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.F))
+		{
+			PhotonNetwork.CreateRoom("name", new RoomOptions { MaxPlayers = 2 }, new TypedLobby("Lobby 1", LobbyType.Default));
+		}
+	}
 
 	private void ConnectWithPhoton()
 	{
@@ -41,19 +48,29 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 		if (logMode)
 			Debug.Log("Connected to Master");
 
-		PhotonNetwork.JoinLobby(new TypedLobby("Standard Lobby", LobbyType.Default));
+		PhotonNetwork.JoinLobby(new TypedLobby("Lobby 1", LobbyType.Default));
 	}
 
 	public override void OnJoinedLobby()
 	{
 		if (logMode)
 			Debug.Log("Connected to Lobby");
+
+		UIManager uiManager = ServiceLocator.GetServiceOfType<UIManager>();
+		uiManager.ShowWindow("Server Browser");
 	}
 
 	public override void OnRoomListUpdate(List<RoomInfo> roomList)
 	{
+		print(roomList.Count);
 		onlineRooms = roomList;
 		ShowRoomsOnUI();
+	}
+
+	public override void OnJoinedRoom()
+	{
+		if (logMode)
+			Debug.Log("Joined a Room");
 	}
 
 	#endregion
