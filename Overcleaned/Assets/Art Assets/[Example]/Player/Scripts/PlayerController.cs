@@ -1,86 +1,98 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
-// This script moves the character controller forward
-// and sideways based on the arrow keys.
-// It also jumps when pressing space.
-// Make sure to attach a character controller to the same game object.
-// It is recommended that you make only one call to Move or SimpleMove per frame.
+using System.Threading.Tasks;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
     #region player movement variables
-    CharacterController characterController;
     private Vector3 moveDirection = Vector3.zero;
     public float speed = 6.0f;
     public float jumpSpeed = 8.0f;
     public float gravity = 20.0f;
-    #endregion 
-
-    internal Animator animator;
-    public enum AnimationState { Idle = 0, Stunned = 1, Walking = 2, TwoHandPickup = 3 }
-    AnimationState myState;
-
-    #region Horizontal and Vertical axes
-    private float horizontalAxis;
-    private float verticalAxis;
+    public float maxTurnSpeed = 720.0f;
     #endregion
 
-    void Start()
+    #region Input Detection
+    private static bool InputFound => Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D);
+    private static Vector2 InputAxes => new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+    #endregion
+
+    private Animator i_Animator = null;
+    private Animator MyAnimator
     {
-        characterController = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
+        get => i_Animator ?? (i_Animator = GetComponent<Animator>());
+    }
+    private CharacterController i_CharacterController = null;
+    private CharacterController MyCharacterController
+    {
+        get => i_CharacterController ?? (i_CharacterController = GetComponent<CharacterController>());
     }
 
-    void Update()
+
+    #region animationStates
+    public enum AnimationState
     {
-        GetAxes();
-        Movement();
+        Idle = 0,
+        Stunned = 1,
+        Walking = 2,
+        TwoHandPickup = 3
     }
+    AnimationState myState;
+    #endregion
 
-    /// fetches input axes and stores them in varaibles for easy access
-    private void GetAxes()
+
+    //Moves and rotates the player.
+    void FixedUpdate() => MovePlayer();
+    private void MovePlayer()
     {
-        horizontalAxis = Input.GetAxis("Horizontal");
-        verticalAxis = Input.GetAxis("Vertical");
-    }
+        const float MOVELERPTIME = 0.1f;
 
-    /// handles playermovement and rotation
-    private void Movement()
-    {       
-        if (myState == AnimationState.Idle || myState == AnimationState.Walking || myState == AnimationState.TwoHandPickup)
-        {
-            moveDirection = new Vector3(horizontalAxis, 0.0f, verticalAxis);
-            moveDirection *= speed;
-            transform.rotation = Quaternion.LookRotation(moveDirection);
-        }
-        characterController.Move(moveDirection * Time.deltaTime);
-
+        //Prevents player from moving when Animation state is set to stunned
         if (myState == AnimationState.Stunned)
-            moveDirection = Vector3.Lerp(moveDirection, Vector3.zero, .1f);
+        {
+            moveDirection = Vector3.Lerp(moveDirection, Vector3.zero, MOVELERPTIME);
+            return;
+        }
+
+        //Handles movement and rotation for player
+        if (InputFound)
+        {
+            Quaternion newRot = Quaternion.LookRotation(moveDirection);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, newRot, maxTurnSpeed * Time.deltaTime);
+            moveDirection = new Vector3(InputAxes.x, 0.0f, InputAxes.y) * speed;
+            MyCharacterController.Move(moveDirection * Time.deltaTime);
+        }
+
+        //Sets Animation states
+        if (InputAxes == Vector2.zero)
+            SetPlayerAnimationState(AnimationState.Walking);
+        else
+            SetPlayerAnimationState(AnimationState.Idle);
     }
 
+    //Manages all player animationstates. 
     public void SetPlayerAnimationState(AnimationState state)
     {
-        animator.SetInteger("State", (int)state);
+        const string ANIM_STATE_STRING = "State";
+        MyAnimator.SetInteger(ANIM_STATE_STRING, (int)state);
         myState = state;
     }
 
+    //Stuns the player for X time and prevents movement.
     public void StunPlayer(float duration)
     {
         //EffectsManager.instance.PlayParticle("ParticleName", Vector.zero, Quaternion.identity, [meer mogelijke parameters])
         SetPlayerAnimationState(AnimationState.Stunned);
-        StartCoroutine("ResetToIdle", duration);
+        ResetToIdle(duration);
 
     }
 
-    private IEnumerator ResetToIdle(float duration)
+    //Resets player animationstate to idle after stun event has been called for example.
+    private async void ResetToIdle(float duration)
     {
-        yield return new WaitForSeconds(duration);
+        await Task.Delay(TimeSpan.FromSeconds(duration));
         SetPlayerAnimationState(AnimationState.Idle);
     }
-
-
-    //TODO: New rotation method which interpolates rotation overtime.
 }
