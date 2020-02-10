@@ -19,15 +19,15 @@ public class PlayerController : MonoBehaviour
     private static Vector2 InputAxes => new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     #endregion
 
-    private Animator i_Animator = null;
+    private Animator m_Animator = null;
     private Animator MyAnimator
     {
-        get => i_Animator ?? (i_Animator = GetComponent<Animator>());
+        get => m_Animator ?? (m_Animator = GetComponent<Animator>());
     }
-    private CharacterController i_CharacterController = null;
+    private CharacterController m_CharacterController = null;
     private CharacterController MyCharacterController
     {
-        get => i_CharacterController ?? (i_CharacterController = GetComponent<CharacterController>());
+        get => m_CharacterController ?? (m_CharacterController = GetComponent<CharacterController>());
     }
 
 
