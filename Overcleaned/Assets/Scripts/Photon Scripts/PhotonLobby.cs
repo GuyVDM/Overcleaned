@@ -4,13 +4,10 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class PhotonLobby : MonoBehaviourPunCallbacks
+public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 {
-
 	[Header("Photon Settings")]
 	public string gameVersion;
-
-	private List<RoomInfo> onlineRooms = new List<RoomInfo>();
 
 	[Header("UI")]
 	public UI_ServerBrowser serverBrowser;
@@ -18,16 +15,36 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 	[Header("Debugging")]
 	public bool logMode;
 
+	#region Initalize Service
+	private void Awake() => OnInitialise();
+	private void OnDestroy()
+	{
+		NetworkManager.onRoomListChange -= ShowRoomsOnUI;
+		OnDeinitialise();
+	}
+	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
+	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
+	#endregion
+
 	private void Start()
 	{
 		ConnectWithPhoton();
+		NetworkManager.onRoomListChange += ShowRoomsOnUI;
 	}
-	private void Update()
+
+	public void HostRoom(string roomName)
 	{
-		if (Input.GetKeyDown(KeyCode.F))
-		{
-			PhotonNetwork.CreateRoom("name", new RoomOptions { MaxPlayers = 2 }, new TypedLobby("Lobby 1", LobbyType.Default));
-		}
+		PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 2 }, new TypedLobby("Lobby 1", LobbyType.Default));
+	}
+
+	public void JoinRoom(string roomName)
+	{
+		PhotonNetwork.JoinRoom(roomName);
+	}
+
+	public void LeaveRoom()
+	{
+		PhotonNetwork.LeaveRoom();
 	}
 
 	private void ConnectWithPhoton()
@@ -36,9 +53,9 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 		PhotonNetwork.GameVersion = gameVersion;
 	}
 
-	private void ShowRoomsOnUI()
+	private void ShowRoomsOnUI(List<RoomInfo> allRooms)
 	{
-		serverBrowser.UpdateRoomInfoButtons(onlineRooms);
+		serverBrowser.UpdateRoomInfoButtons(allRooms);
 	}
 
 	#region Callbacks
@@ -55,22 +72,21 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 	{
 		if (logMode)
 			Debug.Log("Connected to Lobby");
-
-		UIManager uiManager = ServiceLocator.GetServiceOfType<UIManager>();
-		uiManager.ShowWindow("Server Browser");
-	}
-
-	public override void OnRoomListUpdate(List<RoomInfo> roomList)
-	{
-		print(roomList.Count);
-		onlineRooms = roomList;
-		ShowRoomsOnUI();
 	}
 
 	public override void OnJoinedRoom()
 	{
 		if (logMode)
 			Debug.Log("Joined a Room");
+
+		UIManager uiManager = ServiceLocator.GetServiceOfType<UIManager>();
+		uiManager.ShowWindow("Room Information");
+	}
+
+	public override void OnJoinRoomFailed(short returnCode, string message)
+	{
+		if (logMode)
+			Debug.LogError("Room Join Failed: " + message);
 	}
 
 	#endregion

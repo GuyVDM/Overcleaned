@@ -6,18 +6,18 @@ public class UIWindow : MonoBehaviour
 {
 	public string windowName;
 
-	private void Start()
+	public virtual void Start()
 	{
 		ServiceLocator.GetServiceOfType<UIManager>().AddWindowToList(this);
 	}
 
 	public virtual void ShowThisWindow()
 	{
-		gameObject.SetActive(true);
+		transform.GetChild(0).gameObject.SetActive(true);
 	}
 
 	public virtual void HideThisWindow()
 	{
-		gameObject.SetActive(false);
+		transform.GetChild(0).gameObject.SetActive(false);
 	}
 }

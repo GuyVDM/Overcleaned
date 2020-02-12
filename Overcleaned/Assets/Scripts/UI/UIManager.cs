@@ -1,14 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class UIManager : ServiceOfType
+public class UIManager : MonoBehaviour, IServiceOfType
 {
+	public string openWindowOnStart;
+	public TextMeshProUGUI messageObject;
+
 	private Dictionary<string, UIWindow> allwindows = new Dictionary<string, UIWindow>();
+	private string activeWindowName;
+
+	#region Initalize Service
+	private void Awake() => OnInitialise();
+	private void OnDestroy() => OnDeinitialise();
+	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
+	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
+	#endregion
 
 	private void Start()
 	{
 		HideAllWindows();
+
+		if(openWindowOnStart != null && openWindowOnStart != "")
+			ShowWindow(openWindowOnStart);
 	}
 
 	public void AddWindowToList(UIWindow window)
@@ -17,9 +32,21 @@ public class UIManager : ServiceOfType
 			allwindows.Add(window.windowName, window);
 	}
 
+	#region Windows
+
+	public UIWindow ShowWindowReturn(string windowName)
+	{
+		if (activeWindowName != null && activeWindowName != "")
+			HideWindow(activeWindowName);
+
+		allwindows[windowName].ShowThisWindow();
+		activeWindowName = windowName;
+		return allwindows[windowName];
+	}
+
 	public void ShowWindow(string windowName)
 	{
-		allwindows[windowName].ShowThisWindow();
+		ShowWindowReturn(windowName);
 	}
 
 	public void HideWindow(string windowName)
@@ -34,4 +61,30 @@ public class UIManager : ServiceOfType
 			window.Value.HideThisWindow();
 		}
 	}
+
+	#endregion
+
+	#region Messages
+
+	public void ShowMessage(string message, float duration = 3)
+	{
+		ShowMessage(message, Color.red, duration);
+	}
+
+	public void ShowMessage(string message, Color color, float duration = 3)
+	{
+		StartCoroutine(MessageToScreen(message, color, duration));
+	}
+
+	private IEnumerator MessageToScreen(string message, Color color, float duration)
+	{
+		messageObject.text = message;
+		messageObject.color = color;
+
+		messageObject.GetComponent<Animator>().SetBool("sendMessage", true);
+		yield return new WaitForSeconds(duration);
+		messageObject.GetComponent<Animator>().SetBool("sendMessage", false);
+	}
+
+	#endregion
 }

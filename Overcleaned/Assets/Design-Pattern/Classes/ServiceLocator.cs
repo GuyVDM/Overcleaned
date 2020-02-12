@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime;
 
 /// <summary>
 /// Container class with the use to inject references in subclasses.
@@ -9,24 +10,19 @@ public static class ServiceLocator
 {
 
     //----Dictionary containing managers based on Types----//
-    private static Dictionary<Type, ServiceOfType> services = new Dictionary<Type, ServiceOfType>();
+    private static Dictionary<Type, IServiceOfType> services = new Dictionary<Type, IServiceOfType>();
 
-
-    //----If true, will print debug logs related to the ServiceLocator----/
-    public static bool debuggingMode = true;
-
-
-    //---- Callbacks you can subscribe to ----////
+    //---- Callbacks you can subscribe to ----//
     public static event Action OnAddedService;
     public static event Action OnRemovedService;
-    //---------------------------------------////
+    //---------------------------------------//
 
     
-    public static bool TryAddServiceOfType(ServiceOfType service)
+    public static bool TryAddServiceOfType(IServiceOfType service)
     {
         if (!services.ContainsKey(service.GetType())) 
         {
-            services.Add(service.GetType(), service);
+            services.Add(service.GetType(), service); 
             OnAddedService?.Invoke();
             return true;
         }
@@ -34,29 +30,16 @@ public static class ServiceLocator
         return false;
     }
 
-    public static bool TryAddServiceOfType<T>(T service) where T : ServiceOfType 
-    {
-        if(!services.ContainsKey(service.GetType())) 
-        {
-            services.Add(service.GetType(), service);
-            OnAddedService?.Invoke();
-            return true;
-        }
-
-        Debug.LogErrorFormat($"A service of type { typeof(T) }, has already been added to the ServiceLocator.");
-        return false;
-    }
-
-    public static T GetServiceOfType<T>() where T : ServiceOfType 
+    public static T GetServiceOfType<T>() where T : IServiceOfType 
     {
         if(services.ContainsKey(typeof(T))) 
         {
-            services.TryGetValue(typeof(T), out ServiceOfType service);
+            services.TryGetValue(typeof(T), out IServiceOfType service);
             return (T)service;
         }
 
         Debug.LogErrorFormat($"A service of type { typeof(T) }, has not been added to the ServiceLocator.");
-        return null;
+        return default;
     }
 
     public static bool TryRemoveServiceOfType<T>(T service) 

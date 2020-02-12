@@ -1,8 +1,8 @@
 ﻿public interface IServiceOfType
 {
 
-    void InitialiseService();
+    void OnInitialise();
 
-    void RemoveService();
+    void OnDeinitialise();
 
 }
