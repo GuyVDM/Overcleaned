@@ -16,8 +16,10 @@ public class UI_ServerBrowser : UIWindow
 	{
 		for (int i = 0; i < allInfoButtons.Count; i++)
 		{
-			DeleteInfoButton(i);
+			Destroy(allInfoButtons[i].gameObject);
 		}
+
+		allInfoButtons.Clear();
 
 		for (int i = 0; i < infos.Count; i++)
 		{
@@ -48,15 +50,8 @@ public class UI_ServerBrowser : UIWindow
 		Transform infoButton = Instantiate(serverTextPrefab, Vector3.zero, Quaternion.identity).transform;
 		infoButton.SetParent(serverTextParent, false);
 		allInfoButtons.Add(infoButton);
-		serverTextParent.localScale = new Vector3(1, allInfoButtons.Count, 1);
+		RectTransform rTransform = serverTextParent.GetComponent<RectTransform>();
+		rTransform.sizeDelta = new Vector2(rTransform.sizeDelta.x, 70 * allInfoButtons.Count);
 		return infoButton;
 	}
-
-	private void DeleteInfoButton(int buttonIndex)
-	{
-		print("Deleteting Button");
-		Destroy(allInfoButtons[buttonIndex].gameObject);
-		allInfoButtons.RemoveAt(buttonIndex);
-	}
-
 }

@@ -55,7 +55,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		if (logMode)
 			Debug.Log("Room List Update");
 
-		onlineRooms = roomList;
+		for (int i = 0; i < roomList.Count; i++)
+		{
+			if (roomList[i].MaxPlayers > 0 && roomList[i].PlayerCount > 0)
+			{
+				if (onlineRooms.Contains(roomList[i]))
+					onlineRooms.Remove(roomList[i]);
+
+				onlineRooms.Add(roomList[i]);
+			}
+			else
+			{
+				if (onlineRooms.Contains(roomList[i]))
+					onlineRooms.Remove(roomList[i]);
+			}
+		}
+
+		print(onlineRooms.Count);
 		onRoomListChange(onlineRooms);
 	}
 

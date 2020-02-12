@@ -36,7 +36,7 @@ public class UI_RoomInformationWindow : UIWindow
 	{
 		if (CanStartGame())
 		{
-			//Start Game.
+			photonView.RPC("StartGameRPC", RpcTarget.All);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class UI_RoomInformationWindow : UIWindow
 
 		for (int i = 0; i < teamCount.Length; i++)
 		{
-			if (teamCount[i] != teamCount[0])
+			if (teamCount[i] != teamCount.Length / 2)
 				return false;
 		}
 
@@ -94,7 +94,7 @@ public class UI_RoomInformationWindow : UIWindow
 	{
 		foreach (PlayerInRoomElement element in allPlayerElements)
 		{
-			Destroy(element);
+			Destroy(element.gameObject);
 		}
 
 		allPlayerElements.Clear();
@@ -112,22 +112,32 @@ public class UI_RoomInformationWindow : UIWindow
 		PlayerInRoomElement pire = newObject.GetComponent<PlayerInRoomElement>();
 		pire.Init(player.IsLocal);
 		pire.ChangePlayerName(player.NickName);
+		pire.AddListener(delegate { UpdatePlayerElement(player.ActorNumber - 1, pire.GetDropdownIndex()); });
 		allPlayerElements.Add(pire);
 
 		return pire;
 	}
 
-	private void UpdatePlayerElement(int playerElementIndex, Dropdown dd)
+	private void UpdatePlayerElement(int playerElementIndex, int dropdownIndex)
 	{
-		photonView.RPC("UpdatePlayerElementRPC", RpcTarget.OthersBuffered, playerElementIndex, dd.options[dd.value].text);
+		print(dropdownIndex);
+		photonView.RPC("UpdatePlayerElementRPC", RpcTarget.OthersBuffered, playerElementIndex, dropdownIndex);
 	}
 
 	#region RPCs
 
 	[PunRPC]
-	private void UpdatePlayerElementRPC(int playerElementIndex, string newValue)
+	private void UpdatePlayerElementRPC(int playerElementIndex, int dropdownIndex)
 	{
-		allPlayerElements[playerElementIndex].transform.Find("Team Index").GetComponent<Text>().text = newValue;
+		allPlayerElements[playerElementIndex].ChangeTeam(dropdownIndex);
+	}
+
+	[PunRPC]
+	private void StartGameRPC()
+	{
+		SceneHandler sceneManager = ServiceLocator.GetServiceOfType<SceneHandler>();
+		sceneManager.LoadScene(1);
+
 	}
 
 	#endregion

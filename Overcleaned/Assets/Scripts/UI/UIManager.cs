@@ -78,6 +78,12 @@ public class UIManager : MonoBehaviour, IServiceOfType
 
 	private IEnumerator MessageToScreen(string message, Color color, float duration)
 	{
+		if (messageObject == null)
+		{
+			Debug.LogWarning("You tried to send a message on screen, but the message object is null");
+			yield return null;
+		}
+
 		messageObject.text = message;
 		messageObject.color = color;
 

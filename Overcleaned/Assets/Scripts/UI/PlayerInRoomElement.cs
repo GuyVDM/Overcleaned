@@ -26,13 +26,21 @@ public class PlayerInRoomElement : MonoBehaviour
 
 	public void ChangeTeam(int _dropdownIndex)
 	{
-		teamText.text = teamDropdown.options[dropdownIndex].text;
 		dropdownIndex = _dropdownIndex;
+		teamText.text = teamDropdown.options[_dropdownIndex].text;
 	}
 
 	public int GetDropdownIndex()
 	{
-		return dropdownIndex;
+		if (isLocal)
+			return teamDropdown.value;
+		else
+			return dropdownIndex;
+	}
+
+	public void AddListener(UnityEngine.Events.UnityAction<int> call)
+	{
+		teamDropdown.onValueChanged.AddListener(call);
 	}
 
 	public int GetDropdownLength()
