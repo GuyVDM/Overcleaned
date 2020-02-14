@@ -36,7 +36,7 @@ public class UIManager : MonoBehaviour, IServiceOfType
 
 	public UIWindow ShowWindowReturn(string windowName)
 	{
-		if (activeWindowName != null && activeWindowName != "")
+		if (string.IsNullOrEmpty(activeWindowName))
 			HideWindow(activeWindowName);
 
 		allwindows[windowName].ShowThisWindow();

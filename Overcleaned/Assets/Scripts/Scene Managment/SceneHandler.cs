@@ -6,12 +6,25 @@ using UnityEngine.SceneManagement;
 
 public class SceneHandler : MonoBehaviour, IServiceOfType
 {
+	[System.Serializable]
+	public struct SceneSetting
+	{
+		public string sceneName;
+		public Vector2 bottomLeftCameraAnchor, upperRightCameraAnchor;
+	}
+
+	[Header("Scene Settings")]
+	public SceneSetting[] sceneSettings;
+	public int currentSceneSetting { get; private set; }
+
+	[Header("Fade Properties")]
 	public float fadeDuration;
 	public Image fadeScreen;
 
 	private Coroutine sceneLoadingRoutine;
 	private Coroutine runningFadeRoutine;
 	private bool isFading;
+
 
 	#region Initalize Service
 	private void Awake() => OnInitialise();
@@ -28,19 +41,10 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 
 	#region Scene Loading
 
-	public void LoadScene(int buildIndex)
-	{
-		if (sceneLoadingRoutine != null)
-		{
-			StopCoroutine(sceneLoadingRoutine);
-		}
-
-		FadeOut();
-		sceneLoadingRoutine = StartCoroutine(SceneLoading(buildIndex));
-	}
-
 	public void LoadScene(string buildName)
 	{
+		currentSceneSetting = GetSceneSettingIndex(buildName);
+
 		if (sceneLoadingRoutine != null)
 		{
 			StopCoroutine(sceneLoadingRoutine);
@@ -50,12 +54,17 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 		sceneLoadingRoutine = StartCoroutine(SceneLoading(buildName));
 	}
 
-	private IEnumerator SceneLoading(int buildIndex)
+	public void LoadScene(int arrayIndex)
 	{
-		yield return new WaitUntil(() => isFading == false);
+		currentSceneSetting = arrayIndex;
 
-		fadeScreen = null;
-		SceneManager.LoadScene(buildIndex);
+		if (sceneLoadingRoutine != null)
+		{
+			StopCoroutine(sceneLoadingRoutine);
+		}
+
+		FadeOut();
+		sceneLoadingRoutine = StartCoroutine(SceneLoading(sceneSettings[arrayIndex].sceneName));
 	}
 
 	private IEnumerator SceneLoading(string buildName)
@@ -64,6 +73,19 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 
 		fadeScreen = null;
 		SceneManager.LoadScene(buildName);
+	}
+
+	private int GetSceneSettingIndex(string sceneName)
+	{
+		for (int i = 0; i < sceneSettings.Length; i++)
+		{
+			if (sceneSettings[i].sceneName == sceneName)
+			{
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 	#endregion
