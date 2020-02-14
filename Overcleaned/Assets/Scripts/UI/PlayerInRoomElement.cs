@@ -7,7 +7,8 @@ public class PlayerInRoomElement : MonoBehaviour
 {
 
 	private Dropdown teamDropdown;
-	private Text playerName, teamText;
+	private Text playerName, teamText, readyText;
+	private Toggle readyToggle;
 	private bool isLocal;
 	private int dropdownIndex;
 
@@ -18,10 +19,16 @@ public class PlayerInRoomElement : MonoBehaviour
 		teamDropdown = transform.Find("Team Dropdown").GetComponent<Dropdown>();
 		teamText = transform.Find("Team Text").GetComponent<Text>();
 		playerName = transform.Find("Player Name").GetComponent<Text>();
+		readyToggle = transform.Find("Ready Toggle").GetComponent<Toggle>();
+		readyText = transform.Find("Ready Text").GetComponent<Text>();
+
 
 		teamDropdown.gameObject.SetActive(isLocal);
+		readyToggle.gameObject.SetActive(isLocal);
 		teamText.gameObject.SetActive(!isLocal);
+		readyText.gameObject.SetActive(!isLocal);
 		teamText.text = teamDropdown.options[0].text;
+		NetworkManager.GetLocalPlayer().team = 1;
 	}
 
 	public void ChangeTeam(int _dropdownIndex)
@@ -38,9 +45,14 @@ public class PlayerInRoomElement : MonoBehaviour
 			return dropdownIndex;
 	}
 
-	public void AddListener(UnityEngine.Events.UnityAction<int> call)
+	public void AddListenerToDropdown(UnityEngine.Events.UnityAction<int> call)
 	{
 		teamDropdown.onValueChanged.AddListener(call);
+	}
+
+	public void AddListenerToToggle(UnityEngine.Events.UnityAction<bool> call)
+	{
+		readyToggle.onValueChanged.AddListener(call);
 	}
 
 	public int GetDropdownLength()
@@ -51,6 +63,30 @@ public class PlayerInRoomElement : MonoBehaviour
 	public void ChangePlayerName(string newName)
 	{
 		playerName.text = newName;
+	}
+
+	public void SetToggle(bool toggle)
+	{
+		if (toggle)
+			readyText.text = "Ready";
+		else
+			readyText.text = "Not Ready";
+	}
+
+	public bool GetToggleValue()
+	{
+		return readyToggle.isOn;
+	}
+
+	public bool IsReady()
+	{
+		if (isLocal)
+			return readyToggle.isOn;
+		else
+			if (readyText.text == "Ready")
+			return true;
+
+		return false;
 	}
 
 }

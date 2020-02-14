@@ -24,12 +24,16 @@ public class UI_RoomInformationWindow : UIWindow
 	{
 		base.Start();
 		NetworkManager.onPlayerListChange += UpdatePlayerList;
+		NetworkManager.onMasterClientSwitch += MasterClientLeft;
 	}
 
 	public void LeaveServer()
 	{
-		ServiceLocator.GetServiceOfType<PhotonLobby>().LeaveRoom();
-		ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Server Browser");
+		if (PhotonNetwork.CurrentRoom != null)
+		{
+			ServiceLocator.GetServiceOfType<PhotonLobby>().LeaveRoom();
+			ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Server Browser");
+		}
 	}
 
 	public void StartGame()
@@ -43,6 +47,7 @@ public class UI_RoomInformationWindow : UIWindow
 	private void OnDestroy()
 	{
 		NetworkManager.onPlayerListChange -= UpdatePlayerList;
+		NetworkManager.onMasterClientSwitch -= MasterClientLeft;
 	}
 
 	private bool CanStartGame()
@@ -58,6 +63,12 @@ public class UI_RoomInformationWindow : UIWindow
 		if (!TeamsAreCorrect())
 		{
 			uiManager.ShowMessage("All teams need to be equal!");
+			return false;
+		}
+
+		if (!AllPlayersAreReady())
+		{
+			uiManager.ShowMessage("All players need to be ready!");
 			return false;
 		}
 
@@ -90,7 +101,25 @@ public class UI_RoomInformationWindow : UIWindow
 		return true;
 	}
 
-	private void UpdatePlayerList(Player[] playerList)
+	private bool AllPlayersAreReady()
+	{
+		int success = 0;
+		for (int i = 0; i < allPlayerElements.Count; i++)
+		{
+			if (allPlayerElements[i].IsReady())
+			{
+				success++;
+			}
+		}
+
+		if (success == allPlayerElements.Count)
+			return true;
+		else
+			return false;
+			
+	}
+
+	private void UpdatePlayerList(Player[] playerList, Player changedPlayer)
 	{
 		foreach (PlayerInRoomElement element in allPlayerElements)
 		{
@@ -105,6 +134,12 @@ public class UI_RoomInformationWindow : UIWindow
 		}
 	}
 
+	private void MasterClientLeft(Player newMasterClient)
+	{
+		ServiceLocator.GetServiceOfType<UIManager>().ShowMessage("The host has left the server.");
+		LeaveServer();
+	}
+
 	private PlayerInRoomElement CreatePlayerElement(Player player)
 	{
 		GameObject newObject = Instantiate(playerInRoomElementPrefab, Vector3.zero, Quaternion.identity);
@@ -112,7 +147,8 @@ public class UI_RoomInformationWindow : UIWindow
 		PlayerInRoomElement pire = newObject.GetComponent<PlayerInRoomElement>();
 		pire.Init(player.IsLocal);
 		pire.ChangePlayerName(player.NickName);
-		pire.AddListener(delegate { UpdatePlayerElement(player.ActorNumber - 1, pire.GetDropdownIndex()); });
+		pire.AddListenerToDropdown(delegate { UpdatePlayerElement(player.ActorNumber - 1, pire.GetDropdownIndex()); });
+		pire.AddListenerToToggle(delegate { SetReady(player.ActorNumber - 1, pire.GetToggleValue()); });
 		allPlayerElements.Add(pire);
 
 		return pire;
@@ -120,8 +156,13 @@ public class UI_RoomInformationWindow : UIWindow
 
 	private void UpdatePlayerElement(int playerElementIndex, int dropdownIndex)
 	{
-		print(dropdownIndex);
+		NetworkManager.GetLocalPlayer().team = dropdownIndex + 1;
 		photonView.RPC("UpdatePlayerElementRPC", RpcTarget.OthersBuffered, playerElementIndex, dropdownIndex);
+	}
+
+	private void SetReady(int playerElementIndex, bool ready)
+	{
+		photonView.RPC("SetReadyRPC", RpcTarget.OthersBuffered, playerElementIndex, ready);
 	}
 
 	#region RPCs
@@ -138,6 +179,12 @@ public class UI_RoomInformationWindow : UIWindow
 		SceneHandler sceneManager = ServiceLocator.GetServiceOfType<SceneHandler>();
 		sceneManager.LoadScene(1);
 
+	}
+
+	[PunRPC]
+	private void SetReadyRPC(int playerElementIndex, bool ready)
+	{
+		allPlayerElements[playerElementIndex].SetToggle(ready);
 	}
 
 	#endregion

@@ -20,23 +20,26 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	//static events
 	public static event OnRoomListChange onRoomListChange;
 	public static event OnPlayerListChange onPlayerListChange;
+	public static event OnMasterClientSwitch onMasterClientSwitch;
 	public static event OnLocalPlayerLeft onLocalPlayerLeft;
 
 	//delegates for static events
 	public delegate void OnRoomListChange(List<RoomInfo> allRooms);
-	public delegate void OnPlayerListChange(Player[] allPlayers);
+	public delegate void OnPlayerListChange(Player[] allPlayers, Player changedPlayer);
+	public delegate void OnMasterClientSwitch(Player newMasterClient);
 	public delegate void OnLocalPlayerLeft();
 
 	private List<RoomInfo> onlineRooms = new List<RoomInfo>();
+	private static LocalPlayerInformation localPlayerInformation;
 
 	private void Start()
 	{
 		DontDestroyOnLoad(gameObject);
 	}
 
-	public static Player GetLocalPlayer()
+	public static LocalPlayerInformation GetLocalPlayer()
 	{
-		return PhotonNetwork.LocalPlayer;
+		return localPlayerInformation;
 	}
 
 	public void SetLocalPlayerNickname(string nickname)
@@ -75,12 +78,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		onRoomListChange(onlineRooms);
 	}
 
+	public override void OnJoinedLobby()
+	{
+		localPlayerInformation = new LocalPlayerInformation(PhotonNetwork.LocalPlayer);
+	}
+
 	public override void OnPlayerEnteredRoom(Player newPlayer)
 	{
 		if (logMode)
 			Debug.Log("Player List Update");
 
-		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList);
+		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList, newPlayer);
 	}
 
 	public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -88,7 +96,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		if (logMode)
 			Debug.Log("Player List Update");
 
-		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList);
+		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList, otherPlayer);
+	}
+
+	public override void OnMasterClientSwitched(Player newMasterClient)
+	{
+		if (logMode)
+			Debug.Log("Master client switched");
+
+		onMasterClientSwitch?.Invoke(newMasterClient);
 	}
 
 	public override void OnJoinedRoom()
@@ -96,7 +112,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		if (logMode)
 			Debug.Log("Player List Update");
 
-		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList);
+		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList, PhotonNetwork.LocalPlayer);
 	}
 
 	public override void OnLeftRoom()
