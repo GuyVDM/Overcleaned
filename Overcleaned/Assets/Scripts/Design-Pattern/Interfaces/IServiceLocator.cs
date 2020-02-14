@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IServiceLocator
+public interface IServiceOfType
 {
 
-    event Action OnAddedService;
+    void OnInitialise();
 
-    event Action OnRemovedSerice;
+    void OnDeinitialise();
 
 }
