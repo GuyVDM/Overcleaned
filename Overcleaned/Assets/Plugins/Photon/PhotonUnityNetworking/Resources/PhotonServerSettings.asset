@@ -13,16 +13,12 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-<<<<<<< Updated upstream:Overcleaned/Assets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
-    AppIdRealtime: 
-=======
     AppIdRealtime: cdb2d608-89b9-4c16-a877-fb7b2057abcb
->>>>>>> Stashed changes:Overcleaned/Assets/Plugins/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: eu
     Server: 
     Port: 0
     Protocol: 0
@@ -32,5 +28,17 @@ MonoBehaviour:
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
-  RpcList: []
+  RpcList:
+  - DestroySpaceship
+  - Fire
+  - RespawnSpaceship
+  - NewPlayerJoined
+  - ChangeElementText
+  - PlayerJoined
+  - PlayerLeft
+  - OtherPlayerJoined
+  - RPCPlayerLeft
+  - UpdatePlayerElementRPC
+  - StartGameRPC
+  - SetReadyRPC
   DisableAutoOpenWizard: 1

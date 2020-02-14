@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime;
 
 /// <summary>
 /// Container class with the use to inject references in subclasses.
