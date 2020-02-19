@@ -26,7 +26,6 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 	private bool isFading;
 	private bool isLoadingScene;
 
-
 	#region Initalize Service
 	private void Awake() => OnInitialise();
 	private void OnDestroy() => OnDeinitialise();
@@ -40,12 +39,10 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 		Init();
 	}
 
-	private void Update()
+	private void Init()
 	{
-		if (Input.GetKeyDown(KeyCode.N))
-		{
-			LoadScene(2);
-		}
+		SceneManager.sceneLoaded += OnSceneLoaded;
+		FadeIn();
 	}
 
 	#region Scene Loading
@@ -106,9 +103,19 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 		return -1;
 	}
 
+	private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
+	{
+		if (scene.buildIndex == 1)
+			return;
+
+		SceneManager.SetActiveScene(scene);
+		isLoadingScene = false;
+	}
+
 	#endregion
-	
+
 	#region Screen Fading
+
 	public void FadeOut()
 	{
 		if (fadeScreen == null)
@@ -143,21 +150,6 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 		return Instantiate(canvas, Vector3.zero, Quaternion.identity).transform.GetChild(0).GetComponent<Image>();
 	}
 
-	private void Init()
-	{
-		SceneManager.sceneLoaded += OnSceneLoaded;
-		FadeIn();
-	}
-
-	private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
-	{
-		if (scene.buildIndex == 1)
-			return;
-
-		SceneManager.SetActiveScene(scene);
-		isLoadingScene = false;
-	}
-
 	private IEnumerator FadeInRoutine(float duration)
 	{
 		while (fadeScreen.color.a > 0)
@@ -181,5 +173,6 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 		fadeScreen.color = new Color(fadeScreen.color.r, fadeScreen.color.g, fadeScreen.color.b, 1);
 		isFading = false;
 	}
+
 	#endregion
 }
