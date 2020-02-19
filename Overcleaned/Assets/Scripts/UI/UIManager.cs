@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour, IServiceOfType
 	{
 		HideAllWindows();
 
-		if(openWindowOnStart != null && openWindowOnStart != "")
+		if (openWindowOnStart != null && openWindowOnStart != "")
 			ShowWindow(openWindowOnStart);
 	}
 
@@ -36,7 +36,7 @@ public class UIManager : MonoBehaviour, IServiceOfType
 
 	public UIWindow ShowWindowReturn(string windowName)
 	{
-		if (string.IsNullOrEmpty(activeWindowName))
+		if (activeWindowName != null && activeWindowName != "")
 			HideWindow(activeWindowName);
 
 		allwindows[windowName].ShowThisWindow();
