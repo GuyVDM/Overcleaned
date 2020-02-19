@@ -10,7 +10,10 @@ public class ProgressBar : MonoBehaviour
     private const string TOOLTIP_COMPLETIONTEXT = "Success!";
     private const string ANIM_POPUPSTATENAME = "Popup";
     private const float MAX_FILLAMOUNT = 1;
-    
+
+    [SerializeField]
+    private Text action_Name;
+
     [SerializeField]
     private Text progressTooltip;
 
@@ -28,8 +31,6 @@ public class ProgressBar : MonoBehaviour
     #region ### Hidden Variables ###
     private string startingContentTooltip = "";
     #endregion
-
-    private void Awake() => startingContentTooltip = progressTooltip.text;
 
     private void OnEnable()
     {
@@ -71,4 +72,33 @@ public class ProgressBar : MonoBehaviour
             progressTooltip.text = startingContentTooltip + states[index];
         }
     }
+
+    /// <summary>
+    /// This function allows for the owning CleanableObject to display a tooltip.
+    /// </summary>
+    /// <param name="tooltip"></param>
+    public void Set_Tooltip(string tooltip) 
+    {
+        Debug.Log(gameObject.name);
+        progressTooltip.text = tooltip;
+        startingContentTooltip = tooltip;
+    }
+
+    /// <summary>
+    /// This function allows for the owning CleanableObject to display its current progress.
+    /// </summary>
+    /// <param name="progress"></param>
+    public void Set_CurrentProgress(float progress) => fillImage.fillAmount = progress;
+
+    /// <summary>
+    /// This function allows for the tooltip its position to be corrected.
+    /// </summary>
+    /// <param name="pos"></param>
+    public void Set_LocalPositionOfPrefabRootTransform(Transform owner, Vector3 pos) => transform.root.localPosition = owner.position + pos;
+
+    /// <summary>
+    /// This function allows to describe the player its action which is displayed a bit above the progressbar.
+    /// </summary>
+    /// <param name="content"></param>
+    public void Set_ActionName(string content) => action_Name.text = content;
 }

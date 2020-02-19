@@ -21,10 +21,11 @@ public class PlayerCameraController : MonoBehaviour
 
     #region ### Properties ###
     public float ZoomSpeed { get; set; } = 16;
-    private float zoomOffset;
     #endregion
 
     #region ### Private Variables ###
+    private float zoomOffset;
+
     private Vector3 current_Target_Pos;
     private Vector3 last_Pos;
 
@@ -52,7 +53,7 @@ public class PlayerCameraController : MonoBehaviour
     private void Zoom() 
     {
         const int MIN_ZOOM = -5;
-        const int MAX_ZOOM = 10;
+        const int MAX_ZOOM = 13;
 
         zoomOffset += (Input.GetKey(zoomOutKey) ? ZoomSpeed : (Input.GetKey(zoomInKey) ? -ZoomSpeed : 0)) * Time.deltaTime;
         zoomOffset = Mathf.Clamp(zoomOffset, MIN_ZOOM, MAX_ZOOM);
