@@ -24,6 +24,7 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 	private Coroutine sceneLoadingRoutine;
 	private Coroutine runningFadeRoutine;
 	private bool isFading;
+	private bool isLoadingScene;
 
 
 	#region Initalize Service
@@ -37,6 +38,14 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 	{
 		DontDestroyOnLoad(gameObject);
 		Init();
+	}
+
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.N))
+		{
+			LoadScene(2);
+		}
 	}
 
 	#region Scene Loading
@@ -71,8 +80,17 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 	{
 		yield return new WaitUntil(() => isFading == false);
 
+		SceneManager.LoadScene(1, LoadSceneMode.Single);
+
 		fadeScreen = null;
-		SceneManager.LoadScene(buildName);
+		isLoadingScene = true;
+		SceneManager.LoadScene(buildName, LoadSceneMode.Additive);
+
+		yield return new WaitUntil(() => isLoadingScene == false);
+
+		SceneManager.UnloadSceneAsync(1);
+
+		FadeIn();
 	}
 
 	private int GetSceneSettingIndex(string sceneName)
@@ -133,7 +151,11 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 
 	private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
 	{
-		FadeIn();
+		if (scene.buildIndex == 1)
+			return;
+
+		SceneManager.SetActiveScene(scene);
+		isLoadingScene = false;
 	}
 
 	private IEnumerator FadeInRoutine(float duration)
