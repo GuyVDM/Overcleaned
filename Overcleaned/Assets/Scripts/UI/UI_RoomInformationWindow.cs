@@ -40,7 +40,7 @@ public class UI_RoomInformationWindow : UIWindow
 
 	public void StartGame()
 	{
-		if (CanStartGame())
+		if (CanStartGame() || PhotonLobby.DebugMode())
 		{
 			PlayerInRoomElement local = FindLocalPlayerElement();
 			NetworkManager.SetLocalPlayerInfo(local.GetDropdownIndex(), GetNumberInTeam(local.GetDropdownIndex()));
