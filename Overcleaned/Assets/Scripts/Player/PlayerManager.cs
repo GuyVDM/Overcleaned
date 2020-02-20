@@ -13,6 +13,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
 
     public PlayerInteractionController player_InteractionController;
 
+    [Header("Visual References:")]
+    [SerializeField]
+    private MeshRenderer player_Body;
+
     #region ### Service Locator Snippet ###
     public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
 
@@ -36,4 +40,5 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
 
     private void OnDestroy() => OnDeinitialise();
 
+    public void Set_PlayerColor(Color playerColor) => player_Body.material.color = playerColor;
 }

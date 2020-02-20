@@ -44,7 +44,8 @@ public class CleanableObject : InteractableObject
 
     protected virtual void Awake() 
     {
-        progressBar = Instantiate(Resources.Load("ProgressBar") as GameObject).GetComponentInChildren<ProgressBar>();
+        progressBar = SpawnManager.SpawnObjectBasedOnConnectionState("ProgressBar", Vector3.zero, Quaternion.identity).GetComponentInChildren<ProgressBar>();
+        progressBar.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
         progressBar.Set_Tooltip(tooltip);
         progressBar.Set_ActionName(actionName);
     }
