@@ -29,17 +29,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	public delegate void OnMasterClientSwitch(Player newMasterClient);
 	public delegate void OnLocalPlayerLeft();
 
+	public static LocalPlayerInformation localPlayerInformation { get; private set; }
+
 	private List<RoomInfo> onlineRooms = new List<RoomInfo>();
-	private static LocalPlayerInformation localPlayerInformation;
 
 	private void Start()
 	{
 		DontDestroyOnLoad(gameObject);
 	}
 
-	public static LocalPlayerInformation GetLocalPlayer()
+	public static void SetLocalPlayerInfo(int team, int numberInTeam)
 	{
-		return localPlayerInformation;
+		localPlayerInformation.team = team;
+		localPlayerInformation.numberInTeam = numberInTeam;
 	}
 
 	public void SetLocalPlayerNickname(string nickname)

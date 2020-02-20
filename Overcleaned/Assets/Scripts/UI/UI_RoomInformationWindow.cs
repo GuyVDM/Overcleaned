@@ -156,7 +156,7 @@ public class UI_RoomInformationWindow : UIWindow
 
 	private void UpdatePlayerElement(int playerElementIndex, int dropdownIndex)
 	{
-		NetworkManager.GetLocalPlayer().team = dropdownIndex + 1;
+		NetworkManager.SetLocalPlayerInfo(dropdownIndex, playerElementIndex);
 		photonView.RPC("UpdatePlayerElementRPC", RpcTarget.OthersBuffered, playerElementIndex, dropdownIndex);
 	}
 

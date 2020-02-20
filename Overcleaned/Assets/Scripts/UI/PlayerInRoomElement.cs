@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class PlayerInRoomElement : MonoBehaviour
 {
+	public bool isLocal { get; private set; }
 
 	private Dropdown teamDropdown;
 	private Text playerName, teamText, readyText;
 	private Toggle readyToggle;
-	private bool isLocal;
 	private int dropdownIndex;
 
 	public void Init(bool _isLocal)
@@ -28,7 +28,7 @@ public class PlayerInRoomElement : MonoBehaviour
 		teamText.gameObject.SetActive(!isLocal);
 		readyText.gameObject.SetActive(!isLocal);
 		teamText.text = teamDropdown.options[0].text;
-		NetworkManager.GetLocalPlayer().team = 1;
+		NetworkManager.localPlayerInformation.team = 1;
 	}
 
 	public void ChangeTeam(int _dropdownIndex)
