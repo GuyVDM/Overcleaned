@@ -65,12 +65,12 @@ public class PlayerCameraController : MonoBehaviour
     {
         if(Input.GetKeyDown(spyBaseKey)) 
         {
-            playerManager.Set_LockingStateOfPlayerController(true);
+            playerManager.Set_LockingStateOfPlayerController(false);
         }
 
         if(Input.GetKeyUp(spyBaseKey)) 
         {
-            playerManager.Set_LockingStateOfPlayerController(false);
+            playerManager.Set_LockingStateOfPlayerController(true);
         }
     }
 

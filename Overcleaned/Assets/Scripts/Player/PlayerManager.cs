@@ -41,11 +41,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
     {
         if (photonView.IsMine || PhotonNetwork.IsConnected == false) 
         {
+            OnInitialise();
             player_Controller.enabled = true;
             player_CameraController.enabled = true;
             player_InteractionController.enabled = true;
 
-            OnInitialise();
             return;
         }
 
