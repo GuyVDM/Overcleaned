@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
 
-public class CleanableObject : InteractableObject
+public class CleanableObject : InteractableObject, IPunObservable
 {
     //TODO: Move this float value to the HouseManager.Events when it exists.
     public static float CleaningStateOfHouse { get; set; }
@@ -40,15 +38,88 @@ public class CleanableObject : InteractableObject
 
     #region ### Private Variables ###
     private ProgressBar progressBar;
+    private bool lockedForOthers = false;
     #endregion
 
-    protected virtual void Awake() 
+    #region ### RPC Calls ###
+
+    [PunRPC]
+    private void Cast_ObjectStateToClean() 
     {
-        progressBar = SpawnManager.SpawnObjectBasedOnConnectionState("ProgressBar", Vector3.zero, Quaternion.identity).GetComponentInChildren<ProgressBar>();
+        CleanAndLockObjectLocally();
+    }
+
+    private void Set_ObjectStateToClean() 
+    {
+        if (NetworkManager.IsConnectedAndInRoom)
+        {
+            photonView.RPC(nameof(Cast_ObjectStateToClean), RpcTarget.AllBuffered);
+            return;
+        }
+
+        Cast_ProgressBarCreation();
+    }
+
+    [PunRPC]
+    private void Cast_ProgressBarCreation()
+    {
+        progressBar = Instantiate(Resources.Load("ProgressBar") as GameObject).GetComponentInChildren<ProgressBar>();
         progressBar.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
         progressBar.Set_Tooltip(tooltip);
         progressBar.Set_ActionName(actionName);
     }
+
+    private void Create_ProgressBar() 
+    {
+        if (NetworkManager.IsConnectedAndInRoom) 
+        {
+            if (PhotonNetwork.IsMasterClient) 
+            {
+                photonView.RPC(nameof(Cast_ProgressBarCreation), RpcTarget.AllBuffered);
+            }
+            return;
+        }
+
+        Cast_ProgressBarCreation();
+    }
+
+    [PunRPC]
+    private void Set_ProgressBarEnableState(bool isEnabled) 
+    {
+        progressBar.enabled = isEnabled;
+    }
+
+    private void Cast_ProgressBarEnableState(bool isEnabled) 
+    {
+        if (NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Set_ProgressBarEnableState), RpcTarget.AllBuffered, isEnabled);
+            return;
+        }
+
+        Set_ProgressBarEnableState(isEnabled);
+    }
+
+    [PunRPC]
+    private void Set_LockingState(bool isLocked)
+    {
+        this.IsLocked = IsLocked;
+    }
+
+    private void Cast_LockingState(bool isLocked) 
+    {
+        if(NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Set_LockingState), RpcTarget.OthersBuffered, isLocked);
+            return;
+        }
+
+        Set_LockingState(isLocked);
+    }
+
+    #endregion
+
+    protected virtual void Awake() => Create_ProgressBar();
 
     public override void Interact(PlayerInteractionController interactionController)
     {
@@ -58,17 +129,27 @@ public class CleanableObject : InteractableObject
             return;
         }
 
+        if(lockedForOthers == false) 
+        {
+            lockedForOthers = true;
+            Cast_LockingState(true);           
+        }
+
         if (IsCleaned == false) 
         {
             CleaningProgression += Time.deltaTime;
 
-            progressBar.enabled = true;
+            if (progressBar.enabled == false) 
+            {
+                Cast_ProgressBarEnableState(true);
+            }
+
             progressBar.Set_CurrentProgress(CleaningProgression / cleaningTime);
             progressBar.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
 
             if (CleaningProgression >= cleaningTime)
             {
-                CleanObject(interactionController);
+                OnCleanedObject(interactionController);
                 interactionController.DeinteractWithCurrentObject();
             }
         }
@@ -78,17 +159,26 @@ public class CleanableObject : InteractableObject
     {
         IsLocked = false;
         CleaningProgression = 0;
-        progressBar.enabled = false;
+
+        if (progressBar.enabled == true)
+        {
+            Cast_ProgressBarEnableState(false);
+        }
+
+        if (lockedForOthers == true) 
+        {
+            lockedForOthers = false;
+            Cast_LockingState(false);
+        }
+
         progressBar.Set_CurrentProgress(0);
         interactionController.DeinteractWithCurrentObject();
     }
 
-    public virtual void CleanObject(PlayerInteractionController interactionController) 
+    public virtual void OnCleanedObject(PlayerInteractionController interactionController) 
     {
-        OnInteractionWhenCleaned?.Invoke();
         CleaningStateOfHouse -= penalty;
-        IsCleaned = true;
-        IsLocked = true;
+        Set_ObjectStateToClean();
     }
 
     public virtual void DirtyObject() 
@@ -97,5 +187,28 @@ public class CleanableObject : InteractableObject
         CleaningStateOfHouse += penalty;
         IsCleaned = false;
         IsLocked = false;
+    }
+
+    private void CleanAndLockObjectLocally() 
+    {
+        OnInteractionWhenCleaned?.Invoke();
+        IsCleaned = true;
+        IsLocked = true;
+        Debug.Log("Succesfully cleaned object!");
+    }
+
+    public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) 
+    {
+        if (progressBar != null)
+        {
+            if (stream.IsWriting) 
+            {
+                stream.SendNext(CleaningProgression);
+            }
+            else if (stream.IsReading) 
+            {
+                progressBar.Set_CurrentProgress((float)stream.ReceiveNext() / cleaningTime);
+            }
+        }
     }
 }

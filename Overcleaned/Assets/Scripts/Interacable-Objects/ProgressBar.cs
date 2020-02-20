@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using Photon.Pun;
 
 [RequireComponent(typeof(Animator))]
-public class ProgressBar : MonoBehaviour, IPunObservable
+public class ProgressBar : MonoBehaviour
 {
     private static float tooltipUpdateTime = 0.4f;
 
@@ -103,22 +102,4 @@ public class ProgressBar : MonoBehaviour, IPunObservable
     /// <param name="content"></param>
     public void Set_ActionName(string content) => action_Name.text = content;
 
-    /// <summary>
-    /// Function is used to stream for example, the fill amount of this bar.
-    /// </summary>
-    /// <param name="stream"></param>
-    /// <param name="info"></param>
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if(stream.IsWriting) 
-        {
-            stream.SendNext(fillImage.fillAmount);
-            stream.SendNext(this.enabled);
-        }
-        else if(stream.IsReading) 
-        {
-            fillImage.fillAmount = (float)stream.ReceiveNext();
-            this.enabled = (bool)stream.ReceiveNext();
-        }
-    }
 }

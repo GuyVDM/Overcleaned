@@ -95,11 +95,11 @@ public class ToolInteractableObject : CleanableObject
         }
     }
 
-    public override void CleanObject(PlayerInteractionController interactionController)
+    public override void OnCleanedObject(PlayerInteractionController interactionController)
     {
         if (toolInteractableType == ToolInteractableType.ToBeCleaned) 
         {
-            base.CleanObject(interactionController);
+            base.OnCleanedObject(interactionController);
             return;
         }
 
