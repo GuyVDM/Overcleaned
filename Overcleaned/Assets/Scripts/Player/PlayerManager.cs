@@ -25,9 +25,15 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
 
     #region ### RPC Calls ###
     [PunRPC]
-    private void Stream_PlayerColorOverNetwork(byte[] colorData) 
+    private void Stream_PlayerColorOverNetwork((float, float, float, float) colorValues) 
     {
-        player_Body.material.color = colorData.FromByteArray<Color>();
+        player_Body.material.color = new Color()
+        {
+            a = colorValues.Item1,
+            b = colorValues.Item2,
+            g = colorValues.Item3,
+            r = colorValues.Item4
+        };
     }
     #endregion
 
@@ -54,10 +60,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
     {
         if (NetworkManager.IsConnectedAndInRoom)
         {
-            photonView.RPC(nameof(Stream_PlayerColorOverNetwork), RpcTarget.AllBuffered, playerColor.ToByteArray());
+            photonView.RPC(nameof(Stream_PlayerColorOverNetwork), RpcTarget.AllBuffered, (playerColor.a, playerColor.b, playerColor.g, playerColor.r));
             return;
         }
 
-        Stream_PlayerColorOverNetwork(playerColor.ToByteArray());
+        Stream_PlayerColorOverNetwork((playerColor.a, playerColor.b, playerColor.g, playerColor.r));
     }
 }
