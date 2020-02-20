@@ -133,7 +133,8 @@ public class CleanableObject : InteractableObject, IPunObservable
         if(lockedForOthers == false) 
         {
             lockedForOthers = true;
-            Set_LockingState(true);           
+            Set_LockingState(true);
+            photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
         }
 
         if (IsCleaned == false) 
