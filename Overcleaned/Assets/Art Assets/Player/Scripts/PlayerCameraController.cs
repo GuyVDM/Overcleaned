@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Camera))]
 public class PlayerCameraController : MonoBehaviour 
 {
     private const float LERP_SPEED = 2f;
@@ -38,6 +39,8 @@ public class PlayerCameraController : MonoBehaviour
     private static bool WithinYBoundries(float y_pos1, float y_pos2, float y_yourPos) => (y_yourPos > y_pos1 && y_yourPos < y_pos2);
 
     private static bool WithinXBoundries(float x_pos1, float x_pos2, float x_yourPos) => (x_yourPos > x_pos1 && x_yourPos < x_pos2);
+
+    private void OnEnable() => GetComponent<Camera>().enabled = true;
 
     private void Start() => transform.position = last_Pos + camera_Offset;
 
