@@ -84,46 +84,43 @@ public class CleanableObject : InteractableObject, IPunObservable
     }
 
     [PunRPC]
-    private void Set_ProgressBarEnableState(bool isEnabled) 
+    private void Cast_ProgressBarEnableState(bool isEnabled) 
     {
         progressBar.enabled = isEnabled;
     }
 
-    private void Cast_ProgressBarEnableState(bool isEnabled) 
+    private void Set_ProgressBarEnableState(bool isEnabled) 
     {
         if (NetworkManager.IsConnectedAndInRoom) 
         {
-            photonView.RPC(nameof(Set_ProgressBarEnableState), RpcTarget.AllBuffered, isEnabled);
+            photonView.RPC(nameof(Cast_ProgressBarEnableState), RpcTarget.AllBuffered, isEnabled);
             return;
         }
 
-        Set_ProgressBarEnableState(isEnabled);
+        Cast_ProgressBarEnableState(isEnabled);
     }
 
     [PunRPC]
-    private void Set_LockingState(bool isLocked)
+    private void Cast_LockingState(bool isLocked)
     {
         this.IsLocked = IsLocked;
+        Debug.Log("IsLocked is: " + IsLocked);
     }
 
-    private void Cast_LockingState(bool isLocked) 
+    private void Set_LockingState(bool isLocked) 
     {
         if(NetworkManager.IsConnectedAndInRoom) 
         {
-            photonView.RPC(nameof(Set_LockingState), RpcTarget.OthersBuffered, isLocked);
+            photonView.RPC(nameof(Cast_LockingState), RpcTarget.OthersBuffered, isLocked);
             return;
         }
 
-        Set_LockingState(isLocked);
+        Cast_LockingState(isLocked);
     }
 
     #endregion
 
-    protected virtual void Awake() 
-    {
-        Create_ProgressBar();
-        Debug.Log(progressBar);
-    }
+    protected virtual void Awake() => Create_ProgressBar();
 
     public override void Interact(PlayerInteractionController interactionController)
     {
@@ -136,7 +133,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         if(lockedForOthers == false) 
         {
             lockedForOthers = true;
-            Cast_LockingState(true);           
+            Set_LockingState(true);           
         }
 
         if (IsCleaned == false) 
@@ -145,7 +142,7 @@ public class CleanableObject : InteractableObject, IPunObservable
 
             if (progressBar.enabled == false) 
             {
-                Cast_ProgressBarEnableState(true);
+                Set_ProgressBarEnableState(true);
             }
 
             progressBar.Set_CurrentProgress(CleaningProgression / cleaningTime);
@@ -166,13 +163,13 @@ public class CleanableObject : InteractableObject, IPunObservable
 
         if (progressBar.enabled == true)
         {
-            Cast_ProgressBarEnableState(false);
+            Set_ProgressBarEnableState(false);
         }
 
         if (lockedForOthers == true) 
         {
             lockedForOthers = false;
-            Cast_LockingState(false);
+            Set_LockingState(false);
         }
 
         progressBar.Set_CurrentProgress(0);
