@@ -63,15 +63,8 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void LockMovement() 
     {
-        if(Input.GetKeyDown(spyBaseKey)) 
-        {
-            playerManager.Set_LockingStateOfPlayerController(false);
-        }
-
-        if(Input.GetKeyUp(spyBaseKey)) 
-        {
-            playerManager.Set_LockingStateOfPlayerController(true);
-        }
+        bool lockMode = Input.GetKey(spyBaseKey) ? true : false;
+        playerManager.Set_LockingStateOfPlayerController(lockMode);
     }
 
     /// <summary>
