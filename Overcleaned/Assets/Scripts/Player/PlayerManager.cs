@@ -56,6 +56,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
 
     public void Set_EnemyBasePosition(Vector3 pos) => player_CameraController?.Set_EnemyBasePos(pos);
 
+    public void Set_LockingStateOfPlayerController(bool state) => player_Controller.enabled = state;
+
     public void Set_PlayerColor(Color playerColor)
     {
         if (NetworkManager.IsConnectedAndInRoom)

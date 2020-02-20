@@ -25,6 +25,8 @@ public class PlayerCameraController : MonoBehaviour
     #endregion
 
     #region ### Private Variables ###
+    private PlayerManager playerManager;
+
     private float zoomOffset;
 
     private Vector3 current_Target_Pos;
@@ -46,12 +48,30 @@ public class PlayerCameraController : MonoBehaviour
     {
         GetComponent<Camera>().enabled = true;
         GetComponent<AudioListener>().enabled = true;
+        playerManager = ServiceLocator.GetServiceOfType<PlayerManager>();
     }
 
     private void FixedUpdate() 
     {
         MoveCamera();
         Zoom();
+        LockMovement();
+    }
+
+    /// <summary>
+    /// Used to lock the playermovement whenever the player is spying.
+    /// </summary>
+    private void LockMovement() 
+    {
+        if(Input.GetKeyDown(spyBaseKey)) 
+        {
+            playerManager.Set_LockingStateOfPlayerController(true);
+        }
+
+        if(Input.GetKeyUp(spyBaseKey)) 
+        {
+            playerManager.Set_LockingStateOfPlayerController(false);
+        }
     }
 
     /// <summary>
