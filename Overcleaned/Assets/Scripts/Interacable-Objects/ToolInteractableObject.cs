@@ -33,7 +33,8 @@ public class ToolInteractableObject : CleanableObject
     protected override void Awake()
     {
         base.Awake();
-        notool_Animator = Instantiate(Resources.Load("NoToolNote") as GameObject, Vector3.zero, Quaternion.identity).GetComponentInChildren<Animator>();
+        notool_Animator = SpawnManager.SpawnObjectBasedOnConnectionState("NoToolNote", Vector3.zero, Quaternion.identity).GetComponentInChildren<Animator>();
+        notool_Animator.transform.root.position = transform.position + object_ui_Offset;
     }
 
     protected virtual void Update()

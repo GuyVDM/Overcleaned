@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5994928839759215197}
   - component: {fileID: 79230996589898673}
   - component: {fileID: 3396699350069449444}
+  - component: {fileID: 7321631983071713588}
   m_Layer: 5
   m_Name: Progressbar
   m_TagString: Untagged
@@ -112,6 +113,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa35d4e66a7000946980b5200c9d8091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7321631983071713588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3140577960891815004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 6803194723811864756}
+  - {fileID: 5916421993565245562}
+  viewIdField: 5
+  InstantiationId: 5
+  isRuntimeInstantiated: 0
 --- !u!1 &3711619054050908543
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,6 +185,8 @@ GameObject:
   - component: {fileID: 939593057809847128}
   - component: {fileID: 6803194723811864756}
   - component: {fileID: 3395354944573479165}
+  - component: {fileID: 5233146016755340820}
+  - component: {fileID: 5916421993565245562}
   m_Layer: 0
   m_Name: ProgressBar_Animated
   m_TagString: Untagged
@@ -262,6 +288,51 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5233146016755340820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3828453692219231459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 6
+  InstantiationId: 6
+  isRuntimeInstantiated: 0
+--- !u!114 &5916421993565245562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3828453692219231459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: Popup
+  m_SynchronizeLayers:
+  - SynchronizeType: 2
+    LayerIndex: 0
+  - SynchronizeType: 2
+    LayerIndex: 1
 --- !u!1 &4012098208210109227
 GameObject:
   m_ObjectHideFlags: 0
