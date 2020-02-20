@@ -76,6 +76,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 			}
 		}
 
+		print(onlineRooms.Count);
 		onRoomListChange(onlineRooms);
 	}
 
@@ -124,5 +125,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		onLocalPlayerLeft?.Invoke();
 	}
 
-	#endregion
+    public static bool IsConnectedAndInRoom => PhotonNetwork.IsConnected && PhotonNetwork.InRoom;
+    #endregion
 }
