@@ -25,9 +25,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
 
     #region ### RPC Calls ###
     [PunRPC]
-    private void Stream_PlayerColorOverNetwork(Color playerColor) 
+    private void Stream_PlayerColorOverNetwork(byte[] colorData) 
     {
-        player_Body.material.color = playerColor;
+        player_Body.material.color = colorData.FromByteArray<Color>();
     }
     #endregion
 
@@ -58,6 +58,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
             return;
         }
 
-        Stream_PlayerColorOverNetwork(playerColor);
+        Stream_PlayerColorOverNetwork(playerColor.ToByteArray());
     }
 }
