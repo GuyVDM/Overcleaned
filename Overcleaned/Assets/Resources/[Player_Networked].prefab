@@ -56,8 +56,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 4606379125845275357}
-  viewIdField: 6
-  InstantiationId: 6
+  viewIdField: 3
+  InstantiationId: 3
   isRuntimeInstantiated: 0
 --- !u!114 &4606379125845275357
 MonoBehaviour:
@@ -181,8 +181,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 4606379125845275357}
   - {fileID: 8931650954675174967}
-  viewIdField: 5
-  InstantiationId: 5
+  viewIdField: 4
+  InstantiationId: 4
   isRuntimeInstantiated: 0
 --- !u!114 &2394845065278474580
 MonoBehaviour:
@@ -283,7 +283,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1423543961308943627}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &1423543961308943623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,7 +301,7 @@ MonoBehaviour:
   - {x: -11.5, y: -10}
   - {x: 10, y: 9}
   player_Target: {fileID: 3996632627816840650}
-  enemy_Base: {fileID: 0}
+  enemy_Base_Pos: {x: 0, y: 0, z: 0}
 --- !u!1 &1423543962186573940
 GameObject:
   m_ObjectHideFlags: 0

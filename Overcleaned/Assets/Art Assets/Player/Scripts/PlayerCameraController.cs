@@ -40,9 +40,13 @@ public class PlayerCameraController : MonoBehaviour
 
     private static bool WithinXBoundries(float x_pos1, float x_pos2, float x_yourPos) => (x_yourPos > x_pos1 && x_yourPos < x_pos2);
 
-    private void OnEnable() => GetComponent<Camera>().enabled = true;
-
     private void Start() => transform.position = last_Pos + camera_Offset;
+
+    private void OnEnable()
+    {
+        GetComponent<Camera>().enabled = true;
+        GetComponent<AudioListener>().enabled = true;
+    }
 
     private void FixedUpdate() 
     {
