@@ -206,7 +206,9 @@ public class CleanableObject : InteractableObject, IPunObservable
         } 
         else if (stream.IsReading)
         {
-            progressBar.Set_CurrentProgress((float)stream.ReceiveNext() / cleaningTime);
+            float streamvalue = (float)stream.ReceiveNext();
+            Debug.Log(streamvalue);
+            progressBar.Set_CurrentProgress(streamvalue / cleaningTime);
         }
     }
 }
