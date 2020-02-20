@@ -158,8 +158,29 @@ public class UI_RoomInformationWindow : UIWindow
 
 	private void UpdatePlayerElement(int playerElementIndex, int dropdownIndex)
 	{
-		NetworkManager.SetLocalPlayerInfo(dropdownIndex, playerElementIndex);
+		NetworkManager.SetLocalPlayerInfo(dropdownIndex, GetNumberInTeam(dropdownIndex));
+
 		photonView.RPC("UpdatePlayerElementRPC", RpcTarget.OthersBuffered, playerElementIndex, dropdownIndex);
+	}
+
+	private int GetNumberInTeam(int myTeamIndex)
+	{
+		List<PlayerInRoomElement> allElementsInMyTeam = new List<PlayerInRoomElement>();
+		for (int i = 0; i < allPlayerElements.Count; i++)
+		{
+			if (allPlayerElements[i].GetDropdownIndex() == myTeamIndex)
+			{
+				allElementsInMyTeam.Add(allPlayerElements[i]);
+			}
+		}
+
+		for (int i = 0; i < allElementsInMyTeam.Count; i++)
+		{
+			if (allElementsInMyTeam[i].isLocal)
+				return i;
+		}
+
+		return -1;
 	}
 
 	private void SetReady(int playerElementIndex, bool ready)
