@@ -63,7 +63,7 @@ public class CleanableObject : InteractableObject, IPunObservable
     [PunRPC]
     private void Cast_ProgressBarCreation()
     {
-        progressBar = Instantiate(Resources.Load("ProgressBar") as GameObject).GetComponentInChildren<ProgressBar>();
+        progressBar = Instantiate(Resources.Load("ProgressBar") as GameObject, Vector3.zero, Quaternion.identity).GetComponentInChildren<ProgressBar>();
         progressBar.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
         progressBar.Set_Tooltip(tooltip);
         progressBar.Set_ActionName(actionName);
@@ -119,7 +119,11 @@ public class CleanableObject : InteractableObject, IPunObservable
 
     #endregion
 
-    protected virtual void Awake() => Create_ProgressBar();
+    protected virtual void Awake() 
+    {
+        Create_ProgressBar();
+        Debug.Log(progressBar);
+    }
 
     public override void Interact(PlayerInteractionController interactionController)
     {

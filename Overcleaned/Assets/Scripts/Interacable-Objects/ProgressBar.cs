@@ -79,7 +79,6 @@ public class ProgressBar : MonoBehaviour
     /// <param name="tooltip"></param>
     public void Set_Tooltip(string tooltip) 
     {
-        Debug.Log(gameObject.name);
         progressTooltip.text = tooltip;
         startingContentTooltip = tooltip;
     }
