@@ -25,14 +25,14 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
 
     #region ### RPC Calls ###
     [PunRPC]
-    private void Stream_PlayerColorOverNetwork((float, float, float, float) colorValues) 
+    private void Stream_PlayerColorOverNetwork(float alpha, float blue, float green, float red) 
     {
         player_Body.material.color = new Color()
         {
-            a = colorValues.Item1,
-            b = colorValues.Item2,
-            g = colorValues.Item3,
-            r = colorValues.Item4
+            a = alpha,
+            b = blue,
+            g = green,
+            r = red
         };
     }
     #endregion
@@ -64,6 +64,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
             return;
         }
 
-        Stream_PlayerColorOverNetwork((playerColor.a, playerColor.b, playerColor.g, playerColor.r));
+        Stream_PlayerColorOverNetwork(playerColor.a, playerColor.b, playerColor.g, playerColor.r);
     }
 }
