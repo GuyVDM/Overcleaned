@@ -38,7 +38,6 @@ public class CleanableObject : InteractableObject, IPunObservable
 
     #region ### Private Variables ###
     private ProgressBar progressBar;
-    private bool lockedForOthers = false;
     #endregion
 
     #region ### RPC Calls ###
@@ -99,25 +98,6 @@ public class CleanableObject : InteractableObject, IPunObservable
 
         Cast_ProgressBarEnableState(isEnabled);
     }
-
-    [PunRPC]
-    private void Cast_LockingState(bool isLocked)
-    {
-        this.IsLocked = isLocked;
-        Debug.Log("IsLocked is: " + IsLocked);
-    }
-
-    private void Set_LockingState(bool isLocked) 
-    {
-        if(NetworkManager.IsConnectedAndInRoom) 
-        {
-            photonView.RPC(nameof(Cast_LockingState), RpcTarget.OthersBuffered, isLocked);
-            return;
-        }
-
-        Cast_LockingState(isLocked);
-    }
-
     #endregion
 
     protected virtual void Awake() => Create_ProgressBar();

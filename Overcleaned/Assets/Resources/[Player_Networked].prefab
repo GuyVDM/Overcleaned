@@ -56,8 +56,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 4606379125845275357}
-  viewIdField: 4
-  InstantiationId: 4
+  viewIdField: 3
+  InstantiationId: 3
   isRuntimeInstantiated: 0
 --- !u!114 &4606379125845275357
 MonoBehaviour:
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 262a9c22a2a34944e8c86e785e9a8ce1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand: {fileID: 7048445625899154076}
+  hand: {fileID: 5548249776268823213}
   interactableMask:
     serializedVersion: 2
     m_Bits: 256
@@ -126,6 +126,28 @@ MonoBehaviour:
   ShowParameterInspector: 0
   m_SynchronizeParameters: []
   m_SynchronizeLayers: []
+--- !u!114 &9123666195116734318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054525927839009770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 7
+  InstantiationId: 7
+  isRuntimeInstantiated: 0
 --- !u!1 &1423543960288624019
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,8 +203,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 4606379125845275357}
   - {fileID: 8931650954675174967}
-  viewIdField: 3
-  InstantiationId: 3
+  viewIdField: 4
+  InstantiationId: 4
   isRuntimeInstantiated: 0
 --- !u!114 &2394845065278474580
 MonoBehaviour:
@@ -596,9 +618,15 @@ MeshRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 8218032470543275728}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &7048445625899154076 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1431382782105644108, guid: 44fdb88357d2e964d85da437f41a8138,
+--- !u!1 &5548249776268823213 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4535977200230292605, guid: 44fdb88357d2e964d85da437f41a8138,
+    type: 3}
+  m_PrefabInstance: {fileID: 8218032470543275728}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1054525927839009770 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8984185665295162682, guid: 44fdb88357d2e964d85da437f41a8138,
     type: 3}
   m_PrefabInstance: {fileID: 8218032470543275728}
   m_PrefabAsset: {fileID: 0}

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -124,7 +125,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 
 		onLocalPlayerLeft?.Invoke();
 	}
+    #endregion
 
+    #region Statics
     public static bool IsConnectedAndInRoom => PhotonNetwork.IsConnected && PhotonNetwork.InRoom;
+
+    public static PhotonView GetViewByID(int viewID) => PhotonNetwork.PhotonViews.Where(o => o.ViewID == viewID).First();
     #endregion
 }
