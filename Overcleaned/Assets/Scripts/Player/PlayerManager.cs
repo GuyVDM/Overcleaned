@@ -41,4 +41,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
     private void OnDestroy() => OnDeinitialise();
 
     public void Set_PlayerColor(Color playerColor) => player_Body.material.color = playerColor;
+
+    public void Set_EnemyBasePosition(Vector3 pos) => player_CameraController?.Set_EnemyBasePos(pos);
 }

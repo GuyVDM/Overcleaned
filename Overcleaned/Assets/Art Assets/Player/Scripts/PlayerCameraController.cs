@@ -18,7 +18,7 @@ public class PlayerCameraController : MonoBehaviour
     private Transform player_Target;
 
     [SerializeField]
-    private Transform enemy_Base;
+    private Vector3 enemy_Base_Pos;
 
     #region ### Properties ###
     public float ZoomSpeed { get; set; } = 16;
@@ -88,13 +88,13 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void DecideForTarget() 
     {
-        if (player_Target == null || enemy_Base == null)
+        if (player_Target == null)
         {
             Debug.LogWarning("[PlayerCameraController] No playerTarget or reference to the enemy base has been assigned, please assign them and try again.");
             enabled = false;
         }
 
-        current_Target_Pos = Input.GetKey(spyBaseKey) ? enemy_Base.position : last_Pos;
+        current_Target_Pos = Input.GetKey(spyBaseKey) ? enemy_Base_Pos : last_Pos;
     }
 
     /// <summary>
@@ -107,6 +107,15 @@ public class PlayerCameraController : MonoBehaviour
         bottomLeftAnchor,
         topRightAnchor
     };
+
+    /// <summary>
+    /// This function takes care of setting the spy location of the enemy base.
+    /// </summary>
+    /// <param name="position"></param>
+    public void Set_EnemyBasePos(Vector3 position) 
+    {
+        enemy_Base_Pos = position;
+    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
