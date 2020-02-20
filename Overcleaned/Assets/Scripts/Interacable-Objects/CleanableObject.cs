@@ -103,7 +103,7 @@ public class CleanableObject : InteractableObject, IPunObservable
     [PunRPC]
     private void Cast_LockingState(bool isLocked)
     {
-        this.IsLocked = IsLocked;
+        this.IsLocked = isLocked;
         Debug.Log("IsLocked is: " + IsLocked);
     }
 
@@ -198,18 +198,15 @@ public class CleanableObject : InteractableObject, IPunObservable
         Debug.Log("Succesfully cleaned object!");
     }
 
-    public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) 
+    public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (progressBar != null)
+        if (stream.IsWriting)
         {
-            if (stream.IsWriting) 
-            {
-                stream.SendNext(CleaningProgression);
-            }
-            else if (stream.IsReading) 
-            {
-                progressBar.Set_CurrentProgress((float)stream.ReceiveNext() / cleaningTime);
-            }
+            stream.SendNext(CleaningProgression);
+        } 
+        else if (stream.IsReading)
+        {
+            progressBar.Set_CurrentProgress((float)stream.ReceiveNext() / cleaningTime);
         }
     }
 }
