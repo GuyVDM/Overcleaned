@@ -76,7 +76,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 			}
 		}
 
-		print(onlineRooms.Count);
 		onRoomListChange(onlineRooms);
 	}
 

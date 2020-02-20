@@ -5,7 +5,7 @@ public class LocalPlayerInformation
 {
 	public Player photonPlayer { get; private set; }
 	public int team = -1;
-	public int numberInTeam;
+	public int numberInTeam = -1;
 
 	public LocalPlayerInformation(Player myPhotonPlayer)
 	{

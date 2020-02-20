@@ -28,7 +28,7 @@ public class PlayerInRoomElement : MonoBehaviour
 		teamText.gameObject.SetActive(!isLocal);
 		readyText.gameObject.SetActive(!isLocal);
 		teamText.text = teamDropdown.options[0].text;
-		NetworkManager.localPlayerInformation.team = 1;
+		NetworkManager.localPlayerInformation.team = 0;
 	}
 
 	public void ChangeTeam(int _dropdownIndex)

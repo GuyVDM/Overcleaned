@@ -42,6 +42,8 @@ public class UI_RoomInformationWindow : UIWindow
 	{
 		if (CanStartGame())
 		{
+			PlayerInRoomElement local = FindLocalPlayerElement();
+			NetworkManager.SetLocalPlayerInfo(local.GetDropdownIndex(), GetNumberInTeam(local.GetDropdownIndex()));
 			photonView.RPC("StartGameRPC", RpcTarget.All);
 		}
 	}
@@ -186,6 +188,17 @@ public class UI_RoomInformationWindow : UIWindow
 	private void SetReady(int playerElementIndex, bool ready)
 	{
 		photonView.RPC("SetReadyRPC", RpcTarget.OthersBuffered, playerElementIndex, ready);
+	}
+
+	private PlayerInRoomElement FindLocalPlayerElement()
+	{
+		for (int i = 0; i < allPlayerElements.Count; i++)
+		{
+			if (allPlayerElements[i].isLocal)
+				return allPlayerElements[i];
+		}
+
+		return null;
 	}
 
 	#region RPCs
