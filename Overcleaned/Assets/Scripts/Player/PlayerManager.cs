@@ -60,7 +60,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
     {
         if (NetworkManager.IsConnectedAndInRoom)
         {
-            photonView.RPC(nameof(Stream_PlayerColorOverNetwork), RpcTarget.AllBuffered, (playerColor.a, playerColor.b, playerColor.g, playerColor.r));
+            photonView.RPC(nameof(Stream_PlayerColorOverNetwork), RpcTarget.AllBuffered, playerColor.a, playerColor.b, playerColor.g, playerColor.r);
             return;
         }
 
