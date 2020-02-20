@@ -7,6 +7,8 @@ using Photon.Pun;
 
 public class UI_RoomInformationWindow : UIWindow
 {
+
+	public int sceneToLoad;
 	[Header("Prefabs")]
 	public GameObject playerInRoomElementPrefab;
 	[Header("Parents")]
@@ -177,7 +179,7 @@ public class UI_RoomInformationWindow : UIWindow
 	private void StartGameRPC()
 	{
 		SceneHandler sceneManager = ServiceLocator.GetServiceOfType<SceneHandler>();
-		sceneManager.LoadScene(1);
+		sceneManager.LoadScene(sceneToLoad);
 
 	}
 
