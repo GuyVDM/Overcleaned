@@ -30,8 +30,8 @@ public class GameManager : MonoBehaviour, IServiceOfType
 
 	private void SpawnLocalPlayer()
 	{
-		PlayerManager playerManager = PhotonNetwork.Instantiate(playerPrefab.name, teams[NetworkManager.localPlayerInformation.team - 1].teamSpawnPositions[NetworkManager.localPlayerInformation.numberInTeam].position, teams[NetworkManager.localPlayerInformation.team - 1].teamSpawnPositions[NetworkManager.localPlayerInformation.numberInTeam].rotation).GetComponent<PlayerManager>();
+		PlayerManager playerManager = PhotonNetwork.Instantiate(playerPrefab.name, teams[NetworkManager.localPlayerInformation.team].teamSpawnPositions[NetworkManager.localPlayerInformation.numberInTeam].position, Quaternion.identity).GetComponent<PlayerManager>();
 		playerManager.Set_PlayerColor(teams[NetworkManager.localPlayerInformation.team].teamColor);
-		playerManager.Set_EnemyBasePosition(teams[NetworkManager.localPlayerInformation.team - 1].enemyTeamPosition.position);
+		playerManager.Set_EnemyBasePosition(teams[NetworkManager.localPlayerInformation.team].enemyTeamPosition.position);
 	}
 }
