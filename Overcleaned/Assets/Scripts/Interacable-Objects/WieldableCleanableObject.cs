@@ -18,11 +18,12 @@ public class WieldableCleanableObject : WieldableObject
     [SerializeField]
     private MeshRenderer cleaned_Variant;
 
-
-    public override void OnToolInteractionComplete() 
+    #region ### RPC Calls ###
+    protected override void Stream_OnInteractionComplete() 
     {
         CleanObject();
     }
+    #endregion
 
     public void CleanObject() 
     {

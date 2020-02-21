@@ -475,21 +475,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1114638703}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1114638705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+--- !u!23 &1114638705 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 9064778029355328823, guid: f3cefb2812d38804faa779c95d666e10,
+    type: 3}
+  m_PrefabInstance: {fileID: 1114638703}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1114638704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4c050af223f2ae4c849f0d97f6ecd90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  toolID: 0
-  pickup_Offset: {x: 0, y: -1.5, z: 0}
-  rotation_Offset: {x: 0, y: 0, z: 0}
 --- !u!114 &1114638706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,10 +499,35 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 1
   ObservedComponents:
-  - {fileID: 1114638705}
-  viewIdField: 5
-  InstantiationId: 5
+  - {fileID: 1114638708}
+  viewIdField: 2
+  InstantiationId: 2
   isRuntimeInstantiated: 0
+--- !u!23 &1114638707 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 9064778029737446374, guid: f3cefb2812d38804faa779c95d666e10,
+    type: 3}
+  m_PrefabInstance: {fileID: 1114638703}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1114638708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114638704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bf4dec133a1d2a40a1346f5561a104b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolID: 0
+  pickup_Offset: {x: 0, y: 0, z: 0}
+  rotation_Offset: {x: 0, y: 0, z: 0}
+  start_Penalty_Amount: 25
+  cleanedToolID: 1
+  uncleaned_Variant: {fileID: 1114638707}
+  cleaned_Variant: {fileID: 1114638705}
 --- !u!1001 &1533018419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -792,7 +808,7 @@ MonoBehaviour:
   tooltip: Starting to hope for no bugs
   object_ui_Offset: {x: 0, y: 1, z: 0}
   required_ToolID: 0
-  toolInteractableType: 0
+  toolInteractableType: 1
 --- !u!65 &7973870845480658891
 BoxCollider:
   m_ObjectHideFlags: 0

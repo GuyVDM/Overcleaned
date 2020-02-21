@@ -19,6 +19,14 @@ public class WieldableObject : InteractableObject, IPunObservable
     private Collider triggerField;
     #endregion
 
+    #region ### RPC Calls ###
+    [PunRPC]
+    protected virtual void Stream_OnInteractionComplete() 
+    {
+        Debug.Log("Completed interaction!");
+    }
+    #endregion
+
     private void Awake() => GetTriggerField();
 
     private void GetTriggerField() 
@@ -73,8 +81,16 @@ public class WieldableObject : InteractableObject, IPunObservable
     /// <summary>
     /// A function used to initiate some event whenever a tool has been used for a interactable.
     /// </summary>
-    public virtual void OnToolInteractionComplete() => Debug.Log("Completed interaction!");
+    public void OnToolInteractionComplete() 
+    {
+        if(NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_OnInteractionComplete), RpcTarget.AllBuffered);
+            return;
+        }
 
+        Stream_OnInteractionComplete();
+    }
     
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) 
     {
