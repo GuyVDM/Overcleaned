@@ -151,9 +151,11 @@ public class ToolInteractableObject : CleanableObject
         //In this scenario, the tool will be effected instead of this object.
         noToolTip_IsDelayed = true;
         delayTimer_NoToolTip = DELAY_BASE_NOTOOLTIP;
+
         interactionController.currentlyWielding.OnToolInteractionComplete();
-        Set_Stream_ForceFinishProgression();
         CleaningProgression = 0;
+        DeInteract(interactionController);
+        Set_Stream_ForceFinishProgression();
     }
 
     public override void DirtyObject()
