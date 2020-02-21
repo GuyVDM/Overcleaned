@@ -33,8 +33,7 @@ public class ToolInteractableObject : CleanableObject
     [PunRPC]
     protected void Stream_ForceFinishProgression() 
     {
-        const int FINISH_AMOUNT = 1;
-        progressBar.Set_CurrentProgress(FINISH_AMOUNT);
+        progressBar.Set_BarToFinished();
     }
 
     protected void Set_Stream_ForceFinishProgression() 

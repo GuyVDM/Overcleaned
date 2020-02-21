@@ -30,10 +30,12 @@ public class ProgressBar : MonoBehaviour
 
     #region ### Hidden Variables ###
     private string startingContentTooltip = "";
+    private bool isCompleted = false;
     #endregion
 
     private void OnEnable()
     {
+        isCompleted = false;
         fillImage.fillAmount = 0;
         StartCoroutine(nameof(UpdateTooltip));
         fillImage.color = starting_Color;
@@ -52,9 +54,7 @@ public class ProgressBar : MonoBehaviour
         //TODO: Update fillamount based on connected interactable;
         if(Mathf.Approximately(fillImage.fillAmount, MAX_FILLAMOUNT)) 
         {
-            fillImage.color = accomplished_Color;
-            progressTooltip.text = TOOLTIP_COMPLETIONTEXT;
-            enabled = false;
+            Set_BarToFinished();
         }
     }
 
@@ -87,7 +87,7 @@ public class ProgressBar : MonoBehaviour
     /// This function allows for the owning CleanableObject to display its current progress.
     /// </summary>
     /// <param name="progress"></param>
-    public void Set_CurrentProgress(float progress) => fillImage.fillAmount = progress;
+    public void Set_CurrentProgress(float progress) => fillImage.fillAmount = isCompleted == false ? progress : fillImage.fillAmount;
 
     /// <summary>
     /// This function allows for the tooltip its position to be corrected.
@@ -101,4 +101,15 @@ public class ProgressBar : MonoBehaviour
     /// <param name="content"></param>
     public void Set_ActionName(string content) => action_Name.text = content;
 
+    /// <summary>
+    /// Used to force the bar to finish for visual display reasons.
+    /// </summary>
+    public void Set_BarToFinished() 
+    {
+        isCompleted = true;
+        fillImage.color = accomplished_Color;
+        progressTooltip.text = TOOLTIP_COMPLETIONTEXT;
+        fillImage.fillAmount = 1;
+        enabled = false;
+    }     
 }
