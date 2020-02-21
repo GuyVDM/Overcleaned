@@ -100,6 +100,14 @@ public class CleanableObject : InteractableObject, IPunObservable
     }
     #endregion
 
+    private void CleanAndLockObjectLocally() 
+    {
+        OnInteractionWhenCleaned?.Invoke();
+        IsCleaned = true;
+        IsLocked = true;
+        Debug.Log("Succesfully cleaned object!");
+    }
+
     protected virtual void Awake() => Create_ProgressBar();
 
     public override void Interact(PlayerInteractionController interactionController)
@@ -169,14 +177,6 @@ public class CleanableObject : InteractableObject, IPunObservable
         CleaningStateOfHouse += penalty;
         IsCleaned = false;
         IsLocked = false;
-    }
-
-    private void CleanAndLockObjectLocally() 
-    {
-        OnInteractionWhenCleaned?.Invoke();
-        IsCleaned = true;
-        IsLocked = true;
-        Debug.Log("Succesfully cleaned object!");
     }
 
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

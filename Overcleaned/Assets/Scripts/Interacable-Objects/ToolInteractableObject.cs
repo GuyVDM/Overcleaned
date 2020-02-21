@@ -30,6 +30,15 @@ public class ToolInteractableObject : CleanableObject
     protected bool noToolTip_IsDelayed = false;
     #endregion
 
+    #region ### PUN Calls ###
+
+
+    private void Set_NoToolNoteEnabled() 
+    {
+
+    }
+    #endregion
+
     protected override void Awake()
     {
         base.Awake();
