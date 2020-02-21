@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Photon.Pun;
 
 public class WieldableCleanableObject : WieldableObject
 {
@@ -19,6 +18,7 @@ public class WieldableCleanableObject : WieldableObject
     private MeshRenderer cleaned_Variant;
 
     #region ### RPC Calls ###
+    [PunRPC]
     protected override void Stream_OnInteractionComplete() 
     {
         CleanObject();
