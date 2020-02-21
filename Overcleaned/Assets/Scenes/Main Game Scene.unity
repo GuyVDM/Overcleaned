@@ -777,7 +777,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7973870845480658889}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c88fc9e9db9e56641a89dcb65ab60f1d, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b2f785ef8ade8d49b8503ede4757db5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   penalty: 25
@@ -788,9 +788,11 @@ MonoBehaviour:
   OnDirtyObject:
     m_PersistentCalls:
       m_Calls: []
-  actionName: Staining the sink with cum...
-  tooltip: This is weird, but why not
+  actionName: Starting to inject pole...
+  tooltip: Starting to hope for no bugs
   object_ui_Offset: {x: 0, y: 1, z: 0}
+  required_ToolID: 0
+  toolInteractableType: 0
 --- !u!65 &7973870845480658891
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -828,7 +830,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 1
   ObservedComponents:
-  - {fileID: 7973870845480658890}
+  - {fileID: 0}
   viewIdField: 1
   InstantiationId: 1
   isRuntimeInstantiated: 0
