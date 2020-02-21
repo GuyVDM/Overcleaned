@@ -9,6 +9,8 @@ public class UI_RoomInformationWindow : UIWindow
 {
 
 	public int sceneToLoad;
+	public Button startGameButton;
+
 	[Header("Prefabs")]
 	public GameObject playerInRoomElementPrefab;
 	[Header("Parents")]
@@ -27,6 +29,11 @@ public class UI_RoomInformationWindow : UIWindow
 		base.Start();
 		NetworkManager.onPlayerListChange += UpdatePlayerList;
 		NetworkManager.onMasterClientSwitch += MasterClientLeft;
+	}
+
+	protected override void OnWindowEnabled()
+	{
+		startGameButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
 	}
 
 	public void LeaveServer()

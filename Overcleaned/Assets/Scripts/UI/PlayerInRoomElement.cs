@@ -22,7 +22,6 @@ public class PlayerInRoomElement : MonoBehaviour
 		readyToggle = transform.Find("Ready Toggle").GetComponent<Toggle>();
 		readyText = transform.Find("Ready Text").GetComponent<Text>();
 
-
 		teamDropdown.gameObject.SetActive(isLocal);
 		readyToggle.gameObject.SetActive(isLocal);
 		teamText.gameObject.SetActive(!isLocal);
