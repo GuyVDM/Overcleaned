@@ -32,13 +32,13 @@ public class ToolInteractableObject : CleanableObject
     #region ### PUN Calls ###
 
     [PunRPC]
-    private void Stream_NoToolNoteEnabled(bool isEnabled) 
+    protected void Stream_NoToolNoteEnabled(bool isEnabled) 
     {
         noteTimer = TIME_TILL_NOTE_VANISHES_BASE;
         notool_Animator.SetBool(POPUP_BOOLNAME, isEnabled);
     }
 
-    private void Set_NoToolNoteEnabled(bool isEnabled) 
+    protected void Set_NoToolNoteEnabled(bool isEnabled) 
     {
         if(NetworkManager.IsConnectedAndInRoom) 
         {

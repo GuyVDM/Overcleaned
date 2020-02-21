@@ -43,12 +43,12 @@ public class CleanableObject : InteractableObject, IPunObservable
     #region ### RPC Calls ###
 
     [PunRPC]
-    private void Cast_ObjectStateToClean() 
+    protected void Cast_ObjectStateToClean() 
     {
         CleanAndLockObjectLocally();
     }
 
-    private void Set_ObjectStateToClean() 
+    protected void Set_ObjectStateToClean() 
     {
         if (NetworkManager.IsConnectedAndInRoom)
         {
@@ -60,7 +60,7 @@ public class CleanableObject : InteractableObject, IPunObservable
     }
 
     [PunRPC]
-    private void Cast_ProgressBarCreation()
+    protected void Cast_ProgressBarCreation()
     {
         progressBar = Instantiate(Resources.Load("ProgressBar") as GameObject, Vector3.zero, Quaternion.identity).GetComponentInChildren<ProgressBar>();
         progressBar.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
@@ -68,7 +68,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         progressBar.Set_ActionName(actionName);
     }
 
-    private void Create_ProgressBar() 
+    protected void Create_ProgressBar() 
     {
         if (NetworkManager.IsConnectedAndInRoom) 
         {
@@ -83,12 +83,12 @@ public class CleanableObject : InteractableObject, IPunObservable
     }
 
     [PunRPC]
-    private void Cast_ProgressBarEnableState(bool isEnabled) 
+    protected void Cast_ProgressBarEnableState(bool isEnabled) 
     {
         progressBar.enabled = isEnabled;
     }
 
-    private void Set_ProgressBarEnableState(bool isEnabled) 
+    protected void Set_ProgressBarEnableState(bool isEnabled) 
     {
         if (NetworkManager.IsConnectedAndInRoom) 
         {
