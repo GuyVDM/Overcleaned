@@ -30,6 +30,21 @@ public class ToolInteractableObject : CleanableObject
     #endregion
 
     #region ### PUN Calls ###
+    [PunRPC]
+    protected void Stream_ForceFinishProgression() 
+    {
+        const int FINISH_AMOUNT = 1;
+        progressBar.Set_CurrentProgress(FINISH_AMOUNT);
+    }
+
+    protected void Set_Stream_ForceFinishProgression() 
+    {
+        if(NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_ForceFinishProgression), RpcTarget.Others);
+            return;
+        }
+    }
 
     [PunRPC]
     protected void Stream_NoToolNoteEnabled(bool isEnabled) 
@@ -68,7 +83,10 @@ public class ToolInteractableObject : CleanableObject
 
                 if (noteTimer < 0) 
                 {
-                    notool_Animator.SetBool(POPUP_BOOLNAME, false);
+                    if (notool_Animator.GetBool(POPUP_BOOLNAME) == true) 
+                    {
+                        Set_NoToolNoteEnabled(false);
+                    }
                 }
             }
         }
@@ -134,6 +152,7 @@ public class ToolInteractableObject : CleanableObject
         noToolTip_IsDelayed = true;
         delayTimer_NoToolTip = DELAY_BASE_NOTOOLTIP;
         interactionController.currentlyWielding.OnToolInteractionComplete();
+        Set_Stream_ForceFinishProgression();
         CleaningProgression = 0;
     }
 

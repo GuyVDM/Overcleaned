@@ -37,7 +37,7 @@ public class CleanableObject : InteractableObject, IPunObservable
     #endregion
 
     #region ### Private Variables ###
-    private ProgressBar progressBar;
+    protected ProgressBar progressBar;
     #endregion
 
     #region ### RPC Calls ###
