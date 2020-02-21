@@ -40,7 +40,7 @@ public class ToolInteractableObject : CleanableObject
     {
         if(NetworkManager.IsConnectedAndInRoom) 
         {
-            photonView.RPC(nameof(Stream_ForceFinishProgression), RpcTarget.Others);
+            photonView.RPC(nameof(Stream_ForceFinishProgression), RpcTarget.All);
             return;
         }
     }
