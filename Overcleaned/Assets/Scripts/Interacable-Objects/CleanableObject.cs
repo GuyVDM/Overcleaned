@@ -30,7 +30,8 @@ public class CleanableObject : InteractableObject, IPunObservable
     protected Vector3 object_ui_Offset;
 
     #region ### Properties ###
-    protected bool IsCleaned { get; set; }
+    public bool IsCleaned { get; set; }
+
     protected float CleaningProgression { get; set; }
     #endregion
 

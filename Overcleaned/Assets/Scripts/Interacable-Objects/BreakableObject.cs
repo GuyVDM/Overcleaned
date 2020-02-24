@@ -33,7 +33,19 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
     #endregion
 
     #region ### RPC Calls ###
+    [PunRPC]
+    protected void Stream_SetRepairState(bool isBroken)
+    {
+        this.IsBroken = isBroken;
 
+        if(IsBroken) 
+        {
+            onBreakObject?.Invoke();
+            return;
+        }
+
+        onRepairObject?.Invoke();
+    }
     #endregion
 
     protected override void Awake() 
@@ -106,7 +118,6 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         delayTimer_NoToolTip = DELAY_BASE_NOTOOLTIP;
 
         IsBroken = false;
-        CleaningStateOfHouse -= cleaningWeight;
     }
 
     public override void DirtyObject()
