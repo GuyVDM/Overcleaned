@@ -108,10 +108,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         base.Awake();
     }
 
-    private void Start()
-    {
-        Set_RepairProgressBar();
-    }
+    private void Start() => Set_RepairProgressBar();
 
     public override void Interact(PlayerInteractionController interactionController)
     {
@@ -176,6 +173,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         noToolTip_IsDelayed = true;
         delayTimer_NoToolTip = DELAY_BASE_NOTOOLTIP;
 
+        Set_RepairProgressbarEnableState(false);
         Set_RepairState(false);
     }
 
@@ -196,7 +194,8 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
             } 
             else if (stream.IsReading) 
             {
-                repairProgressionUI.Set_CurrentProgress(repairTime / RepairProgression);
+                Debug.Log(RepairProgression / repairTime);
+                repairProgressionUI.Set_CurrentProgress(RepairProgression / repairTime);
             }
         }
 

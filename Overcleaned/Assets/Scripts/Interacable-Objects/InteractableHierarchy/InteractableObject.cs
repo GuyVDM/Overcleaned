@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Photon.Pun;
+﻿using Photon.Pun;
 
 public abstract class InteractableObject : MonoBehaviourPunCallbacks, IInteractableObject 
 {
