@@ -194,8 +194,8 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
             } 
             else if (stream.IsReading) 
             {
-                Debug.Log(RepairProgression / repairTime);
-                repairProgressionUI.Set_CurrentProgress(RepairProgression / repairTime);
+                float valueReceived = (float)stream.ReceiveNext();
+                repairProgressionUI.Set_CurrentProgress(valueReceived / repairTime);
             }
         }
 
