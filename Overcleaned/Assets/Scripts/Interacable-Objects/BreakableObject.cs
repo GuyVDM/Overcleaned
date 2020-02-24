@@ -78,10 +78,10 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
     [PunRPC]
     protected void Stream_BreakableProgressBarCreation()
     {
-        progressBar = Instantiate(Resources.Load("RepairingProgressBar") as GameObject, Vector3.zero, Quaternion.identity).GetComponentInChildren<ProgressBar>();
-        progressBar.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
-        progressBar.Set_Tooltip(repairActionTooltip);
-        progressBar.Set_ActionName(repairActionName);
+        repairProgressionUI = Instantiate(Resources.Load("RepairingProgressBar") as GameObject, Vector3.zero, Quaternion.identity).GetComponentInChildren<ProgressBar>();
+        repairProgressionUI.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
+        repairProgressionUI.Set_Tooltip(repairActionTooltip);
+        repairProgressionUI.Set_ActionName(repairActionName);
     }
 
     protected void Set_RepairProgressBar()
@@ -101,9 +101,10 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
     protected override void Awake() 
     {
-        base.Awake();
         Set_RepairProgressBar();
         IsBroken = true;
+
+        base.Awake();
     }
 
     public override void Interact(PlayerInteractionController interactionController)
