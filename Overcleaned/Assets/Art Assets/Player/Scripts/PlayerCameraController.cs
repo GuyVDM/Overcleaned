@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Camera))]
 public class PlayerCameraController : MonoBehaviour 
 {
     private const float LERP_SPEED = 2f;
@@ -17,13 +18,15 @@ public class PlayerCameraController : MonoBehaviour
     private Transform player_Target;
 
     [SerializeField]
-    private Transform enemy_Base;
+    private Vector3 enemy_Base_Pos;
 
     #region ### Properties ###
     public float ZoomSpeed { get; set; } = 16;
     #endregion
 
     #region ### Private Variables ###
+    private PlayerManager playerManager;
+
     private float zoomOffset;
 
     private Vector3 current_Target_Pos;
@@ -41,10 +44,27 @@ public class PlayerCameraController : MonoBehaviour
 
     private void Start() => transform.position = last_Pos + camera_Offset;
 
+    private void OnEnable()
+    {
+        GetComponent<Camera>().enabled = true;
+        GetComponent<AudioListener>().enabled = true;
+        playerManager = ServiceLocator.GetServiceOfType<PlayerManager>();
+    }
+
     private void FixedUpdate() 
     {
         MoveCamera();
         Zoom();
+        LockMovement();
+    }
+
+    /// <summary>
+    /// Used to lock the playermovement whenever the player is spying.
+    /// </summary>
+    private void LockMovement() 
+    {
+        bool lockMode = Input.GetKey(spyBaseKey) ? false : true;
+        playerManager.Set_LockingStateOfPlayerController(lockMode);
     }
 
     /// <summary>
@@ -85,13 +105,13 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void DecideForTarget() 
     {
-        if (player_Target == null || enemy_Base == null)
+        if (player_Target == null)
         {
             Debug.LogWarning("[PlayerCameraController] No playerTarget or reference to the enemy base has been assigned, please assign them and try again.");
             enabled = false;
         }
 
-        current_Target_Pos = Input.GetKey(spyBaseKey) ? enemy_Base.position : last_Pos;
+        current_Target_Pos = Input.GetKey(spyBaseKey) ? enemy_Base_Pos : last_Pos;
     }
 
     /// <summary>
@@ -104,6 +124,15 @@ public class PlayerCameraController : MonoBehaviour
         bottomLeftAnchor,
         topRightAnchor
     };
+
+    /// <summary>
+    /// This function takes care of setting the spy location of the enemy base.
+    /// </summary>
+    /// <param name="position"></param>
+    public void Set_EnemyBasePos(Vector3 position) 
+    {
+        enemy_Base_Pos = position;
+    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

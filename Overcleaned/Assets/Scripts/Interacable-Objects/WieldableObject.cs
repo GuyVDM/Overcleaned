@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using Photon.Pun;
 
 [RequireComponent(typeof(Rigidbody))]
-public class WieldableObject : InteractableObject
+public class WieldableObject : InteractableObject, IPunObservable
 {
     [Header("Tweakable Parameters:")]
     public int toolID;
@@ -16,6 +17,14 @@ public class WieldableObject : InteractableObject
 
     #region ### Private Variables ###
     private Collider triggerField;
+    #endregion
+
+    #region ### RPC Calls ###
+    [PunRPC]
+    protected virtual void Stream_OnInteractionComplete() 
+    {
+        Debug.Log("Completed interaction!");
+    }
     #endregion
 
     private void Awake() => GetTriggerField();
@@ -43,7 +52,14 @@ public class WieldableObject : InteractableObject
 
         if (IsLocked == false) 
         {
-            if(interactionController.currentlyWielding != null) 
+            if (lockedForOthers == false)
+            {
+                lockedForOthers = true;
+                Set_LockingState(true);
+                photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            }
+
+            if (interactionController.currentlyWielding != null) 
             {
                 interactionController.DropObject(interactionController.currentlyWielding);
             }
@@ -52,10 +68,45 @@ public class WieldableObject : InteractableObject
         }
     }
 
-    public override void DeInteract(PlayerInteractionController interactionController) => interactionController.DropObject(this);
+    public override void DeInteract(PlayerInteractionController interactionController)
+    {
+        if (lockedForOthers == true)
+        {
+            lockedForOthers = false;
+            Set_LockingState(false);
+            interactionController.DropObject(this);
+        }
+    }
 
     /// <summary>
     /// A function used to initiate some event whenever a tool has been used for a interactable.
     /// </summary>
-    public virtual void OnToolInteractionComplete() => Debug.Log("Completed interaction!");
+    public void OnToolInteractionComplete() 
+    {
+        if(NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_OnInteractionComplete), RpcTarget.AllBuffered);
+            return;
+        }
+
+        Stream_OnInteractionComplete();
+    }
+    
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) 
+    {
+        if(IsLocked == false && lockedForOthers == false) 
+        {
+            if (stream.IsWriting)
+            {
+                stream.SendNext(transform.position);
+                stream.SendNext(transform.eulerAngles);
+            }
+            else 
+            if(stream.IsReading) 
+            {
+                transform.position = (Vector3)stream.ReceiveNext();
+                transform.eulerAngles = (Vector3)stream.ReceiveNext();
+            }
+        }
+    }
 }

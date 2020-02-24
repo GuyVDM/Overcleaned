@@ -7,6 +7,10 @@ using Photon.Pun;
 
 public class UI_RoomInformationWindow : UIWindow
 {
+
+	public int sceneToLoad;
+	public Button startGameButton;
+
 	[Header("Prefabs")]
 	public GameObject playerInRoomElementPrefab;
 	[Header("Parents")]
@@ -27,6 +31,11 @@ public class UI_RoomInformationWindow : UIWindow
 		NetworkManager.onMasterClientSwitch += MasterClientLeft;
 	}
 
+	protected override void OnWindowEnabled()
+	{
+		startGameButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
+	}
+
 	public void LeaveServer()
 	{
 		if (PhotonNetwork.CurrentRoom != null)
@@ -38,8 +47,10 @@ public class UI_RoomInformationWindow : UIWindow
 
 	public void StartGame()
 	{
-		if (CanStartGame())
+		if (CanStartGame() || PhotonLobby.DebugMode())
 		{
+			PlayerInRoomElement local = FindLocalPlayerElement();
+			NetworkManager.SetLocalPlayerInfo(local.GetDropdownIndex(), GetNumberInTeam(local.GetDropdownIndex()));
 			photonView.RPC("StartGameRPC", RpcTarget.All);
 		}
 	}
@@ -156,13 +167,44 @@ public class UI_RoomInformationWindow : UIWindow
 
 	private void UpdatePlayerElement(int playerElementIndex, int dropdownIndex)
 	{
-		NetworkManager.GetLocalPlayer().team = dropdownIndex + 1;
+		NetworkManager.SetLocalPlayerInfo(dropdownIndex, GetNumberInTeam(dropdownIndex));
 		photonView.RPC("UpdatePlayerElementRPC", RpcTarget.OthersBuffered, playerElementIndex, dropdownIndex);
+	}
+
+	private int GetNumberInTeam(int myTeamIndex)
+	{
+		List<PlayerInRoomElement> allElementsInMyTeam = new List<PlayerInRoomElement>();
+		for (int i = 0; i < allPlayerElements.Count; i++)
+		{
+			if (allPlayerElements[i].GetDropdownIndex() == myTeamIndex)
+			{
+				allElementsInMyTeam.Add(allPlayerElements[i]);
+			}
+		}
+
+		for (int i = 0; i < allElementsInMyTeam.Count; i++)
+		{
+			if (allElementsInMyTeam[i].isLocal)
+				return i;
+		}
+
+		return -1;
 	}
 
 	private void SetReady(int playerElementIndex, bool ready)
 	{
 		photonView.RPC("SetReadyRPC", RpcTarget.OthersBuffered, playerElementIndex, ready);
+	}
+
+	private PlayerInRoomElement FindLocalPlayerElement()
+	{
+		for (int i = 0; i < allPlayerElements.Count; i++)
+		{
+			if (allPlayerElements[i].isLocal)
+				return allPlayerElements[i];
+		}
+
+		return null;
 	}
 
 	#region RPCs
@@ -177,7 +219,7 @@ public class UI_RoomInformationWindow : UIWindow
 	private void StartGameRPC()
 	{
 		SceneHandler sceneManager = ServiceLocator.GetServiceOfType<SceneHandler>();
-		sceneManager.LoadScene(1);
+		sceneManager.LoadScene(sceneToLoad);
 
 	}
 

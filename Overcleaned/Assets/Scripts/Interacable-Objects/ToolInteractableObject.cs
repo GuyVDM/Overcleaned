@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Photon.Pun;
 
 public class ToolInteractableObject : CleanableObject
 {
@@ -30,21 +29,64 @@ public class ToolInteractableObject : CleanableObject
     protected bool noToolTip_IsDelayed = false;
     #endregion
 
+    #region ### PUN Calls ###
+    [PunRPC]
+    protected void Stream_ForceFinishProgression() 
+    {
+        progressBar.Set_BarToFinished();
+    }
+
+    protected void Set_Stream_ForceFinishProgression() 
+    {
+        if(NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_ForceFinishProgression), RpcTarget.All);
+            return;
+        }
+    }
+
+    [PunRPC]
+    protected void Stream_NoToolNoteEnabled(bool isEnabled) 
+    {
+        noteTimer = TIME_TILL_NOTE_VANISHES_BASE;
+        notool_Animator.SetBool(POPUP_BOOLNAME, isEnabled);
+    }
+
+    protected void Set_NoToolNoteEnabled(bool isEnabled) 
+    {
+        if(NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_NoToolNoteEnabled), RpcTarget.AllBufferedViaServer, isEnabled);
+            return;
+        }
+
+        Stream_NoToolNoteEnabled(isEnabled);
+    }
+
+    #endregion
+
     protected override void Awake()
     {
         base.Awake();
         notool_Animator = Instantiate(Resources.Load("NoToolNote") as GameObject, Vector3.zero, Quaternion.identity).GetComponentInChildren<Animator>();
+        notool_Animator.transform.root.position = transform.position + object_ui_Offset;
     }
 
     protected virtual void Update()
     {
-        if(notool_Animator.GetBool(POPUP_BOOLNAME) == true) 
+        if (IsLocked == false) 
         {
-            noteTimer -= Time.deltaTime;
-
-            if(noteTimer < 0) 
+            if (notool_Animator.GetBool(POPUP_BOOLNAME) == true) 
             {
-                notool_Animator.SetBool(POPUP_BOOLNAME, false);
+                noteTimer -= Time.deltaTime;
+
+                if (noteTimer < 0) 
+                {
+                    if (notool_Animator.GetBool(POPUP_BOOLNAME) == true) 
+                    {
+                        Set_NoToolNoteEnabled(false);
+                    }
+                }
             }
         }
     }
@@ -64,8 +106,10 @@ public class ToolInteractableObject : CleanableObject
             }
         }
 
-        noteTimer = TIME_TILL_NOTE_VANISHES_BASE;
-        notool_Animator.SetBool(POPUP_BOOLNAME, true);
+        if (notool_Animator.GetBool(POPUP_BOOLNAME) == false) 
+        {
+            Set_NoToolNoteEnabled(true);
+        }
     }
 
     public override void Interact(PlayerInteractionController interactionController)
@@ -94,19 +138,22 @@ public class ToolInteractableObject : CleanableObject
         }
     }
 
-    public override void CleanObject(PlayerInteractionController interactionController)
+    public override void OnCleanedObject(PlayerInteractionController interactionController)
     {
         if (toolInteractableType == ToolInteractableType.ToBeCleaned) 
         {
-            base.CleanObject(interactionController);
+            base.OnCleanedObject(interactionController);
             return;
         }
 
         //In this scenario, the tool will be effected instead of this object.
         noToolTip_IsDelayed = true;
         delayTimer_NoToolTip = DELAY_BASE_NOTOOLTIP;
+
         interactionController.currentlyWielding.OnToolInteractionComplete();
         CleaningProgression = 0;
+        DeInteract(interactionController);
+        Set_Stream_ForceFinishProgression();
     }
 
     public override void DirtyObject()
