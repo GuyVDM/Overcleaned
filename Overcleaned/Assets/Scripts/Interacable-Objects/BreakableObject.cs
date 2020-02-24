@@ -90,8 +90,9 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         {
             if (PhotonNetwork.IsMasterClient) 
             {
-                Stream_BreakableProgressBarCreation();
-                photonView.RPC(nameof(Stream_BreakableProgressBarCreation), RpcTarget.OthersBuffered);
+                photonView.RPC(nameof(Stream_BreakableProgressBarCreation), RpcTarget.AllBuffered);
+        
+                Debug.Log(repairProgressionUI);
             }
             return;
         }
@@ -102,11 +103,14 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
     protected override void Awake() 
     {
-        Set_RepairProgressBar();
-
         IsBroken = true;
 
         base.Awake();
+    }
+
+    private void Start()
+    {
+        Set_RepairProgressBar();
     }
 
     public override void Interact(PlayerInteractionController interactionController)
