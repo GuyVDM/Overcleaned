@@ -74,15 +74,35 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
         Stream_RepairProgressbarEnableState(isEnabled);
     }
+
+    [PunRPC]
+    protected void Stream_BreakableProgressBarCreation()
+    {
+        progressBar = Instantiate(Resources.Load("RepairingProgressBar") as GameObject, Vector3.zero, Quaternion.identity).GetComponentInChildren<ProgressBar>();
+        progressBar.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
+        progressBar.Set_Tooltip(repairActionTooltip);
+        progressBar.Set_ActionName(repairActionName);
+    }
+
+    protected void Set_RepairProgressBar()
+    {
+        if (NetworkManager.IsConnectedAndInRoom)
+        {
+            if (PhotonNetwork.IsMasterClient) 
+            {
+                photonView.RPC(nameof(Stream_BreakableProgressBarCreation), RpcTarget.AllBuffered);
+            }
+            return;
+        }
+
+        Stream_BreakableProgressBarCreation();
+    }
     #endregion
 
     protected override void Awake() 
     {
         base.Awake();
-        repairProgressionUI = Instantiate(Resources.Load("RepairingProgressBar") as GameObject, Vector3.zero, Quaternion.identity).GetComponentInChildren<ProgressBar>();
-        repairProgressionUI.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
-        repairProgressionUI.Set_ActionName(repairActionName);
-        repairProgressionUI.Set_Tooltip(repairActionTooltip);
+        Set_RepairProgressBar();
         IsBroken = true;
     }
 
