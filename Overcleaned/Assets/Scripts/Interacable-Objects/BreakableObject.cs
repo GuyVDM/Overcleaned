@@ -133,7 +133,10 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
                     RepairProgression += Time.deltaTime;
 
-                    Set_RepairProgressbarEnableState(true);
+                    if (repairProgressionUI.enabled == false) 
+                    {
+                        Set_RepairProgressbarEnableState(true);
+                    }
 
                     repairProgressionUI.Set_CurrentProgress(RepairProgression / repairTime);
 
