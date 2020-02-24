@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using Photon.Pun;
 
-public class BreakableObject : ToolInteractableObject
+public class BreakableObject : ToolInteractableObject, IPunObservable
 {
     [Header("Breakable Specifics:")]
     [SerializeField]
@@ -31,6 +32,10 @@ public class BreakableObject : ToolInteractableObject
     private ProgressBar repairProgressionUI;
     #endregion
 
+    #region ### RPC Calls ###
+
+    #endregion
+
     protected override void Awake() 
     {
         base.Awake();
@@ -55,6 +60,13 @@ public class BreakableObject : ToolInteractableObject
             {
                 if (interactionController.currentlyWielding.toolID == repair_ToolID)
                 {
+                    if (lockedForOthers == false)
+                    {
+                        lockedForOthers = true;
+                        Set_LockingState(true);
+                        photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+                    }
+
                     RepairProgression += Time.deltaTime;
                     repairProgressionUI.enabled = true;
                     repairProgressionUI.Set_CurrentProgress(RepairProgression / repairTime);
@@ -94,7 +106,7 @@ public class BreakableObject : ToolInteractableObject
         delayTimer_NoToolTip = DELAY_BASE_NOTOOLTIP;
 
         IsBroken = false;
-        CleaningStateOfHouse -= penalty;
+        CleaningStateOfHouse -= cleaningWeight;
     }
 
     public override void DirtyObject()
@@ -103,4 +115,6 @@ public class BreakableObject : ToolInteractableObject
         onBreakObject?.Invoke();
         base.DirtyObject();
     }
+
+
 }

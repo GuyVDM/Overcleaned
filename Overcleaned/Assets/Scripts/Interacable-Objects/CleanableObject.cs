@@ -4,12 +4,10 @@ using Photon.Pun;
 
 public class CleanableObject : InteractableObject, IPunObservable
 {
-    //TODO: Move this float value to the HouseManager.Events when it exists.
-    public static float CleaningStateOfHouse { get; set; }
 
     [Header("Tweakable Parameters:")]
     [SerializeField]
-    protected float penalty = 25;
+    public float cleaningWeight = 25;
 
     [SerializeField]
     private float cleaningTime = 5;
@@ -167,14 +165,12 @@ public class CleanableObject : InteractableObject, IPunObservable
 
     public virtual void OnCleanedObject(PlayerInteractionController interactionController) 
     {
-        CleaningStateOfHouse -= penalty;
         Set_ObjectStateToClean();
     }
 
     public virtual void DirtyObject() 
     {
-        OnDirtyObject?.Invoke();
-        CleaningStateOfHouse += penalty;
+        OnDirtyObject?.Invoke();;
         IsCleaned = false;
         IsLocked = false;
     }
