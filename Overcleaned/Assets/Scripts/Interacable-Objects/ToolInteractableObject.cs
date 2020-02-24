@@ -91,7 +91,6 @@ public class ToolInteractableObject : CleanableObject
         }
     }
 
-
     protected virtual void Set_Notifications()
     {
         if (noToolTip_IsDelayed == true)

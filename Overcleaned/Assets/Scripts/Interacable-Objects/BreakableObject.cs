@@ -102,6 +102,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
     protected override void Awake() 
     {
         Set_RepairProgressBar();
+
         IsBroken = true;
 
         base.Awake();

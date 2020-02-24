@@ -42,7 +42,7 @@ public class CleanableObject : InteractableObject, IPunObservable
     #region ### RPC Calls ###
 
     [PunRPC]
-    protected void Cast_ObjectStateToClean() 
+    protected void Stream_ObjectStateToClean() 
     {
         CleanAndLockObjectLocally();
     }
@@ -51,15 +51,15 @@ public class CleanableObject : InteractableObject, IPunObservable
     {
         if (NetworkManager.IsConnectedAndInRoom)
         {
-            photonView.RPC(nameof(Cast_ObjectStateToClean), RpcTarget.AllBuffered);
+            photonView.RPC(nameof(Stream_ObjectStateToClean), RpcTarget.AllBuffered);
             return;
         }
 
-        Cast_ProgressBarCreation();
+        Stream_ProgressBarCreation();
     }
 
     [PunRPC]
-    protected void Cast_ProgressBarCreation()
+    protected void Stream_ProgressBarCreation()
     {
         progressBar = Instantiate(Resources.Load("ProgressBar") as GameObject, Vector3.zero, Quaternion.identity).GetComponentInChildren<ProgressBar>();
         progressBar.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
@@ -73,16 +73,16 @@ public class CleanableObject : InteractableObject, IPunObservable
         {
             if (PhotonNetwork.IsMasterClient) 
             {
-                photonView.RPC(nameof(Cast_ProgressBarCreation), RpcTarget.AllBuffered);
+                photonView.RPC(nameof(Stream_ProgressBarCreation), RpcTarget.AllBuffered);
             }
             return;
         }
 
-        Cast_ProgressBarCreation();
+        Stream_ProgressBarCreation();
     }
 
     [PunRPC]
-    protected void Cast_ProgressBarEnableState(bool isEnabled) 
+    protected void Stream_ProgressBarEnableState(bool isEnabled) 
     {
         progressBar.enabled = isEnabled;
     }
@@ -91,11 +91,11 @@ public class CleanableObject : InteractableObject, IPunObservable
     {
         if (NetworkManager.IsConnectedAndInRoom) 
         {
-            photonView.RPC(nameof(Cast_ProgressBarEnableState), RpcTarget.AllBuffered, isEnabled);
+            photonView.RPC(nameof(Stream_ProgressBarEnableState), RpcTarget.AllBuffered, isEnabled);
             return;
         }
 
-        Cast_ProgressBarEnableState(isEnabled);
+        Stream_ProgressBarEnableState(isEnabled);
     }
     #endregion
 
