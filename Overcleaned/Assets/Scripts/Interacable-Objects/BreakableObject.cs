@@ -99,6 +99,23 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
         Stream_BreakableProgressBarCreation();
     }
+
+    [PunRPC]
+    protected void Stream_BreakableProgressbarFinish() 
+    {
+        repairProgressionUI.Set_BarToFinished();
+    }
+
+    protected void Set_BreakableProgressbarFinish() 
+    {
+        if(NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_BreakableProgressbarFinish), RpcTarget.All);
+            return;
+        }
+
+        Stream_BreakableProgressbarFinish();
+    }
     #endregion
 
     protected override void Awake() 
@@ -143,6 +160,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
                     if(RepairProgression >= repairTime) 
                     {
                         RepairObject();
+                        Set_BreakableProgressbarFinish();
                     }
                     return;
                 }
