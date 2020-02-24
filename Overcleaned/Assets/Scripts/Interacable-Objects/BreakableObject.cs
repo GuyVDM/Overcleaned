@@ -79,7 +79,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
     protected override void Awake() 
     {
         base.Awake();
-        repairProgressionUI = SpawnManager.SpawnObjectBasedOnConnectionState("RepairingProgressBar", Vector3.zero, Quaternion.identity).GetComponentInChildren<ProgressBar>();
+        repairProgressionUI = Instantiate(Resources.Load("RepairingProgressBar") as GameObject, Vector3.zero, Quaternion.identity).GetComponentInChildren<ProgressBar>();
         repairProgressionUI.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
         repairProgressionUI.Set_ActionName(repairActionName);
         repairProgressionUI.Set_Tooltip(repairActionTooltip);
