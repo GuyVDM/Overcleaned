@@ -45,7 +45,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
             player_Controller.enabled = true;
             player_CameraController.enabled = true;
             player_InteractionController.enabled = true;
-
             return;
         }
 

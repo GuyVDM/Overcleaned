@@ -1630,7 +1630,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000017762184}
+  m_AnchoredPosition: {x: 0, y: 0.000026789214}
   m_SizeDelta: {x: 0, y: 70}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1122821479
@@ -1691,7 +1691,7 @@ MonoBehaviour:
   maxPlayers: 4
   serverBrowser: {fileID: 1284110907}
   logMode: 1
-  debugMode: 0
+  debugMode: 1
 --- !u!4 &1202236672
 Transform:
   m_ObjectHideFlags: 0
@@ -1787,7 +1787,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 557435271}
   m_HandleRect: {fileID: 557435270}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2300,7 +2300,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.1000061, y: 0.7000122}
+  m_AnchoredPosition: {x: -0.099975586, y: 0.7000122}
   m_SizeDelta: {x: -23.2, y: -83.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1847668283

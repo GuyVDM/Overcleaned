@@ -218,11 +218,10 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
                 float valueReceived = (float)stream.ReceiveNext();
                 repairProgressionUI.Set_CurrentProgress(valueReceived / repairTime);
             }
+
+            return;
         }
 
-        if (!IsBroken)
-        {
-            base.OnPhotonSerializeView(stream, info);
-        }
+        base.OnPhotonSerializeView(stream, info);
     }
 }

@@ -10,7 +10,10 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveDirection = Vector3.zero;
     public float speed = 6.0f;
     public float jumpSpeed = 8.0f;
+
+    //Heeft geen referenties kek
     public float gravity = 20.0f;
+
     public float maxTurnSpeed = 720.0f;
     #endregion
 
@@ -66,9 +69,9 @@ public class PlayerController : MonoBehaviour
 
         //Sets Animation states
         if (InputAxes == Vector2.zero)
-            SetPlayerAnimationState(AnimationState.Walking);
-        else
             SetPlayerAnimationState(AnimationState.Idle);
+        else
+            SetPlayerAnimationState(AnimationState.Walking);
     }
 
     //Manages all player animationstates. 
