@@ -802,7 +802,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cleaningWeight: 25
   cleaningTime: 5
-  OnInteractionWhenCleaned:
+  OnCleaned:
     m_PersistentCalls:
       m_Calls: []
   OnDirtyObject:
@@ -884,7 +884,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cleaningWeight: 25
   cleaningTime: 5
-  OnInteractionWhenCleaned:
+  OnCleaned:
     m_PersistentCalls:
       m_Calls: []
   OnDirtyObject:
@@ -895,3 +895,25 @@ MonoBehaviour:
   object_ui_Offset: {x: 0, y: 1, z: 0}
   required_ToolID: 0
   toolInteractableType: 1
+--- !u!114 &7973870845480658896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7973870845480658894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 1
+  ObservedComponents:
+  - {fileID: 7973870845480658895}
+  viewIdField: 2
+  InstantiationId: 2
+  isRuntimeInstantiated: 0
