@@ -90,7 +90,8 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         {
             if (PhotonNetwork.IsMasterClient) 
             {
-                photonView.RPC(nameof(Stream_BreakableProgressBarCreation), RpcTarget.AllBuffered);
+                Stream_BreakableProgressBarCreation();
+                photonView.RPC(nameof(Stream_BreakableProgressBarCreation), RpcTarget.OthersBuffered);
             }
             return;
         }
