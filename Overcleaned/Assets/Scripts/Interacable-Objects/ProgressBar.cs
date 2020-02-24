@@ -90,7 +90,7 @@ public class ProgressBar : MonoBehaviour
     /// This function allows for the owning CleanableObject to display its current progress.
     /// </summary>
     /// <param name="progress"></param>
-    public void Set_CurrentProgress(float progress) => fillImage.fillAmount = isCompleted == false ? progress : currentProgress/*fillImage.fillAmount*/;
+    public void Set_CurrentProgress(float progress) => currentProgress = isCompleted == false ? progress : currentProgress/*fillImage.fillAmount*/;
 
     /// <summary>
     /// This function allows for the tooltip its position to be corrected.
