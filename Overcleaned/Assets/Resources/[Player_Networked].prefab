@@ -55,8 +55,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 88721340485871257}
-  viewIdField: 0
-  InstantiationId: 5
+  viewIdField: 3
+  InstantiationId: 3
   isRuntimeInstantiated: 0
 --- !u!114 &2394845065278474580
 MonoBehaviour:
@@ -70,7 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5547580d9e44e1046927c2020ce57430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player_Controller: {fileID: 0}
+  player_Controller: {fileID: 5722854915095877389}
   player_CameraController: {fileID: 1423543961308943623}
   player_InteractionController: {fileID: 4695892089584853058}
   player_Body: {fileID: 6408974032507816183}
@@ -263,8 +263,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 0
-  InstantiationId: 8
+  viewIdField: 5
+  InstantiationId: 5
   isRuntimeInstantiated: 0
 --- !u!114 &5722854915095877389
 MonoBehaviour:
@@ -301,8 +301,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 0
-  InstantiationId: 6
+  viewIdField: 4
+  InstantiationId: 4
   isRuntimeInstantiated: 0
 --- !u!1 &7555081891276985065
 GameObject:
