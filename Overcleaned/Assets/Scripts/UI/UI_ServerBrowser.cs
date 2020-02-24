@@ -31,7 +31,7 @@ public class UI_ServerBrowser : UIWindow
 	public void CreateServer()
 	{
 		PhotonLobby lobby = ServiceLocator.GetServiceOfType<PhotonLobby>();
-		lobby.HostRoom(NetworkManager.localPlayerInformation.photonPlayer.NickName + "'s server");
+		lobby.HostRoom(NetworkManager.localPlayerInformation.PhotonPlayer.NickName + "'s server");
 	}
 
 	private void ChangeInfoButton(Transform button, RoomInfo info)
