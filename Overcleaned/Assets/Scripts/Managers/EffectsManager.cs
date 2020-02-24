@@ -5,7 +5,7 @@ using UnityEngine.Audio;
 using Photon.Pun;
 
 [RequireComponent(typeof(PhotonView))]
-public class SH_EffectsManager : MonoBehaviourPun, IServiceOfType
+public class EffectsManager : MonoBehaviourPun, IServiceOfType
 {
     #region Structs & Sub classes
     public class EffectTracker<T>

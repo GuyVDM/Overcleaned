@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
+using Photon.Pun;
 
-public class PlayerInteractionController : MonoBehaviour
+public class PlayerInteractionController : MonoBehaviourPunCallbacks
 {
     private const float RAY_LENGTH = 1f;
 
     [Header("References & Parameters:")]
     [SerializeField]
-    private Transform hand;
+    private GameObject hand;
 
     [SerializeField]
     private LayerMask interactableMask;
@@ -29,6 +30,32 @@ public class PlayerInteractionController : MonoBehaviour
     private Vector3 arrow_UX_Offset = new Vector3(0, 2, 0);
     #endregion
 
+    #region ### RPC Calls ###
+    [PunRPC]
+    private void Cast_ThrowObject(int objectID) 
+    {
+        const float THROW_FORCE_FORWARD = 10;
+        const float THROW_FORCE_UP = 3;
+
+        Transform thrownObject = NetworkManager.GetViewByID(objectID).transform;
+
+        thrownObject.transform.SetParent(null);
+        thrownObject.transform.GetComponent<Rigidbody>().isKinematic = false;
+        thrownObject.transform.GetComponent<Rigidbody>().AddForceAtPosition((transform.forward * THROW_FORCE_FORWARD) + (transform.up * THROW_FORCE_UP), transform.position, ForceMode.Impulse);
+    }
+
+    [PunRPC()]
+    private void Cast_PickupObject(int handID, int objectID, Vector3 rotation, Vector3 localPosition) 
+    {
+        Transform currentlyWielded = NetworkManager.GetViewByID(objectID).transform;
+        Transform handToChildTo = NetworkManager.GetViewByID(handID).transform;
+
+        currentlyWielded.transform.SetParent(hand.transform);
+        currentlyWielded.transform.localPosition = localPosition;
+        currentlyWielded.transform.localEulerAngles = rotation;
+        currentlyWielded.transform.GetComponent<Rigidbody>().isKinematic = true;
+    }
+    #endregion
 
     private void Update()
     {
@@ -135,24 +162,37 @@ public class PlayerInteractionController : MonoBehaviour
         if(currentlyWielding == null) 
         {
             currentlyWielding = wieldableObject;
-            currentlyWielding.transform.SetParent(hand);
-            currentlyWielding.transform.localPosition = localHandOffset;
-            currentlyWielding.transform.localEulerAngles = localRotationOffset;
-            currentlyWielding.transform.GetComponent<Rigidbody>().isKinematic = true;
+
+            if(NetworkManager.IsConnectedAndInRoom) 
+            {
+                photonView.RPC(nameof(Cast_PickupObject), RpcTarget.AllBuffered,
+                hand.GetPhotonView().ViewID,
+                wieldableObject.gameObject.GetPhotonView().ViewID,
+                localRotationOffset,
+                localHandOffset
+                );
+                return;
+            }
+
+            Cast_PickupObject(
+                hand.GetPhotonView().ViewID,
+                wieldableObject.gameObject.GetPhotonView().ViewID,
+                localRotationOffset,
+                localHandOffset
+            );
         }
     }
 
-    public void DropObject(WieldableObject wieldableObject) 
+    public void DropObject(WieldableObject wieldableObject)
     {
-        const float THROW_FORCE_FORWARD = 10;
-        const float THROW_FORCE_UP = 3;
-
-        if(currentlyWielding != null) 
+        if (currentlyWielding != null) 
         {
             currentlyWielding = null;
-            wieldableObject.transform.SetParent(null);
-            wieldableObject.transform.GetComponent<Rigidbody>().isKinematic = false;
-            wieldableObject.transform.GetComponent<Rigidbody>().AddForceAtPosition((transform.forward * THROW_FORCE_FORWARD) + (transform.up * THROW_FORCE_UP) , transform.position, ForceMode.Impulse);
+            if (NetworkManager.IsConnectedAndInRoom) 
+            {
+                photonView.RPC(nameof(Cast_ThrowObject), RpcTarget.AllBuffered, wieldableObject.gameObject.GetPhotonView().ViewID);
+                return;
+            }
         }
     }
 

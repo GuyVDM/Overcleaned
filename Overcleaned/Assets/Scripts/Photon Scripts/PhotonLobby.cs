@@ -14,6 +14,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 
 	[Header("Debugging")]
 	public bool logMode;
+	public bool debugMode;
 
 	#region Initalize Service
 	private void Awake() => OnInitialise();
@@ -35,6 +36,11 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 	public void HostRoom(string roomName)
 	{
 		PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 2 }, new TypedLobby("Lobby 1", LobbyType.Default));
+	}
+
+	public static bool DebugMode()
+	{
+		return ServiceLocator.GetServiceOfType<PhotonLobby>().debugMode;
 	}
 
 	public void JoinRoom(string roomName)
