@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: cdb2d608-89b9-4c16-a877-fb7b2057abcb
+    AppIdRealtime: 
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: eu
+    FixedRegion: 
     Server: 
     Port: 0
     Protocol: 0
@@ -28,34 +28,5 @@ MonoBehaviour:
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
-  RpcList:
-  - DestroySpaceship
-  - Fire
-  - RespawnSpaceship
-  - SetReadyRPC
-  - StartGameRPC
-  - UpdatePlayerElementRPC
-  - PlayAudioRPC
-  - PlayParticleRPC
-  - StopAllPlayingClipsRPC
-  - StopAudioRPC
-  - Stream_PlayerColorOverNetwork
-  - Set_LockingState
-  - Set_ProgressBarEnableState
-  - Cast_ProgressBarCreation
-  - Cast_ObjectStateToClean
-  - Cast_LockingState
-  - Cast_ProgressBarEnableState
-  - Cast_ThrowObject
-  - Cast_PickupObject
-  - Stream_NoToolNoteEnabled
-  - Stream_OnInteractionComplete
-  - Stream_ForceFinishProgression
-  - Stream_RepairProgressbarEnableState
-  - Stream_SetRepairState
-  - Stream_BreakableProgressBarCreation
-  - Stream_ObjectStateToClean
-  - Stream_ProgressBarCreation
-  - Stream_ProgressBarEnableState
-  - Stream_BreakableProgressbarFinish
-  DisableAutoOpenWizard: 1
+  RpcList: []
+  DisableAutoOpenWizard: 0
