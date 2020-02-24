@@ -14,7 +14,7 @@ public class CleanableObject : InteractableObject, IPunObservable
 
     [Header("Event Params:")]
     [SerializeField]
-    private UnityEvent OnInteractionWhenCleaned;
+    private UnityEvent OnCleaned;
 
     [SerializeField]
     private UnityEvent OnDirtyObject;
@@ -101,7 +101,7 @@ public class CleanableObject : InteractableObject, IPunObservable
 
     private void CleanAndLockObjectLocally() 
     {
-        OnInteractionWhenCleaned?.Invoke();
+        OnCleaned?.Invoke();
         IsCleaned = true;
         IsLocked = true;
         Debug.Log("Succesfully cleaned object!");
