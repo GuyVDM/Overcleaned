@@ -7,7 +7,7 @@ public class CleanableObject : InteractableObject, IPunObservable
 
     [Header("Tweakable Parameters:")]
     [SerializeField]
-    public float cleaningWeight = 25;
+    public int cleaningWeight = 25;
 
     [SerializeField]
     private float cleaningTime = 5;
