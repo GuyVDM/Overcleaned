@@ -312,6 +312,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 9064778029737446374, guid: f3cefb2812d38804faa779c95d666e10,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d702ae932708d8d46a6ce2aff696e345, type: 2}
     - target: {fileID: 9064778030653016334, guid: f3cefb2812d38804faa779c95d666e10,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -405,7 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bf4dec133a1d2a40a1346f5561a104b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toolID: 0
+  toolID: 1
   pickup_Offset: {x: 0, y: 0, z: 0}
   rotation_Offset: {x: 0, y: 0, z: 0}
   start_Penalty_Amount: 25
@@ -922,10 +927,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7973870845480658889}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b2f785ef8ade8d49b8503ede4757db5, type: 3}
+  m_Script: {fileID: 11500000, guid: d5535b4d337650d41b4bae8565aeb7b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  penalty: 25
+  cleaningWeight: 25
   cleaningTime: 5
   OnInteractionWhenCleaned:
     m_PersistentCalls:
@@ -933,11 +938,21 @@ MonoBehaviour:
   OnDirtyObject:
     m_PersistentCalls:
       m_Calls: []
-  actionName: Starting to inject pole...
-  tooltip: Starting to hope for no bugs
+  actionName: Fixing the last part
+  tooltip: It'll take a while...
   object_ui_Offset: {x: 0, y: 1, z: 0}
-  required_ToolID: 0
-  toolInteractableType: 1
+  required_ToolID: 1
+  toolInteractableType: 0
+  repair_ToolID: 1
+  repairTime: 4
+  repairActionName: Slapping ass
+  repairActionTooltip: With class...
+  onBreakObject:
+    m_PersistentCalls:
+      m_Calls: []
+  onRepairObject:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &7973870845480658891
 BoxCollider:
   m_ObjectHideFlags: 0

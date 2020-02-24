@@ -46,6 +46,34 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
         onRepairObject?.Invoke();
     }
+
+    protected void Set_RepairState(bool isBroken) 
+    {
+        if(NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_SetRepairState), RpcTarget.AllBuffered, isBroken);
+            return;
+        }
+
+        Stream_SetRepairState(isBroken);
+    }
+    
+    [PunRPC]
+    protected void Stream_RepairProgressbarEnableState(bool isEnabled) 
+    {
+        repairProgressionUI.enabled = isEnabled;
+    }
+
+    protected void Set_RepairProgressbarEnableState(bool isEnabled) 
+    {
+        if(NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_RepairProgressbarEnableState), RpcTarget.AllBuffered, isEnabled);
+            return;
+        }
+
+        Stream_RepairProgressbarEnableState(isEnabled);
+    }
     #endregion
 
     protected override void Awake() 
@@ -80,9 +108,10 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
                     }
 
                     RepairProgression += Time.deltaTime;
-                    repairProgressionUI.enabled = true;
+
+                    Set_RepairProgressbarEnableState(true);
+
                     repairProgressionUI.Set_CurrentProgress(RepairProgression / repairTime);
-                    repairProgressionUI.Set_LocalPositionOfPrefabRootTransform(transform, object_ui_Offset);
 
                     if(RepairProgression >= repairTime) 
                     {
@@ -104,10 +133,13 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
     {
         if(IsBroken) 
         {
-            RepairProgression = 0;
+            if (IsLocked == false)
+            {
+                Set_RepairProgressbarEnableState(false);
+                RepairProgression = 0;
+            }
         }
 
-        repairProgressionUI.enabled = false;
         base.DeInteract(interactionController);
     }
 
@@ -117,7 +149,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         noToolTip_IsDelayed = true;
         delayTimer_NoToolTip = DELAY_BASE_NOTOOLTIP;
 
-        IsBroken = false;
+        Set_RepairState(false);
     }
 
     public override void DirtyObject()
@@ -127,5 +159,23 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         base.DirtyObject();
     }
 
+    public override void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) 
+    {
+        if (IsBroken)
+        {
+            if (stream.IsWriting)
+            {
+                stream.SendNext(RepairProgression);
+            } 
+            else if (stream.IsReading) 
+            {
+                repairProgressionUI.Set_CurrentProgress(repairTime / RepairProgression);
+            }
+        }
 
+        if (!IsBroken)
+        {
+            base.OnPhotonSerializeView(stream, info);
+        }
+    }
 }
