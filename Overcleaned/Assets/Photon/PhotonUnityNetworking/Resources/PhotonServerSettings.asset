@@ -28,29 +28,5 @@ MonoBehaviour:
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
-  RpcList:
-  - Cast_LockingState
-  - Cast_PickupObject
-  - Cast_ThrowObject
-  - DestroySpaceship
-  - Fire
-  - PlayAudioRPC
-  - PlayParticleRPC
-  - RespawnSpaceship
-  - SetReadyRPC
-  - StartGameRPC
-  - StopAllPlayingClipsRPC
-  - StopAudioRPC
-  - Stream_BreakableProgressBarCreation
-  - Stream_BreakableProgressbarFinish
-  - Stream_ForceFinishProgression
-  - Stream_NoToolNoteEnabled
-  - Stream_ObjectStateToClean
-  - Stream_OnInteractionComplete
-  - Stream_PlayerColorOverNetwork
-  - Stream_ProgressBarCreation
-  - Stream_ProgressBarEnableState
-  - Stream_RepairProgressbarEnableState
-  - Stream_SetRepairState
-  - UpdatePlayerElementRPC
-  DisableAutoOpenWizard: 1
+  RpcList: []
+  DisableAutoOpenWizard: 0
