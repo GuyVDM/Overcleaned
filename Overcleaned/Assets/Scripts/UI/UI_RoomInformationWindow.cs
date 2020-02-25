@@ -202,7 +202,7 @@ public class UI_RoomInformationWindow : UIWindow
 
 		for (int i = 0; i < teamCount.Length; i++)
 		{
-			if (teamCount[i] != teamCount.Length / 2)
+			if (teamCount[i] != allPlayerElements.Count / teamCount.Length)
 				return false;
 		}
 
