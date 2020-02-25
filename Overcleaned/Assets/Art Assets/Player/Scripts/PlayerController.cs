@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     private static Vector2 InputAxes => new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     #endregion
 
+    public EffectsManager manager;   
+
     private Animator m_Animator = null;
     private Animator MyAnimator
     {
@@ -45,12 +47,27 @@ public class PlayerController : MonoBehaviour
     AnimationState myState;
     #endregion
 
+    private void Awake()
+    {
+        manager = ServiceLocator.GetServiceOfType<EffectsManager>();
+    }
 
     //Moves and rotates the player.
     void FixedUpdate() => MovePlayer();
+
+    void Update()
+    {
+        if (Input.GetButtonDown("Jump"))
+            StunPlayer(3f);
+    }
     private void MovePlayer()
     {
         const float MOVELERPTIME = 0.1f;
+
+        float normalizedSpeed = Mathf.Abs(InputAxes.x)*0.67f + Mathf.Abs(InputAxes.y)*0.67f;
+        if (normalizedSpeed < 1f)
+            normalizedSpeed = 1f;       
+
 
         //Prevents player from moving when Animation state is set to stunned
         if (myState == AnimationState.Stunned)
@@ -63,15 +80,15 @@ public class PlayerController : MonoBehaviour
         {
             Quaternion newRot = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, newRot, maxTurnSpeed * Time.deltaTime);
-            moveDirection = new Vector3(InputAxes.x, 0.0f, InputAxes.y) * speed;
+            moveDirection = new Vector3(InputAxes.x, -gravity * Time.deltaTime, InputAxes.y) * speed / normalizedSpeed;
             MyCharacterController.Move(moveDirection * Time.deltaTime);
         }
 
         //Sets Animation states
-        if (InputAxes == Vector2.zero)
-            SetPlayerAnimationState(AnimationState.Idle);
-        else
+        if (InputAxes.x==1f || InputAxes.y ==1f)
             SetPlayerAnimationState(AnimationState.Walking);
+        else
+            SetPlayerAnimationState(AnimationState.Idle);
     }
 
     //Manages all player animationstates. 
@@ -85,7 +102,7 @@ public class PlayerController : MonoBehaviour
     //Stuns the player for X time and prevents movement.
     public void StunPlayer(float duration)
     {
-        //EffectsManager.instance.PlayParticle("ParticleName", Vector.zero, Quaternion.identity, [meer mogelijke parameters])
+        manager.PlayParticle("Knockout_FX", transform.position, Quaternion.identity);
         SetPlayerAnimationState(AnimationState.Stunned);
         ResetToIdle(duration);
 
