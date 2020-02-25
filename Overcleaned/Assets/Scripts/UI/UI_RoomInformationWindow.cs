@@ -7,6 +7,102 @@ using Photon.Pun;
 
 public class UI_RoomInformationWindow : UIWindow
 {
+	public class PlayerUIElement
+	{
+		public bool IsLocal { get; private set; }
+		public bool IsReady { get; private set; }
+		public string PlayerName { get; private set; }
+		public int PlayerNumber { get; private set; }
+		public int teamNumber { get; private set; }
+
+		private GameObject uiObject;
+		private Dropdown teamDropdown;
+		private Text playerNameText, teamText, readyText;
+		private Toggle readyToggle;
+
+
+		public PlayerUIElement(Player player, Transform uiReference)
+		{
+			uiObject = uiReference.gameObject;
+			teamDropdown = uiReference.Find("Team Dropdown").GetComponent<Dropdown>();
+			teamText = uiReference.Find("Team Text").GetComponent<Text>();
+			playerNameText = uiReference.Find("Player Name").GetComponent<Text>();
+			readyToggle = uiReference.Find("Ready Toggle").GetComponent<Toggle>();
+			readyText = uiReference.Find("Ready Text").GetComponent<Text>();
+
+			teamDropdown.onValueChanged.AddListener(delegate { SetTeamNumber(teamDropdown.value); });
+			readyToggle.onValueChanged.AddListener(delegate { SetReadyValue(readyToggle.isOn); });
+			teamText.text = teamDropdown.options[0].text;
+
+			AssignToPlayer(player);
+		}
+
+		public void DestroyReference()
+		{
+			Destroy(uiObject);
+		}
+
+		public void AssignToPlayer(Player player)
+		{
+			IsLocal = player.IsLocal;
+			PlayerName = player.NickName;
+			PlayerNumber = player.ActorNumber;
+
+			teamDropdown.gameObject.SetActive(IsLocal);
+			readyToggle.gameObject.SetActive(IsLocal);
+			teamText.gameObject.SetActive(!IsLocal);
+			readyText.gameObject.SetActive(!IsLocal);
+
+			playerNameText.text = PlayerName;
+		}
+
+		public void AddListenerToDropDown(UnityEngine.Events.UnityAction<int> call)
+		{
+			teamDropdown.onValueChanged.AddListener(call);
+		}
+
+		public void AddListenerToReadyToggle(UnityEngine.Events.UnityAction<bool> call)
+		{
+			readyToggle.onValueChanged.AddListener(call);
+		}
+
+		public int GetTeamNumber()
+		{
+			return teamNumber;
+		}
+
+		public int GetTeamCount()
+		{
+			return teamDropdown.options.Count;
+		}
+
+		public bool GetToggleValue()
+		{
+			return readyToggle.isOn;
+		}
+
+		public void ChangeTeamText(int dropdownIndex)
+		{
+			teamText.text = teamDropdown.options[dropdownIndex].text;
+			teamNumber = dropdownIndex;
+		}
+
+		public void SetReady(bool isReady)
+		{
+			readyText.text = isReady ? "Ready" : "Not Ready";
+			SetReadyValue(isReady);
+		}
+
+		private void SetTeamNumber(int newTeamNumber)
+		{
+			teamNumber = newTeamNumber;
+		}
+
+		private void SetReadyValue(bool isReady)
+		{
+			IsReady = isReady;
+		}
+	}
 
 	public int sceneToLoad;
 	public Button startGameButton;
@@ -16,7 +112,7 @@ public class UI_RoomInformationWindow : UIWindow
 	[Header("Parents")]
 	public Transform playerElementParent;
 
-	private List<PlayerInRoomElement> allPlayerElements = new List<PlayerInRoomElement>();
+	private List<PlayerUIElement> allPlayerElements = new List<PlayerUIElement>();
 	private PhotonView photonView;
 
 	private void Awake()
@@ -29,6 +125,7 @@ public class UI_RoomInformationWindow : UIWindow
 		base.Start();
 		NetworkManager.onPlayerListChange += UpdatePlayerList;
 		NetworkManager.onMasterClientSwitch += MasterClientLeft;
+		NetworkManager.onLocalPlayerLeft += LocalPlayerLeft;
 	}
 
 	protected override void OnWindowEnabled()
@@ -49,9 +146,8 @@ public class UI_RoomInformationWindow : UIWindow
 	{
 		if (PhotonLobby.DebugMode() || CanStartGame())
 		{
-			PlayerInRoomElement local = FindLocalPlayerElement();
-			NetworkManager.SetLocalPlayerInfo(local.GetDropdownIndex(), GetNumberInTeam(local.GetDropdownIndex()));
-			photonView.RPC("StartGameRPC", RpcTarget.All);
+			PhotonNetwork.CurrentRoom.IsOpen = false;
+			photonView.RPC(nameof(StartGameRPC), RpcTarget.All);
 		}
 	}
 
@@ -59,8 +155,10 @@ public class UI_RoomInformationWindow : UIWindow
 	{
 		NetworkManager.onPlayerListChange -= UpdatePlayerList;
 		NetworkManager.onMasterClientSwitch -= MasterClientLeft;
+		NetworkManager.onLocalPlayerLeft -= LocalPlayerLeft;
 	}
 
+	#region Checks for Start Game
 	private bool CanStartGame()
 	{
 		UIManager uiManager = ServiceLocator.GetServiceOfType<UIManager>();
@@ -96,16 +194,16 @@ public class UI_RoomInformationWindow : UIWindow
 
 	private bool TeamsAreCorrect()
 	{
-		int[] teamCount = new int[allPlayerElements[0].GetDropdownLength()];
+		int[] teamCount = new int[allPlayerElements[0].GetTeamCount()];
 
 		for (int i = 0; i < allPlayerElements.Count; i++)
 		{
-			teamCount[allPlayerElements[i].GetDropdownIndex()]++;
+			teamCount[allPlayerElements[i].teamNumber]++;
 		}
 
 		for (int i = 0; i < teamCount.Length; i++)
 		{
-			if (teamCount[i] != teamCount.Length / 2)
+			if (teamCount[i] != allPlayerElements.Count / teamCount.Length)
 				return false;
 		}
 
@@ -117,8 +215,9 @@ public class UI_RoomInformationWindow : UIWindow
 		int success = 0;
 		for (int i = 0; i < allPlayerElements.Count; i++)
 		{
-			if (allPlayerElements[i].IsReady())
+			if (allPlayerElements[i].IsReady)
 			{
+				print("READY");
 				success++;
 			}
 		}
@@ -127,21 +226,35 @@ public class UI_RoomInformationWindow : UIWindow
 			return true;
 		else
 			return false;
-			
 	}
+	#endregion
 
-	private void UpdatePlayerList(Player[] playerList, Player changedPlayer)
+	#region Events
+
+	private void UpdatePlayerList(Player[] playerList, Player changedPlayer, NetworkManager.PlayerListMode playerListMode)
 	{
-		foreach (PlayerInRoomElement element in allPlayerElements)
+		switch (playerListMode)
 		{
-			Destroy(element.gameObject);
-		}
+			case NetworkManager.PlayerListMode.PlayerJoined:
 
-		allPlayerElements.Clear();
+				CreatePlayerElement(changedPlayer);
 
-		for (int i = 0; i < playerList.Length; i++)
-		{
-			CreatePlayerElement(playerList[i]);
+				break;
+
+			case NetworkManager.PlayerListMode.PlayerLeft:
+
+				DeletePlayerElement(changedPlayer);
+
+				break;
+
+			case NetworkManager.PlayerListMode.LocalPlayerJoined:
+
+				for (int i = 0; i < playerList.Length; i++)
+				{
+					CreatePlayerElement(playerList[i]);
+				}
+
+				break;
 		}
 	}
 
@@ -151,82 +264,127 @@ public class UI_RoomInformationWindow : UIWindow
 		LeaveServer();
 	}
 
-	private PlayerInRoomElement CreatePlayerElement(Player player)
+	private void LocalPlayerLeft()
+	{
+		for (int i = 0; i < allPlayerElements.Count; i++)
+		{
+			allPlayerElements[i].DestroyReference();
+		}
+
+		allPlayerElements.Clear();
+	}
+
+	#endregion
+
+	private PlayerUIElement CreatePlayerElement(Player player)
 	{
 		GameObject newObject = Instantiate(playerInRoomElementPrefab, Vector3.zero, Quaternion.identity);
 		newObject.transform.SetParent(playerElementParent, false);
-		PlayerInRoomElement pire = newObject.GetComponent<PlayerInRoomElement>();
-		pire.Init(player.IsLocal);
-		pire.ChangePlayerName(player.NickName);
-		pire.AddListenerToDropdown(delegate { UpdatePlayerElement(player.ActorNumber - 1, pire.GetDropdownIndex()); });
-		pire.AddListenerToToggle(delegate { SetReady(player.ActorNumber - 1, pire.GetToggleValue()); });
-		allPlayerElements.Add(pire);
 
-		return pire;
+		PlayerUIElement toReturn = new PlayerUIElement(player, newObject.transform);
+
+		toReturn.AddListenerToDropDown(delegate { UpdatePlayerElement(player.NickName, toReturn.teamNumber); });
+		toReturn.AddListenerToReadyToggle(delegate { SetReady(player.NickName, toReturn.GetToggleValue()); });
+		allPlayerElements.Add(toReturn);
+
+		return toReturn;
 	}
 
-	private void UpdatePlayerElement(int playerElementIndex, int dropdownIndex)
+	private void DeletePlayerElement(Player player)
 	{
-		NetworkManager.SetLocalPlayerInfo(dropdownIndex, GetNumberInTeam(dropdownIndex));
-		photonView.RPC("UpdatePlayerElementRPC", RpcTarget.OthersBuffered, playerElementIndex, dropdownIndex);
+		PlayerUIElement toDestroy = FindUIElementByPlayerName(player.NickName);
+		allPlayerElements.Remove(toDestroy);
+		toDestroy.DestroyReference();
 	}
 
 	private int GetNumberInTeam(int myTeamIndex)
 	{
-		List<PlayerInRoomElement> allElementsInMyTeam = new List<PlayerInRoomElement>();
+		int toReturn = 0;
+		PlayerUIElement localPlayerElement = FindLocalPlayerElement();
+		List<PlayerUIElement> membersOfMyTeam = new List<PlayerUIElement>();
+		membersOfMyTeam.Add(localPlayerElement);
+
 		for (int i = 0; i < allPlayerElements.Count; i++)
 		{
-			if (allPlayerElements[i].GetDropdownIndex() == myTeamIndex)
+			if (allPlayerElements[i].GetTeamNumber() == localPlayerElement.teamNumber)
 			{
-				allElementsInMyTeam.Add(allPlayerElements[i]);
+				membersOfMyTeam.Add(allPlayerElements[i]);
 			}
 		}
 
-		for (int i = 0; i < allElementsInMyTeam.Count; i++)
+		for (int i = 0; i < membersOfMyTeam.Count; i++)
 		{
-			if (allElementsInMyTeam[i].isLocal)
-				return i;
+			if (membersOfMyTeam[i].PlayerNumber > localPlayerElement.PlayerNumber)
+			{
+				toReturn++;
+			}
 		}
 
-		return -1;
+		return toReturn;
 	}
 
-	private void SetReady(int playerElementIndex, bool ready)
-	{
-		photonView.RPC("SetReadyRPC", RpcTarget.OthersBuffered, playerElementIndex, ready);
-	}
-
-	private PlayerInRoomElement FindLocalPlayerElement()
+	private PlayerUIElement FindUIElementByPlayerName(string playerName)
 	{
 		for (int i = 0; i < allPlayerElements.Count; i++)
 		{
-			if (allPlayerElements[i].isLocal)
+			if (allPlayerElements[i].PlayerName == playerName)
+			{
+				return allPlayerElements[i];
+			}
+		}
+
+		return null;
+	}
+
+	private PlayerUIElement FindLocalPlayerElement()
+	{
+		for (int i = 0; i < allPlayerElements.Count; i++)
+		{
+			if (allPlayerElements[i].IsLocal)
 				return allPlayerElements[i];
 		}
 
 		return null;
 	}
 
+	#region Functions for RPC calls
+
+	private void SetReady(string playerName, bool ready)
+	{
+		photonView.RPC(nameof(SetReadyRPC), RpcTarget.OthersBuffered, playerName, ready);
+	}
+
+	private void UpdatePlayerElement(string playerName, int dropdownIndex)
+	{
+		//NetworkManager.SetLocalPlayerInfo(dropdownIndex, GetNumberInTeam(dropdownIndex));
+		photonView.RPC(nameof(UpdatePlayerElementRPC), RpcTarget.OthersBuffered, playerName, dropdownIndex);
+	}
+
+	#endregion
+
 	#region RPCs
 
 	[PunRPC]
-	private void UpdatePlayerElementRPC(int playerElementIndex, int dropdownIndex)
+	private void UpdatePlayerElementRPC(string playerName, int dropdownIndex)
 	{
-		allPlayerElements[playerElementIndex].ChangeTeam(dropdownIndex);
+		print(dropdownIndex);
+		FindUIElementByPlayerName(playerName).ChangeTeamText(dropdownIndex);
 	}
 
 	[PunRPC]
 	private void StartGameRPC()
 	{
+		PlayerUIElement local = FindLocalPlayerElement();
+		NetworkManager.SetLocalPlayerInfo(local.teamNumber, GetNumberInTeam(local.teamNumber));
+
 		SceneHandler sceneManager = ServiceLocator.GetServiceOfType<SceneHandler>();
 		sceneManager.LoadScene(sceneToLoad);
-
 	}
 
 	[PunRPC]
-	private void SetReadyRPC(int playerElementIndex, bool ready)
+	private void SetReadyRPC(string playerName, bool ready)
 	{
-		allPlayerElements[playerElementIndex].SetToggle(ready);
+		FindUIElementByPlayerName(playerName).SetReady(ready);
 	}
 
 	#endregion

@@ -91,7 +91,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
 
 	#region Audio Variables
 
-	[Header("Audio Proporties")]
+	[Header("Audio Properties")]
     public AudioMixer audioMixer;
     public AudioClip[] allAudioclips;
     public PlayOnStart[] playOnStartClips;
@@ -105,7 +105,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
 
     #region Particle Variables
 
-    [Header("Particle Proporties")]
+    [Header("Particle Properties")]
     public ParticleSystem[] allParticleSystemPrefabs;
 
     private readonly List<ParticleTracker> activeParticleSystems = new List<ParticleTracker>();
