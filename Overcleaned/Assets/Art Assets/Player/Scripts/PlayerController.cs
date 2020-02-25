@@ -9,11 +9,7 @@ public class PlayerController : MonoBehaviour
     #region player movement variables
     private Vector3 moveDirection = Vector3.zero;
     public float speed = 6.0f;
-    public float jumpSpeed = 8.0f;
-
-    //Heeft geen referenties kek
-    public float gravity = 20.0f;
-
+    public float gravity = 2.0f;
     public float maxTurnSpeed = 720.0f;
     #endregion
 
@@ -102,7 +98,7 @@ public class PlayerController : MonoBehaviour
     //Stuns the player for X time and prevents movement.
     public void StunPlayer(float duration)
     {
-        manager.PlayParticle("Knockout_FX", transform.position, Quaternion.identity);
+        manager.PlayParticle("Knockout_FX", transform.position +new Vector3(0,1.5f,0), Quaternion.identity);
         SetPlayerAnimationState(AnimationState.Stunned);
         ResetToIdle(duration);
 
