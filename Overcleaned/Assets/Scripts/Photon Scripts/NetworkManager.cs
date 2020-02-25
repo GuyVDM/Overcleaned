@@ -70,7 +70,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 
 		for (int i = 0; i < roomList.Count; i++)
 		{
-			if (roomList[i].MaxPlayers > 0 && roomList[i].PlayerCount > 0)
+			if (roomList[i].MaxPlayers > 0 && roomList[i].PlayerCount > 0 && roomList[i].IsOpen)
 			{
 				if (onlineRooms.Contains(roomList[i]))
 					onlineRooms.Remove(roomList[i]);
@@ -114,6 +114,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		if (logMode)
 			Debug.Log("Master client switched");
 
+		PhotonNetwork.CurrentRoom.IsOpen = false;
 		onMasterClientSwitch?.Invoke(newMasterClient);
 	}
 

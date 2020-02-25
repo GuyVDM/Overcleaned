@@ -146,6 +146,7 @@ public class UI_RoomInformationWindow : UIWindow
 	{
 		if (CanStartGame() || PhotonLobby.DebugMode())
 		{
+			PhotonNetwork.CurrentRoom.IsOpen = false;
 			photonView.RPC(nameof(StartGameRPC), RpcTarget.All);
 		}
 	}
