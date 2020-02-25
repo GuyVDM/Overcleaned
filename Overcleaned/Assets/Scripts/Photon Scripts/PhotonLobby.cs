@@ -8,6 +8,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 {
 	[Header("Photon Settings")]
 	public string gameVersion;
+	public byte maxPlayers;
 
 	[Header("UI")]
 	public UI_ServerBrowser serverBrowser;
@@ -35,7 +36,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 
 	public void HostRoom(string roomName)
 	{
-		PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 2 }, new TypedLobby("Lobby 1", LobbyType.Default));
+		PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = maxPlayers }, new TypedLobby("Lobby 1", LobbyType.Default));
 	}
 
 	public static bool DebugMode()
