@@ -15,6 +15,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
 	#endregion
 
+	public enum PlayerListMode
+	{
+		PlayerLeft,
+		PlayerJoined,
+		LocalPlayerJoined,
+	}
+
 	//Variables
 	public bool logMode;
 
@@ -26,7 +33,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 
 	//delegates for static events
 	public delegate void OnRoomListChange(List<RoomInfo> allRooms);
-	public delegate void OnPlayerListChange(Player[] allPlayers, Player changedPlayer);
+	public delegate void OnPlayerListChange(Player[] allPlayers, Player changedPlayer, PlayerListMode playerListMode);
 	public delegate void OnMasterClientSwitch(Player newMasterClient);
 	public delegate void OnLocalPlayerLeft();
 
@@ -91,7 +98,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		if (logMode)
 			Debug.Log("Player List Update");
 
-		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList, newPlayer);
+		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList, newPlayer, PlayerListMode.PlayerJoined);
 	}
 
 	public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -99,7 +106,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		if (logMode)
 			Debug.Log("Player List Update");
 
-		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList, otherPlayer);
+		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList, otherPlayer, PlayerListMode.PlayerLeft);
 	}
 
 	public override void OnMasterClientSwitched(Player newMasterClient)
@@ -115,7 +122,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		if (logMode)
 			Debug.Log("Player List Update");
 
-		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList, PhotonNetwork.LocalPlayer);
+		onPlayerListChange?.Invoke(PhotonNetwork.PlayerList, PhotonNetwork.LocalPlayer, PlayerListMode.LocalPlayerJoined);
 	}
 
 	public override void OnLeftRoom()

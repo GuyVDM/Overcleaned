@@ -444,7 +444,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2782770983143222850}
   - component: {fileID: 1854728068337780960}
-  - component: {fileID: 2407183669431813274}
   m_Layer: 5
   m_Name: Player in Room Element
   m_TagString: Untagged
@@ -484,18 +483,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2500578428739097340}
   m_CullTransparentMesh: 0
---- !u!114 &2407183669431813274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2500578428739097340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c83a8b527baf0243b6f443b5044a49a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3105346342824631912
 GameObject:
   m_ObjectHideFlags: 0
