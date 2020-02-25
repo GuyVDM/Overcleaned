@@ -31,6 +31,7 @@ public class UI_RoomInformationWindow : UIWindow
 			readyText = uiReference.Find("Ready Text").GetComponent<Text>();
 
 			teamDropdown.onValueChanged.AddListener(delegate { SetTeamNumber(teamDropdown.value); });
+			readyToggle.onValueChanged.AddListener(delegate { SetReadyValue(readyToggle.isOn); });
 			teamText.text = teamDropdown.options[0].text;
 
 			AssignToPlayer(player);
@@ -89,12 +90,17 @@ public class UI_RoomInformationWindow : UIWindow
 		public void SetReady(bool isReady)
 		{
 			readyText.text = isReady ? "Ready" : "Not Ready";
-			IsReady = isReady;
+			SetReadyValue(isReady);
 		}
 
 		private void SetTeamNumber(int newTeamNumber)
 		{
 			teamNumber = newTeamNumber;
+		}
+
+		private void SetReadyValue(bool isReady)
+		{
+			IsReady = isReady;
 		}
 	}
 
@@ -119,6 +125,7 @@ public class UI_RoomInformationWindow : UIWindow
 		base.Start();
 		NetworkManager.onPlayerListChange += UpdatePlayerList;
 		NetworkManager.onMasterClientSwitch += MasterClientLeft;
+		NetworkManager.onLocalPlayerLeft += LocalPlayerLeft;
 	}
 
 	protected override void OnWindowEnabled()
@@ -139,9 +146,7 @@ public class UI_RoomInformationWindow : UIWindow
 	{
 		if (CanStartGame() || PhotonLobby.DebugMode())
 		{
-			PlayerUIElement local = FindLocalPlayerElement();
-			NetworkManager.SetLocalPlayerInfo(local.teamNumber, GetNumberInTeam(local.teamNumber));
-			photonView.RPC("StartGameRPC", RpcTarget.All);
+			photonView.RPC(nameof(StartGameRPC), RpcTarget.All);
 		}
 	}
 
@@ -149,6 +154,7 @@ public class UI_RoomInformationWindow : UIWindow
 	{
 		NetworkManager.onPlayerListChange -= UpdatePlayerList;
 		NetworkManager.onMasterClientSwitch -= MasterClientLeft;
+		NetworkManager.onLocalPlayerLeft -= LocalPlayerLeft;
 	}
 
 	#region Checks for Start Game
@@ -210,6 +216,7 @@ public class UI_RoomInformationWindow : UIWindow
 		{
 			if (allPlayerElements[i].IsReady)
 			{
+				print("READY");
 				success++;
 			}
 		}
@@ -254,6 +261,16 @@ public class UI_RoomInformationWindow : UIWindow
 	{
 		ServiceLocator.GetServiceOfType<UIManager>().ShowMessage("The host has left the server.");
 		LeaveServer();
+	}
+
+	private void LocalPlayerLeft()
+	{
+		for (int i = 0; i < allPlayerElements.Count; i++)
+		{
+			allPlayerElements[i].DestroyReference();
+		}
+
+		allPlayerElements.Clear();
 	}
 
 	#endregion
@@ -356,6 +373,9 @@ public class UI_RoomInformationWindow : UIWindow
 	[PunRPC]
 	private void StartGameRPC()
 	{
+		PlayerUIElement local = FindLocalPlayerElement();
+		NetworkManager.SetLocalPlayerInfo(local.teamNumber, GetNumberInTeam(local.teamNumber));
+
 		SceneHandler sceneManager = ServiceLocator.GetServiceOfType<SceneHandler>();
 		sceneManager.LoadScene(sceneToLoad);
 	}
