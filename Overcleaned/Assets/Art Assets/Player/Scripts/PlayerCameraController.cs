@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Threading.Tasks;
+using System;
 
 [RequireComponent(typeof(Camera))]
 public class PlayerCameraController : MonoBehaviour 
@@ -20,6 +22,12 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField]
     private Vector3 enemy_Base_Pos;
 
+    [SerializeField]
+    private Animator canvas_Anim;
+
+    [SerializeField]
+    private GameObject canvas;
+
     #region ### Properties ###
     public float ZoomSpeed { get; set; } = 16;
     #endregion
@@ -28,6 +36,9 @@ public class PlayerCameraController : MonoBehaviour
     private PlayerManager playerManager;
 
     private float zoomOffset;
+
+    private const float TIME_BEFORE_UI = 2;
+    private const string TRIGGER_NAME = "Popup";
 
     private Vector3 current_Target_Pos;
     private Vector3 last_Pos;
@@ -49,6 +60,18 @@ public class PlayerCameraController : MonoBehaviour
         GetComponent<Camera>().enabled = true;
         GetComponent<AudioListener>().enabled = true;
         playerManager = ServiceLocator.GetServiceOfType<PlayerManager>();
+
+        canvas.SetActive(true);
+        EnableCleaningUI();
+    }
+
+    private async void EnableCleaningUI() 
+    {
+        if(canvas_Anim != null) 
+        {
+            await Task.Delay(TimeSpan.FromSeconds(TIME_BEFORE_UI));
+            canvas_Anim.SetTrigger(TRIGGER_NAME);
+        }
     }
 
     private void FixedUpdate() 
