@@ -150,7 +150,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 8100939995989278516}
   - {fileID: 6393120765383580608}
-  viewIdField: 5
+  viewIdField: 0
   InstantiationId: 5
   isRuntimeInstantiated: 0
 --- !u!1 &1089651429084426412
@@ -252,7 +252,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 3
+  viewIdField: 0
   InstantiationId: 3
   isRuntimeInstantiated: 0
 --- !u!1 &1680132393193108345
@@ -928,8 +928,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
-  gravity: 20
-  maxTurnSpeed: 720
+  gravity: 2
+  maxTurnSpeed: 480
   manager: {fileID: 0}
 --- !u!114 &1080600953416085825
 MonoBehaviour:
@@ -950,7 +950,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 4
+  viewIdField: 0
   InstantiationId: 4
   isRuntimeInstantiated: 0
 --- !u!114 &1870904856804557746
