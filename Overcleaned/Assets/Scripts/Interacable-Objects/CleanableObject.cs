@@ -111,7 +111,7 @@ public class CleanableObject : InteractableObject, IPunObservable
 
     public override void Interact(PlayerInteractionController interactionController)
     {
-        if(IsLocked) 
+        if(IsLocked || !IsAllowedAccess(ownedByTeam)) 
         {
             interactionController.DeinteractWithCurrentObject();
             return;

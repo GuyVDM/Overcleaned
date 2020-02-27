@@ -114,7 +114,7 @@ public class ToolInteractableObject : CleanableObject
 
     public override void Interact(PlayerInteractionController interactionController)
     {
-        if(IsLocked == true) 
+        if(IsLocked == true || !IsAllowedAccess(ownedByTeam)) 
         {
             DeInteract(interactionController);
             interactionController.DeinteractWithCurrentObject();

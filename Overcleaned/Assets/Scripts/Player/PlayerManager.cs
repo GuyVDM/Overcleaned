@@ -6,6 +6,12 @@ using Photon.Pun;
 [RequireComponent(typeof(PhotonView))]
 public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
 {
+    public enum Team 
+    {
+        Team1 = 0,
+        Team2 = 1
+    }
+
     [Header("References:")]
     public PlayerController player_Controller;
 
@@ -16,6 +22,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
     [Header("Visual References:")]
     [SerializeField]
     private MeshRenderer player_Body;
+
+    [Header("Debugging:")]
+    [SerializeField]
+    private Team team;
 
     #region ### Service Locator Snippet ###
     public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
@@ -35,6 +45,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
             r = red
         };
     }
+
+    [PunRPC]
+    private void Stream_PlayerTeamOverNetwork(int teamID) 
+    {
+        team = (Team)teamID;
+    }
     #endregion
 
     private void Awake()
@@ -42,18 +58,28 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
         if (photonView.IsMine || PhotonNetwork.IsConnected == false) 
         {
             OnInitialise();
+            Set_TeamState();
             player_Controller.enabled = true;
             player_CameraController.enabled = true;
             player_InteractionController.enabled = true;
             return;
         }
-
-        this.enabled = false;
     }
 
     private void OnDestroy() => OnDeinitialise();
 
     public void Set_EnemyBasePosition(Vector3 pos) => player_CameraController?.Set_EnemyBasePos(pos);
+
+    public void Set_TeamState() 
+    {
+        if(NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_PlayerTeamOverNetwork), RpcTarget.AllBuffered, NetworkManager.localPlayerInformation.team);
+            return;
+        }
+
+        Stream_PlayerTeamOverNetwork(NetworkManager.localPlayerInformation.team);
+    }
 
     public void Set_LockingStateOfPlayerController(bool state) => player_Controller.enabled = state;
 
@@ -67,4 +93,5 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
 
         Stream_PlayerColorOverNetwork(playerColor.a, playerColor.b, playerColor.g, playerColor.r);
     }
+
 }

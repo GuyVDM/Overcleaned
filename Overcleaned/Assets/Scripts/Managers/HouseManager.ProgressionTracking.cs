@@ -4,9 +4,9 @@ using UnityEngine;
 
 public partial class HouseManager : MonoBehaviour, IServiceOfType
 {
-	public static float CleanPercentage { get { return GetCleanPercentage(); } private set { } }
+	public static float CleanPercentage => GetCleanPercentage();
 
-	private static CleanableObject[] cleanableObjects;
+    private static CleanableObject[] cleanableObjects;
 	private static int totalWeightOfAllCleanables;
 
 	#region Initalize Service
