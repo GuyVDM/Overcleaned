@@ -18,8 +18,7 @@ public abstract class InteractableObject : MonoBehaviourPunCallbacks, IInteracta
     public abstract void DeInteract(PlayerInteractionController interactionController);
 
     [Header("Team Management")]
-    [SerializeField]
-    protected OwnedByTeam ownedByTeam = OwnedByTeam.Everyone;
+    public OwnedByTeam ownedByTeam = OwnedByTeam.Everyone;
 
     #region ### RPC Calls ###
     [PunRPC]
@@ -40,24 +39,6 @@ public abstract class InteractableObject : MonoBehaviourPunCallbacks, IInteracta
     #region ### Static Accessor Property ###
     private static HouseManager m_houseManager;
     private HouseManager HouseManager => m_houseManager ?? (m_houseManager = ServiceLocator.GetServiceOfType<HouseManager>());
-    #endregion
-
-    #region ### Static Checks ###
-    protected static bool IsAllowedAccess(OwnedByTeam teamOwner)
-    {
-        if(teamOwner == OwnedByTeam.Everyone) 
-        {
-            return true;
-        }
-
-        if(NetworkManager.localPlayerInformation.team == (int)teamOwner) 
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     #endregion
 
     #region ### Private Variables ###

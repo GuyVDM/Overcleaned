@@ -250,9 +250,71 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 8100939995989278516}
   - {fileID: 6393120765383580608}
-  viewIdField: 0
-  InstantiationId: 6
+  viewIdField: 5
+  InstantiationId: 5
   isRuntimeInstantiated: 0
+--- !u!1 &977362385202431396
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8988849847190346353}
+  - component: {fileID: 3335496867655060530}
+  - component: {fileID: 1174432944542119328}
+  m_Layer: 9
+  m_Name: '[PlayerCollider]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8988849847190346353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977362385202431396}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.54, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7310821113577667045}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3335496867655060530
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977362385202431396}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1174432944542119328
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977362385202431396}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1 &1089651429084426412
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,8 +414,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 0
-  InstantiationId: 7
+  viewIdField: 4
+  InstantiationId: 4
   isRuntimeInstantiated: 0
 --- !u!1 &1103632569539231498
 GameObject:
@@ -1301,6 +1363,7 @@ Transform:
   - {fileID: 3559685064175142856}
   - {fileID: 7622783399273634764}
   - {fileID: 6610335592913529989}
+  - {fileID: 8988849847190346353}
   m_Father: {fileID: 3343622068766143276}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1376,8 +1439,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 0
-  InstantiationId: 8
+  viewIdField: 3
+  InstantiationId: 3
   isRuntimeInstantiated: 0
 --- !u!114 &1870904856804557746
 MonoBehaviour:

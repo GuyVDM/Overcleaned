@@ -72,7 +72,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
         #region ### When starting to interact ###
         if (Input.GetKey(interactKey) && currentSelected != null) 
         {
-            if (currentSelected.IsLocked == false)
+            if (currentSelected.IsLocked == false && HasAccessToInteract(currentSelected))
             {
                 arrow_Selection_UX.gameObject.SetActive(false);
                 currentlyInteracting = currentSelected;
@@ -126,7 +126,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
             {
                 InteractableObject observedObject = hitPoint.transform.GetComponent<InteractableObject>();
 
-                if (observedObject.IsLocked == false)
+                if (observedObject.IsLocked == false && HasAccessToInteract(observedObject))
                 {
                     if (currentSelected == null) 
                     {
@@ -233,6 +233,23 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
                 ForceDropObject();
             }
         }   
+    }
+    #endregion
+
+    #region ### Interact Checks ###
+    private static bool HasAccessToInteract(InteractableObject interactableObject)
+    {
+        if (interactableObject.ownedByTeam == InteractableObject.OwnedByTeam.Everyone) 
+        {
+            return true;
+        }
+
+        if ((int)interactableObject.ownedByTeam == NetworkManager.localPlayerInformation.team)
+        {
+            return true;
+        }
+
+        return false;
     }
     #endregion
 }
