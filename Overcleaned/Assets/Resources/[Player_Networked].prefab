@@ -129,7 +129,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7310821113577667045}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2907963461636833616
 MeshFilter:
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player_Controller: {fileID: 6122987107604025410}
   player_CameraController: {fileID: 6043271190485121396}
-  player_InteractionController: {fileID: 1870904856804557746}
+  player_InteractionController: {fileID: 9203236387461447684}
   player_Body: {fileID: 3159775121834661112}
   team: 0
 --- !u!114 &915508530143815553
@@ -250,8 +250,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 8100939995989278516}
   - {fileID: 6393120765383580608}
-  viewIdField: 6
-  InstantiationId: 6
+  viewIdField: 5
+  InstantiationId: 5
   isRuntimeInstantiated: 0
 --- !u!1 &977362385202431396
 GameObject:
@@ -264,6 +264,8 @@ GameObject:
   - component: {fileID: 8988849847190346353}
   - component: {fileID: 3335496867655060530}
   - component: {fileID: 1174432944542119328}
+  - component: {fileID: 9203236387461447684}
+  - component: {fileID: 6455605808020390334}
   m_Layer: 9
   m_Name: '[PlayerCollider]'
   m_TagString: Untagged
@@ -283,7 +285,7 @@ Transform:
   m_LocalScale: {x: 1.3265, y: 1.3265, z: 1.3265}
   m_Children: []
   m_Father: {fileID: 7310821113577667045}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &3335496867655060530
 CapsuleCollider:
@@ -315,6 +317,48 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!114 &9203236387461447684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977362385202431396}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 262a9c22a2a34944e8c86e785e9a8ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hand: {fileID: 1089651429084426412}
+  interactableMask:
+    serializedVersion: 2
+    m_Bits: 256
+  arrow_Selection_UX: {fileID: 8994339082462930250}
+  currentlyWielding: {fileID: 0}
+  currentSelected: {fileID: 0}
+  currentlyInteracting: {fileID: 0}
+--- !u!114 &6455605808020390334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977362385202431396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 6
+  InstantiationId: 6
+  isRuntimeInstantiated: 0
 --- !u!1 &1089651429084426412
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,7 +390,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7310821113577667045}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4919108465677541538
 MeshFilter:
@@ -414,8 +458,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 7
-  InstantiationId: 7
+  viewIdField: 4
+  InstantiationId: 4
   isRuntimeInstantiated: 0
 --- !u!1 &1103632569539231498
 GameObject:
@@ -520,7 +564,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7310821113577667045}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3331976688919698592
 MeshFilter:
@@ -729,7 +773,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7310821113577667045}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2478674691051591032
 MeshFilter:
@@ -1021,7 +1065,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7310821113577667045}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5780097358721812999
 MeshFilter:
@@ -1197,7 +1241,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7310821113577667045}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3766687274502186175
 MeshFilter:
@@ -1336,7 +1380,6 @@ GameObject:
   - component: {fileID: 556778803801175452}
   - component: {fileID: 6122987107604025410}
   - component: {fileID: 1080600953416085825}
-  - component: {fileID: 1870904856804557746}
   - component: {fileID: 8100939995989278516}
   - component: {fileID: 6393120765383580608}
   m_Layer: 0
@@ -1357,13 +1400,13 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 8988849847190346353}
   - {fileID: 3985302585202064420}
   - {fileID: 4848102693925536434}
   - {fileID: 6415549342006895513}
   - {fileID: 3559685064175142856}
   - {fileID: 7622783399273634764}
   - {fileID: 6610335592913529989}
-  - {fileID: 8988849847190346353}
   m_Father: {fileID: 3343622068766143276}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1439,29 +1482,9 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 8
-  InstantiationId: 8
+  viewIdField: 3
+  InstantiationId: 3
   isRuntimeInstantiated: 0
---- !u!114 &1870904856804557746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7046752325803422870}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 262a9c22a2a34944e8c86e785e9a8ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hand: {fileID: 1089651429084426412}
-  interactableMask:
-    serializedVersion: 2
-    m_Bits: 256
-  arrow_Selection_UX: {fileID: 8994339082462930250}
-  currentlyWielding: {fileID: 0}
-  currentSelected: {fileID: 0}
-  currentlyInteracting: {fileID: 0}
 --- !u!114 &8100939995989278516
 MonoBehaviour:
   m_ObjectHideFlags: 0
