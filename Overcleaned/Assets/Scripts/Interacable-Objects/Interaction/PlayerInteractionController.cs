@@ -28,20 +28,24 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     private readonly KeyCode useWieldableKey = KeyCode.Return;
 
     private Vector3 arrow_UX_Offset = new Vector3(0, 2, 0);
+
+    private bool forceDrop = false;
     #endregion
 
     #region ### RPC Calls ###
     [PunRPC]
-    private void Cast_ThrowObject(int objectID) 
+    private void Cast_ThrowObject(int objectID, bool hasForceDropped) 
     {
         const float THROW_FORCE_FORWARD = 10;
         const float THROW_FORCE_UP = 3;
+
+        Vector3 throwVelocity = hasForceDropped ? Vector3.zero : (transform.forward * THROW_FORCE_FORWARD) + (transform.up * THROW_FORCE_UP);
 
         Transform thrownObject = NetworkManager.GetViewByID(objectID).transform;
 
         thrownObject.transform.SetParent(null);
         thrownObject.transform.GetComponent<Rigidbody>().isKinematic = false;
-        thrownObject.transform.GetComponent<Rigidbody>().AddForceAtPosition((transform.forward * THROW_FORCE_FORWARD) + (transform.up * THROW_FORCE_UP), transform.position, ForceMode.Impulse);
+        thrownObject.transform.GetComponent<Rigidbody>().AddForceAtPosition(throwVelocity, transform.position, ForceMode.Impulse);
     }
 
     [PunRPC()]
@@ -190,8 +194,21 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
             currentlyWielding = null;
             if (NetworkManager.IsConnectedAndInRoom) 
             {
-                photonView.RPC(nameof(Cast_ThrowObject), RpcTarget.AllBuffered, wieldableObject.gameObject.GetPhotonView().ViewID);
+                photonView.RPC(nameof(Cast_ThrowObject), RpcTarget.AllBuffered, wieldableObject.gameObject.GetPhotonView().ViewID, forceDrop);
+                forceDrop = false;
                 return;
+            }
+        }
+    }
+
+    public void ForceDropObject() 
+    {
+        if (currentlyWielding != null) 
+        {
+            if (currentlyWielding.GetType() == typeof(WieldableCleanableObject))
+            {
+                forceDrop = true;
+                DropObject(currentlyWielding);
             }
         }
     }
@@ -203,4 +220,19 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
             currentlyInteracting = null;
         }
     }
+
+    #region ### Collision Checks ###
+    private void OnCollisionEnter(Collision collision) 
+    {
+        if(collision.transform.root.GetComponent<PlayerManager>()) 
+        {
+            PlayerManager otherPlayer = collision.transform.root.GetComponent<PlayerManager>();
+
+            if((int)otherPlayer.team != NetworkManager.localPlayerInformation.team) 
+            {
+                ForceDropObject();
+            }
+        }   
+    }
+    #endregion
 }

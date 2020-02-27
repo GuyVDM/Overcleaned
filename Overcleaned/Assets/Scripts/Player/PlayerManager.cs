@@ -24,8 +24,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
     private MeshRenderer player_Body;
 
     [Header("Debugging:")]
-    [SerializeField]
-    private Team team;
+    public Team team;
 
     #region ### Service Locator Snippet ###
     public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
