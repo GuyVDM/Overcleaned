@@ -30,7 +30,9 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 
 	private void Start()
 	{
-		ConnectWithPhoton();
+		if (!PhotonNetwork.IsConnected)
+			ConnectWithPhoton();
+
 		NetworkManager.onRoomListChange += ShowRoomsOnUI;
 	}
 

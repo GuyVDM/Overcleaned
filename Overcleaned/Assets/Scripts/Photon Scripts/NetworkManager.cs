@@ -56,9 +56,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	{
 		PhotonNetwork.LocalPlayer.NickName = nickname;
 	}
+
 	public void SetLocalPlayerNickname(InputField inputField)
 	{
 		SetLocalPlayerNickname(inputField.text);
+	}
+
+	private void ReturnToMainMenu()
+	{
+		SceneHandler sceneHandler = ServiceLocator.GetServiceOfType<SceneHandler>();
+		sceneHandler.LoadScene(0);
 	}
 
 	#region Callbacks
@@ -86,6 +93,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 
 		print(onlineRooms.Count);
 		onRoomListChange(onlineRooms);
+	}
+
+	public override void OnDisconnected(DisconnectCause cause)
+	{
+		ReturnToMainMenu();
 	}
 
 	public override void OnJoinedLobby()

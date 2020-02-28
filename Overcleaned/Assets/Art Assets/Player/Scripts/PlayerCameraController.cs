@@ -20,6 +20,9 @@ public class PlayerCameraController : MonoBehaviour
     private Transform player_Target;
 
     [SerializeField]
+    private Camera uiCamera;
+
+    [SerializeField]
     private Vector3 enemy_Base_Pos;
 
     [SerializeField]
@@ -58,6 +61,7 @@ public class PlayerCameraController : MonoBehaviour
     private void OnEnable()
     {
         GetComponent<Camera>().enabled = true;
+        uiCamera.enabled = true;
         GetComponent<AudioListener>().enabled = true;
         playerManager = ServiceLocator.GetServiceOfType<PlayerManager>();
 
