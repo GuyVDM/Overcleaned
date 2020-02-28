@@ -222,7 +222,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     }
 
     #region ### Collision Checks ###
-    private void OnCollisionEnter(Collision collision) 
+    private void OnTriggerEnter(Collider collision) 
     {
         Debug.Log(collision.gameObject.name);
         if(collision.transform.root.GetComponent<PlayerManager>()) 

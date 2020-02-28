@@ -250,8 +250,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 8100939995989278516}
   - {fileID: 6393120765383580608}
-  viewIdField: 5
-  InstantiationId: 5
+  viewIdField: 10
+  InstantiationId: 10
   isRuntimeInstantiated: 0
 --- !u!1 &977362385202431396
 GameObject:
@@ -262,10 +262,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8988849847190346353}
-  - component: {fileID: 3335496867655060530}
   - component: {fileID: 1174432944542119328}
   - component: {fileID: 9203236387461447684}
   - component: {fileID: 6455605808020390334}
+  - component: {fileID: 3020005488989559044}
   m_Layer: 9
   m_Name: '[PlayerCollider]'
   m_TagString: Untagged
@@ -287,20 +287,6 @@ Transform:
   m_Father: {fileID: 7310821113577667045}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &3335496867655060530
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 977362385202431396}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1174432944542119328
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -356,9 +342,22 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 6
-  InstantiationId: 6
+  viewIdField: 8
+  InstantiationId: 8
   isRuntimeInstantiated: 0
+--- !u!65 &3020005488989559044
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977362385202431396}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1089651429084426412
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,8 +457,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 4
-  InstantiationId: 4
+  viewIdField: 7
+  InstantiationId: 7
   isRuntimeInstantiated: 0
 --- !u!1 &1103632569539231498
 GameObject:
@@ -1482,8 +1481,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 3
-  InstantiationId: 3
+  viewIdField: 6
+  InstantiationId: 6
   isRuntimeInstantiated: 0
 --- !u!114 &8100939995989278516
 MonoBehaviour:
