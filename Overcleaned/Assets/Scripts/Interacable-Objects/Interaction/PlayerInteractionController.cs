@@ -97,6 +97,11 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
             if(currentlyWielding != null) 
             {
                 currentlyWielding.DeInteract(this);
+
+                if(currentlyInteracting) 
+                {
+                    currentlyInteracting.DeInteract(this);
+                }
             }
         }
 
