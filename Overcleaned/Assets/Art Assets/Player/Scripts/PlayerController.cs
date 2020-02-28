@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (Input.GetButtonDown("Jump"))
-            StunPlayer(3f);
+            StunPlayer(5f);
     }
     private void MovePlayer()
     {
@@ -81,10 +81,10 @@ public class PlayerController : MonoBehaviour
         }
 
         //Sets Animation states
-        if (InputAxes.x==1f || InputAxes.y ==1f)
-            SetPlayerAnimationState(AnimationState.Walking);
-        else
+        if (InputAxes == Vector2.zero)
             SetPlayerAnimationState(AnimationState.Idle);
+        else
+            SetPlayerAnimationState(AnimationState.Walking);
     }
 
     //Manages all player animationstates. 
