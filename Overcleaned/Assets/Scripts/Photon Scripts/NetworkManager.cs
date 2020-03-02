@@ -100,6 +100,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		ReturnToMainMenu();
 	}
 
+
+
 	public override void OnJoinedLobby()
 	{
 		localPlayerInformation = new LocalPlayerInformation(PhotonNetwork.LocalPlayer);
