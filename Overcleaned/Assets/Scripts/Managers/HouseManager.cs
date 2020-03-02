@@ -28,18 +28,18 @@ public partial class HouseManager : MonoBehaviourPun, IServiceOfType
 	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
 	#endregion
 
-	private void Start()
-	{
-		totalWeightOfAllCleanables = GetTotalWeight();
+	//private void Start()
+	//{
+	//	totalWeightOfAllCleanables = GetTotalWeight();
 
-		if (PhotonNetwork.IsMasterClient)
-			photonView.RPC(nameof(GetRemainingTime), RpcTarget.AllBuffered);
-	}
+	//	if (PhotonNetwork.IsMasterClient)
+	//		photonView.RPC(nameof(GetRemainingTime), RpcTarget.AllBuffered);
+	//}
 
-	private void Update()
-	{
-		print(RemainingTime);
-	}
+	//private void Update()
+	//{
+	//	print(RemainingTime);
+	//}
 
 	#region Cleaning Progression
 	public static float GetCleanPercentage()
