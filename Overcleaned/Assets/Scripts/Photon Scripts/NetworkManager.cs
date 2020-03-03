@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using System.IO;
+using System.Text.RegularExpressions;
 
 public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 {
@@ -41,9 +43,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 
 	private List<RoomInfo> onlineRooms = new List<RoomInfo>();
 
+	//Nicknaming the player
+	private string[] allProfanity;
+
 	private void Start()
 	{
 		DontDestroyOnLoad(gameObject);
+		allProfanity = GetAllProfanity(Application.streamingAssetsPath + "/Profanity.txt");
 	}
 
 	public static void SetLocalPlayerInfo(int team, int numberInTeam)
@@ -52,9 +58,24 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		localPlayerInformation.numberInTeam = numberInTeam;
 	}
 
+	private void ReturnToMainMenu()
+	{
+		SceneHandler sceneHandler = ServiceLocator.GetServiceOfType<SceneHandler>();
+		sceneHandler.LoadScene(0);
+	}
+
+	#region Nicknaming the player
+
 	public void SetLocalPlayerNickname(string nickname)
 	{
-		PhotonNetwork.LocalPlayer.NickName = nickname;
+		if (NameIsClean(nickname))
+		{
+			GiveNicknameToPlayer(nickname);
+		}
+		else
+		{
+			ServiceLocator.GetServiceOfType<UIManager>().ShowMessage("Do not use profanity in your username.");
+		}
 	}
 
 	public void SetLocalPlayerNickname(InputField inputField)
@@ -62,11 +83,43 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		SetLocalPlayerNickname(inputField.text);
 	}
 
-	private void ReturnToMainMenu()
+	private string[] GetAllProfanity(string path)
 	{
-		SceneHandler sceneHandler = ServiceLocator.GetServiceOfType<SceneHandler>();
-		sceneHandler.LoadScene(0);
+		string allText = File.ReadAllText(path);
+		string[] allWords = allText.Split('\n');
+
+		for (int i = 0; i < allWords.Length; i++)
+		{
+			allWords[i] = Regex.Replace(allWords[i], @"\s+", "");
+		}
+
+		return allWords;
 	}
+
+	private bool NameIsClean(string nickname)
+	{
+		for (int i = 0; i < allProfanity.Length; i++)
+		{
+			print(nickname + " " + nickname.Length);
+			print(allProfanity[i] + " " + allProfanity[i].Length);
+
+			if (nickname.ToLower() == allProfanity[i])
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private void GiveNicknameToPlayer(string nickname)
+	{
+		//photonView.RPC(nameof(RegisterNickname), RpcTarget.All, nickname);
+		PhotonNetwork.LocalPlayer.NickName = nickname;
+		ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Server Browser");
+	}
+
+	#endregion
 
 	#region Callbacks
 
@@ -91,7 +144,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 			}
 		}
 
-		print(onlineRooms.Count);
 		onRoomListChange(onlineRooms);
 	}
 
@@ -99,8 +151,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	{
 		ReturnToMainMenu();
 	}
-
-
 
 	public override void OnJoinedLobby()
 	{
