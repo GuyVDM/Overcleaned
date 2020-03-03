@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
-using System.IO;
 using System.Text.RegularExpressions;
 
 public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
@@ -40,7 +39,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	public delegate void OnLocalPlayerLeft();
 
 	public static LocalPlayerInformation localPlayerInformation { get; private set; }
-
 	private List<RoomInfo> onlineRooms = new List<RoomInfo>();
 
 	//Nicknaming the player
@@ -49,7 +47,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	private void Start()
 	{
 		DontDestroyOnLoad(gameObject);
-		allProfanity = GetAllProfanity(Application.streamingAssetsPath + "/Profanity.txt");
+		allProfanity = GetAllProfanity(); 
 	}
 
 	public static void SetLocalPlayerInfo(int team, int numberInTeam)
@@ -83,10 +81,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		SetLocalPlayerNickname(inputField.text);
 	}
 
-	private string[] GetAllProfanity(string path)
+	private string[] GetAllProfanity()
 	{
-		string allText = File.ReadAllText(path);
-		string[] allWords = allText.Split('\n');
+		TextAsset ta = (TextAsset)Resources.Load("Profanity");
+		string[] allWords = ta.text.Split('\n');
 
 		for (int i = 0; i < allWords.Length; i++)
 		{
@@ -100,10 +98,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	{
 		for (int i = 0; i < allProfanity.Length; i++)
 		{
-			print(nickname + " " + nickname.Length);
-			print(allProfanity[i] + " " + allProfanity[i].Length);
-
-			if (nickname.ToLower() == allProfanity[i])
+			if (nickname.ToLower().Contains(allProfanity[i]))
 			{
 				return false;
 			}
