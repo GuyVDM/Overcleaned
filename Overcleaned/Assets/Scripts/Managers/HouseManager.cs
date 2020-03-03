@@ -6,8 +6,15 @@ using System;
 
 public partial class HouseManager : MonoBehaviourPun, IServiceOfType
 {
+	//Static values;
 	public static float CleanPercentage => GetCleanPercentage();
-	public static int RemainingTime => GetRemainingTime(); 
+	public static TimeSpan RemainingTime => GetRemainingTime();
+
+	//Events
+	public static event TimeChanged OnTimeChanged;
+
+	//Delegates for events
+	public delegate void TimeChanged(TimeSpan newtime);
 
 	//Progression tracking
     private static CleanableObject[] cleanableObjects;
@@ -16,6 +23,7 @@ public partial class HouseManager : MonoBehaviourPun, IServiceOfType
 	//Time tracking
 	public int gameTimeInMinutes;
 	private static DateTime targetTime;
+	private TimeSpan lastTimeSpan;
 
 	#region Initalize Service
 	private void Awake()
@@ -38,7 +46,15 @@ public partial class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	private void Update()
 	{
-		print(RemainingTime);
+		if (lastTimeSpan.Seconds != RemainingTime.Seconds)
+		{
+			if (lastTimeSpan.Seconds > RemainingTime.Seconds || RemainingTime.Seconds == 59 || lastTimeSpan == null)
+			{
+				lastTimeSpan = RemainingTime;
+
+				OnTimeChanged(lastTimeSpan);
+			}
+		}
 	}
 
 	#region Cleaning Progression
@@ -78,12 +94,12 @@ public partial class HouseManager : MonoBehaviourPun, IServiceOfType
 		targetTime = CalculateTargetTime();
 	}
 
-	public static int GetRemainingTime()
+	public static TimeSpan GetRemainingTime()
 	{
 		if (targetTime != null)
-			return targetTime.Subtract(DateTime.Now).Minutes;
+			return targetTime.Subtract(DateTime.Now);
 		else
-			return -1;
+			return new TimeSpan();
 	}
 
 	private DateTime CalculateTargetTime()
