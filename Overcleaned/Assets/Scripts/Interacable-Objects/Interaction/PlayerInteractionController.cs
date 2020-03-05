@@ -122,11 +122,11 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     private void CheckForInteractables() 
     {
         Ray interactableRay = new Ray(transform.position, transform.forward);
-        ExtDebug.DrawBoxCastBox(transform.position, new Vector3(0.5f, 0.5f, 0.5f), transform.rotation, transform.forward, RAY_LENGTH, Color.red);
+        ExtDebug.DrawBoxCastBox(transform.position, new Vector3(0.5f, 0.75f, 0.5f), transform.rotation, transform.forward, RAY_LENGTH, Color.red);
 
         RaycastHit hitPoint;
 
-        if (Physics.BoxCast(transform.position, new Vector3(0.5f, 0.5f, 0.5f), transform.forward, out hitPoint, transform.rotation, RAY_LENGTH, interactableMask)) 
+        if (Physics.BoxCast(transform.position, new Vector3(0.4f, 0.75f, 0.4f), transform.forward, out hitPoint, transform.rotation, RAY_LENGTH, interactableMask)) 
         {
             if (hitPoint.transform.GetComponent<InteractableObject>() != null) 
             {

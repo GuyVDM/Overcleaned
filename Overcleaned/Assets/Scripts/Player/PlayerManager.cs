@@ -19,6 +19,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
 
     public PlayerInteractionController player_InteractionController;
 
+    public PlayerUIController player_UIController;
+
     [Header("Visual References:")]
     [SerializeField]
     private MeshRenderer player_Body;
@@ -61,6 +63,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
             player_Controller.enabled = true;
             player_CameraController.enabled = true;
             player_InteractionController.enabled = true;
+            player_UIController.enabled = true;
             return;
         }
     }
