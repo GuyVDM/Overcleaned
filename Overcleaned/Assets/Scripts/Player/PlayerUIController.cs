@@ -17,6 +17,13 @@ public class PlayerUIController : MonoBehaviour
     [SerializeField]
     private Image fill_CleanAmount;
 
+    [SerializeField]
+    private Animator anim_OpponentProgressBar;
+
+    #region ### Private Variables ###
+    private const string BOOL_DISPLAYOPPONENTPROGRESS = "Popup";
+    #endregion
+
     private void OnEnable()
     {
         HouseManager.OnTimeChanged += UpdateTimer;
@@ -46,5 +53,16 @@ public class PlayerUIController : MonoBehaviour
 
         timerFront.text = timeLeftText;
         timerBack.text = timeLeftText;
+    }
+
+    public void DisplayOpponentProgressbar(bool state) 
+    {
+        if(anim_OpponentProgressBar) 
+        {
+            if (anim_OpponentProgressBar.GetBool(BOOL_DISPLAYOPPONENTPROGRESS) != state) 
+            {
+                anim_OpponentProgressBar.SetBool(BOOL_DISPLAYOPPONENTPROGRESS, state);
+            }
+        }
     }
 }

@@ -5,7 +5,6 @@ using System;
 [RequireComponent(typeof(Camera))]
 public class PlayerCameraController : MonoBehaviour 
 {
-    private const float LERP_SPEED = 2f;
 
     [Header("Tweaking Variables:")]
     [SerializeField]
@@ -40,11 +39,15 @@ public class PlayerCameraController : MonoBehaviour
 
     private float zoomOffset;
 
+    private const float LERP_SPEED = 2f;
     private const float TIME_BEFORE_UI = 2;
+
     private const string TRIGGER_NAME = "Popup";
 
     private Vector3 current_Target_Pos;
     private Vector3 last_Pos;
+
+    private bool shouldDisplayProgressBar;
 
     private readonly KeyCode spyBaseKey = KeyCode.O;
     private readonly KeyCode zoomInKey = KeyCode.PageUp;
@@ -60,8 +63,8 @@ public class PlayerCameraController : MonoBehaviour
 
     private void OnEnable()
     {
-        GetComponent<Camera>().enabled = true;
         uiCamera.enabled = true;
+        GetComponent<Camera>().enabled = true;
         GetComponent<AudioListener>().enabled = true;
         playerManager = ServiceLocator.GetServiceOfType<PlayerManager>();
 
@@ -123,7 +126,7 @@ public class PlayerCameraController : MonoBehaviour
         }
         else 
         {
-            Debug.LogWarning("[PlayerCamera] 2 boundry points need to be defined for the camera to work.");
+            Debug.LogWarning("[PlayerCamera] A (Max and Min) of 2 boundry points need to be defined for the camera to work.");
         }
     }
 
@@ -139,6 +142,12 @@ public class PlayerCameraController : MonoBehaviour
         }
 
         current_Target_Pos = Input.GetKey(spyBaseKey) ? enemy_Base_Pos : last_Pos;
+
+        if (shouldDisplayProgressBar != Input.GetKey(spyBaseKey)) 
+        {
+            shouldDisplayProgressBar = Input.GetKey(spyBaseKey);
+            playerManager.Set_DisplayStateEnemyProgressbar(shouldDisplayProgressBar);
+        }
     }
 
     /// <summary>
