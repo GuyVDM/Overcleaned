@@ -11,7 +11,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 {
 	#region Initalize Service
 	private void Awake() => OnInitialise();
-	private void OnDestroy() => OnDeinitialise();
+	private void OnDestroy()
+	{
+		print("I Have been destroyed");
+		OnDeinitialise();
+	}
 	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
 	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
 	#endregion
@@ -25,6 +29,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 
 	//Variables
 	public bool logMode;
+
+	private bool hasBeenConnected;
 
 	//static events
 	public static event OnRoomListChange onRoomListChange;
@@ -144,12 +150,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 
 	public override void OnDisconnected(DisconnectCause cause)
 	{
-		ReturnToMainMenu();
+		if (hasBeenConnected)
+		{
+			if (logMode)
+				Debug.Log("The player has been disconnected");
+
+			ReturnToMainMenu();
+		}
 	}
 
 	public override void OnJoinedLobby()
 	{
 		localPlayerInformation = new LocalPlayerInformation(PhotonNetwork.LocalPlayer);
+		hasBeenConnected = true;
 	}
 
 	public override void OnPlayerEnteredRoom(Player newPlayer)

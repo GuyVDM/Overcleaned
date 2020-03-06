@@ -26,6 +26,10 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 	private bool isFading;
 	private bool isLoadingScene;
 
+	[Header("Debugging")]
+	public float waitInLoadingScreen;
+	public bool logMode;
+
 	#region Initalize Service
 	private void Awake() => OnInitialise();
 	private void OnDestroy() => OnDeinitialise();
@@ -81,6 +85,12 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 
 		fadeScreen = null;
 		isLoadingScene = true;
+
+		yield return new WaitForSeconds(waitInLoadingScreen);
+
+		if (logMode)
+			Debug.Log("Loading the scene with the name: " + buildName);
+
 		SceneManager.LoadScene(buildName, LoadSceneMode.Additive);
 
 		yield return new WaitUntil(() => isLoadingScene == false);
