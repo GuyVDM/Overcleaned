@@ -13,7 +13,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	private void Awake() => OnInitialise();
 	private void OnDestroy()
 	{
-		print("I Have been destroyed");
 		OnDeinitialise();
 	}
 	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
