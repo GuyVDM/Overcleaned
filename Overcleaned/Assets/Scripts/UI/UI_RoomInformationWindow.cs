@@ -366,8 +366,7 @@ public class UI_RoomInformationWindow : UIWindow
 
 	[PunRPC]
 	private void UpdatePlayerElementRPC(string playerName, int dropdownIndex)
-	{
-		print(dropdownIndex);
+	{ 
 		FindUIElementByPlayerName(playerName).ChangeTeamText(dropdownIndex);
 	}
 

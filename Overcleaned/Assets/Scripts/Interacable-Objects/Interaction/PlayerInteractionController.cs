@@ -29,7 +29,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
 
     private Vector3 arrow_UX_Offset = new Vector3(0, 2, 0);
 
-    private bool forceDrop = false;
+    private bool forceDrop = false; 
     #endregion
 
     #region ### RPC Calls ###
@@ -122,10 +122,11 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     private void CheckForInteractables() 
     {
         Ray interactableRay = new Ray(transform.position, transform.forward);
-        RaycastHit hitPoint;
-        Debug.DrawRay(transform.position, transform.forward, Color.red, RAY_LENGTH);
+        ExtDebug.DrawBoxCastBox(transform.position, new Vector3(0.5f, 0.75f, 0.5f), transform.rotation, transform.forward, RAY_LENGTH, Color.red);
 
-        if (Physics.Raycast(interactableRay, out hitPoint, RAY_LENGTH, interactableMask)) 
+        RaycastHit hitPoint;
+
+        if (Physics.BoxCast(transform.position, new Vector3(0.4f, 0.75f, 0.4f), transform.forward, out hitPoint, transform.rotation, RAY_LENGTH, interactableMask)) 
         {
             if (hitPoint.transform.GetComponent<InteractableObject>() != null) 
             {
@@ -227,6 +228,10 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     }
 
     #region ### Collision Checks ###
+    /// <summary>
+    /// The Callback is mainly used to check if you are colliding with another player, if so and if wielding a cleanable, you'll drop the object.
+    /// </summary>
+    /// <param name="collision"></param>
     private void OnTriggerEnter(Collider collision) 
     {
         Debug.Log(collision.gameObject.name);
