@@ -10,6 +10,9 @@ public class WieldableCleanableObject : WieldableObject
     [SerializeField]
     private int cleanedToolID = 0;
 
+    [SerializeField]
+    private bool isBreakable;
+
     [Header("Renderers:")]
     [SerializeField]
     private MeshRenderer uncleaned_Variant;
@@ -35,12 +38,12 @@ public class WieldableCleanableObject : WieldableObject
     #endregion
 
     #region ### Private Variables ###
-    private const int dirty_LayerMask = 1 << 10;
+    private const int dirty_LayerMask = 10;
 
     private int starting_ToolID;
     #endregion
 
-    private void Awake() => starting_ToolID = cleanedToolID;
+    private void Awake() => starting_ToolID = toolID;
 
     public void CleanObject() 
     {
@@ -64,11 +67,22 @@ public class WieldableCleanableObject : WieldableObject
         {
             uncleaned_Variant.enabled = true;
             cleaned_Variant.enabled = false;
+
+            if(isBreakable) 
+            {
+                BreakObject();
+            }
         }
+    }
+
+    public void BreakObject() 
+    {
+        Debug.Log("Should break object later on.");
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(collision.gameObject.layer + " and our layer is:" + dirty_LayerMask);
         if(collision.transform.gameObject.layer == dirty_LayerMask) 
         {
             if(isCleaned == true) 
