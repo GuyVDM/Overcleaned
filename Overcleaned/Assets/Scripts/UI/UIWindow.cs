@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIWindow : MonoBehaviour
 {
 	public string windowName;
+	internal bool isActive;
 
 	public virtual void Start()
 	{
@@ -14,12 +15,14 @@ public class UIWindow : MonoBehaviour
 	public virtual void ShowThisWindow()
 	{
 		transform.GetChild(0).gameObject.SetActive(true);
+		isActive = true;
 		OnWindowEnabled();
 	}
 
 	public virtual void HideThisWindow()
 	{
 		transform.GetChild(0).gameObject.SetActive(false);
+		isActive = false;
 		OnWindowDisabled();
 	}
 
