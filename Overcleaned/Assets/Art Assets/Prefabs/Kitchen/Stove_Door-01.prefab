@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3731141718596834041}
   - component: {fileID: 5664590589301483727}
   - component: {fileID: 2134743932072760374}
+  - component: {fileID: -1471384693037086622}
   m_Layer: 0
   m_Name: Stove_Door-01
   m_TagString: Untagged
@@ -79,3 +80,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &-1471384693037086622
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404466652471369962}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8567114, y: 0.3743026, z: 0.09278852}
+  m_Center: {x: 0, y: 0.17744146, z: 0.025348842}

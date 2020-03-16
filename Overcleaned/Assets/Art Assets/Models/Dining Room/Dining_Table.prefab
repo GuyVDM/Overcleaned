@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7264112352034593740}
   - component: {fileID: 1843178469450818042}
   - component: {fileID: 5379761299842948355}
+  - component: {fileID: 3236583115115747126}
   m_Layer: 0
   m_Name: Dining_Table
   m_TagString: Untagged
@@ -25,9 +26,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5950405654603262431}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.07687497, y: 0.499, z: -0.032124996}
-  m_LocalScale: {x: 0.125, y: 1, z: 0.125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -79,3 +80,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &3236583115115747126
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5950405654603262431}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.496875, y: 0.7531621, z: 1.2390674}
+  m_Center: {x: 0, y: 0.37591907, z: 0}
