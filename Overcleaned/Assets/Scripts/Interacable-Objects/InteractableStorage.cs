@@ -15,10 +15,17 @@ public class InteractableStorage : InteractableObject
         {
             if(DoesAllowForObjectID(interactionController.currentlyWielding.toolID)) 
             {
-                WieldableObject wieldable = interactionController.currentlyWielding;
-                interactionController.DropObject(wieldable);
+                if (interactionController.currentlyWielding.GetType() == typeof(WieldableCleanableObject)) 
+                {
+                    WieldableCleanableObject wieldable = (WieldableCleanableObject)interactionController.currentlyWielding;
 
-                ObjectPool.Set_ObjectBackToPool(wieldable.photonView.ViewID);
+                    interactionController.DropObject(wieldable);
+                    
+                    //Activate function that stores the object, also in onenable, reset all things
+
+                    ObjectPool.Set_ObjectBackToPool(wieldable.photonView.ViewID);
+                    return;
+                }
             }
         }
 
