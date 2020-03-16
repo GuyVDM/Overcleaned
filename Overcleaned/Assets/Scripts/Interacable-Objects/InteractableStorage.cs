@@ -15,13 +15,19 @@ public class InteractableStorage : InteractableObject
         {
             if(DoesAllowForObjectID(interactionController.currentlyWielding.toolID)) 
             {
+                WieldableObject wieldable = interactionController.currentlyWielding;
+                interactionController.DropObject(wieldable);
 
+                ObjectPool.Set_ObjectBackToPool(wieldable.photonView.ViewID);
             }
         }
+
+        DeInteract(interactionController);
     }
 
     public override void DeInteract(PlayerInteractionController interactionController)
     {
+        interactionController.DeinteractWithCurrentObject();
     }
 
     private bool DoesAllowForObjectID(int objectID) => accepted_ItemIDs.Contains(objectID);

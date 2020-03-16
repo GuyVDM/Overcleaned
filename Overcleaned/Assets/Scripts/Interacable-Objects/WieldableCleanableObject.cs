@@ -82,7 +82,6 @@ public class WieldableCleanableObject : WieldableObject
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.layer + " and our layer is:" + dirty_LayerMask);
         if(collision.transform.gameObject.layer == dirty_LayerMask) 
         {
             if(isCleaned == true) 
