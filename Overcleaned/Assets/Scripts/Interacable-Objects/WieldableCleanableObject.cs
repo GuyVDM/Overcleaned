@@ -4,8 +4,10 @@ using Photon.Pun;
 public class WieldableCleanableObject : WieldableObject
 {
     [Header("Tweakable Parameters:")]
-    [SerializeField]
-    private float start_Penalty_Amount;
+    public int cleaningWeight;
+
+    public bool IsCleanedAndStored => isCleaned && isStored;
+    public bool isStored = false;
 
     [SerializeField]
     private int cleanedToolID = 0;

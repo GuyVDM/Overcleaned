@@ -18,6 +18,7 @@ public partial class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	//Progression tracking
     private static CleanableObject[] cleanableObjects;
+	private static WieldableCleanableObject[] wieldableCleanableObjects;
 	private static int totalWeightOfAllCleanables;
 
 	//Time tracking
@@ -30,6 +31,7 @@ public partial class HouseManager : MonoBehaviourPun, IServiceOfType
 	{
 		OnInitialise();
 		cleanableObjects = FindObjectsOfType<CleanableObject>();
+		wieldableCleanableObjects = FindObjectsOfType<WieldableCleanableObject>();
 	}
 	private void OnDestroy() => OnDeinitialise();
 	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
@@ -70,6 +72,14 @@ public partial class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 
+		for (int i = 0; i < wieldableCleanableObjects.Length; i++)
+		{
+			if (wieldableCleanableObjects[i].IsCleanedAndStored)
+			{
+				weightCleaned += wieldableCleanableObjects[i].cleaningWeight;
+			}
+		}
+
 		return (weightCleaned / totalWeightOfAllCleanables) * 100;
 	}
 
@@ -80,6 +90,11 @@ public partial class HouseManager : MonoBehaviourPun, IServiceOfType
 		for (int i = 0; i < cleanableObjects.Length; i++)
 		{
 			toReturn += cleanableObjects[i].cleaningWeight;
+		}
+
+		for (int i = 0; i < wieldableCleanableObjects.Length; i++)
+		{
+			toReturn += wieldableCleanableObjects[i].cleaningWeight;
 		}
 
 		return toReturn;
