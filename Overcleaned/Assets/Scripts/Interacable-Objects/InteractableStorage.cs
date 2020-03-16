@@ -15,13 +15,26 @@ public class InteractableStorage : InteractableObject
         {
             if(DoesAllowForObjectID(interactionController.currentlyWielding.toolID)) 
             {
+                if (interactionController.currentlyWielding.GetType() == typeof(WieldableCleanableObject)) 
+                {
+                    WieldableCleanableObject wieldable = (WieldableCleanableObject)interactionController.currentlyWielding;
 
+                    interactionController.DropObject(wieldable);
+                    
+                    //Activate function that stores the object, also in onenable, reset all things
+
+                    ObjectPool.Set_ObjectBackToPool(wieldable.photonView.ViewID);
+                    return;
+                }
             }
         }
+
+        DeInteract(interactionController);
     }
 
     public override void DeInteract(PlayerInteractionController interactionController)
     {
+        interactionController.DeinteractWithCurrentObject();
     }
 
     private bool DoesAllowForObjectID(int objectID) => accepted_ItemIDs.Contains(objectID);
