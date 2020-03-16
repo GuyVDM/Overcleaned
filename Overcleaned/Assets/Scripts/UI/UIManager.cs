@@ -5,7 +5,10 @@ using TMPro;
 
 public class UIManager : MonoBehaviour, IServiceOfType
 {
+	public static bool UIIsOpen { get; private set; }
+
 	public string openWindowOnStart;
+	public KeyBinding[] keyBindings;
 	public TextMeshProUGUI messageObject;
 
 	private Dictionary<string, UIWindow> allwindows = new Dictionary<string, UIWindow>();
@@ -26,6 +29,17 @@ public class UIManager : MonoBehaviour, IServiceOfType
 			ShowWindow(openWindowOnStart);
 	}
 
+	private void Update()
+	{
+		for (int i = 0; i < keyBindings.Length; i++)
+		{
+			if (Input.GetButtonDown(keyBindings[i].buttonName))
+			{
+				keyBindings[i].functionality.Invoke();
+			}
+		}
+	}
+
 	public void AddWindowToList(UIWindow window)
 	{
 		if (!allwindows.ContainsKey(window.windowName))
@@ -37,10 +51,15 @@ public class UIManager : MonoBehaviour, IServiceOfType
 	public UIWindow ShowWindowReturn(string windowName)
 	{
 		if (activeWindowName != null && activeWindowName != "")
-			HideWindow(activeWindowName);
+			if (!allwindows[activeWindowName].lockWindow)
+				HideWindow(activeWindowName);
+			else
+				return allwindows[activeWindowName];
 
 		allwindows[windowName].ShowThisWindow();
 		activeWindowName = windowName;
+
+		UIIsOpen = true;
 		return allwindows[windowName];
 	}
 
@@ -52,6 +71,17 @@ public class UIManager : MonoBehaviour, IServiceOfType
 	public void HideWindow(string windowName)
 	{
 		allwindows[windowName].HideThisWindow();
+		UIIsOpen = AWindowIsOpen();
+	}
+
+	public void ToggleWindow(string windowName)
+	{
+		if (allwindows[windowName].isActive)
+			allwindows[windowName].HideThisWindow();
+		else
+			allwindows[windowName].ShowThisWindow();
+
+		UIIsOpen = AWindowIsOpen();
 	}
 
 	public void HideAllWindows()
@@ -60,6 +90,21 @@ public class UIManager : MonoBehaviour, IServiceOfType
 		{
 			window.Value.HideThisWindow();
 		}
+
+		UIIsOpen = false;
+	}
+
+	private bool AWindowIsOpen()
+	{
+		bool toReturn = false;
+
+		foreach (KeyValuePair<string, UIWindow> window in allwindows)
+		{
+			if (window.Value.isActive)
+				toReturn = true;
+		}
+
+		return toReturn;
 	}
 
 	#endregion

@@ -36,9 +36,18 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 		NetworkManager.onRoomListChange += ShowRoomsOnUI;
 	}
 
-	public void HostRoom(string roomName)
+	public bool HostRoom(string roomName)
 	{
-		PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = maxPlayers }, new TypedLobby("Lobby 1", LobbyType.Default));
+		if (ServiceLocator.GetServiceOfType<NetworkManager>().ServerNameIsAvailable(roomName))
+		{
+			PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = maxPlayers }, new TypedLobby("Lobby 1", LobbyType.Default));
+			return true;
+		}
+		else
+		{
+			ServiceLocator.GetServiceOfType<UIManager>().ShowMessage("That server name is already in use.");
+			return false;
+		}
 	}
 
 	public static bool DebugMode()

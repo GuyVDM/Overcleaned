@@ -1,6 +1,7 @@
 ﻿using System.Collections;using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour, IServiceOfType
 {
@@ -35,4 +36,19 @@ public class GameManager : MonoBehaviour, IServiceOfType
 		playerManager.Set_PlayerColor(teams[NetworkManager.localPlayerInformation.team].teamColor);
 		playerManager.Set_EnemyBasePosition(teams[NetworkManager.localPlayerInformation.team].enemyTeamPosition.position);
 	}
+}
+
+public class Gang
+{
+	public void No()
+	{
+
+	}
+}
+
+[System.Serializable]
+public struct KeyBinding
+{
+	public string buttonName;
+	public UnityEvent functionality;
 }

@@ -9,6 +9,8 @@ public class UI_ServerBrowser : UIWindow
 {
 	public GameObject serverTextPrefab;
 	public Transform serverTextParent;
+	public Transform serverCreationWindow;
+	public InputField serverCreationInputfield;
 
 	private List<Transform> allInfoButtons = new List<Transform>();
 
@@ -28,10 +30,28 @@ public class UI_ServerBrowser : UIWindow
 		}
 	}
 
+	public void OpenServerCreationWindow()
+	{
+		serverCreationWindow.gameObject.SetActive(true);
+	}
+
+	public void CloseServerCreationWindow()
+	{
+		serverCreationWindow.gameObject.SetActive(false);
+	}
+
 	public void CreateServer()
 	{
 		PhotonLobby lobby = ServiceLocator.GetServiceOfType<PhotonLobby>();
-		lobby.HostRoom(NetworkManager.localPlayerInformation.PhotonPlayer.NickName + "'s server");
+		if (lobby.HostRoom(serverCreationInputfield.text))
+		{
+			CloseServerCreationWindow();
+		}
+	}
+
+	protected override void OnWindowEnabled()
+	{
+		CloseServerCreationWindow();
 	}
 
 	private void ChangeInfoButton(Transform button, RoomInfo info)
