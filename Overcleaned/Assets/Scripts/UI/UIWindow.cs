@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIWindow : MonoBehaviour
 {
 	public string windowName;
+	public bool lockWindow;
 	internal bool isActive;
 
 	public virtual void Start()

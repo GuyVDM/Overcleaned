@@ -67,7 +67,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		sceneHandler.LoadScene(0);
 	}
 
-	#region Nicknaming the player
+	#region Joining and Leaving Servers
+
+	public void LeaveServer()
+	{
+		PhotonNetwork.LeaveRoom();
+		ReturnToMainMenu();
+	}
+
+	#endregion
+
+	#region Nicknaming the Player & Server
 
 	public void SetLocalPlayerNickname(string nickname)
 	{
@@ -104,6 +114,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		for (int i = 0; i < allProfanity.Length; i++)
 		{
 			if (nickname.ToLower().Contains(allProfanity[i]))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public bool ServerNameIsAvailable(string newServername)
+	{
+		for (int i = 0; i < onlineRooms.Count; i++)
+		{
+			if (onlineRooms[i].Name == newServername)
 			{
 				return false;
 			}

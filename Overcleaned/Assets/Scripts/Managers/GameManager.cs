@@ -38,6 +38,14 @@ public class GameManager : MonoBehaviour, IServiceOfType
 	}
 }
 
+public class Gang
+{
+	public void No()
+	{
+
+	}
+}
+
 [System.Serializable]
 public struct KeyBinding
 {
