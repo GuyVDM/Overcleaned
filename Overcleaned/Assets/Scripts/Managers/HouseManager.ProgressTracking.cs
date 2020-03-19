@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using System;
 
-public partial class HouseManager : MonoBehaviourPun, IServiceOfType
+public partial class HouseManager
 {
 	private struct EndGameProgressionStorage
 	{
@@ -48,7 +48,7 @@ public partial class HouseManager : MonoBehaviourPun, IServiceOfType
 	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
 	#endregion
 
-	private void Start()
+	void Start()
 	{
 		totalWeightOfAllCleanables = GetTotalWeight();
 
