@@ -20,7 +20,8 @@ public class InteractableStorage : InteractableObject
                     WieldableCleanableObject wieldable = (WieldableCleanableObject)interactionController.currentlyWielding;
 
                     interactionController.DropObject(wieldable);
-                    
+
+                    Debug.Log("coom");
                     //Activate function that stores the object, also in onenable, reset all things
 
                     ObjectPool.Set_ObjectBackToPool(wieldable.photonView.ViewID);

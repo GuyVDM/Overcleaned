@@ -19,17 +19,21 @@ public struct ObjectPoolData
 
 public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
 {
-
-    private static List<ObjectPoolData> pool = new List<ObjectPoolData>();
+    private static List<ObjectPoolData> poolData;
 
     private static event Action<bool, int> OnSetObjectState;
     private static event Action<int, Vector3, Vector3> OnSetObjectTransform;
     private static event Action<int> OnAddObjectToPool;
 
+    [Header("Pool References:")]
+    [SerializeField]
+    private List<ObjectPoolData> pool = new List<ObjectPoolData>();
+
     #region ### ServiceLocator Snipper ###
     private void Awake() 
     {
         OnInitialise();
+        poolData = pool;
 
         OnSetObjectState += Set_GameObjectEnableState;
         OnSetObjectTransform += Set_ObjectTransform;
@@ -116,7 +120,7 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
 
     public static void Set_ObjectFromPool(string objectIndentifier, Vector3 pos, Vector3 orientation) 
     {
-        ObjectPoolData data = pool.Where(o => o.poolID == objectIndentifier).First();
+        ObjectPoolData data = poolData.Where(o => o.poolID == objectIndentifier).First();
         GameObject objectToReturn = data.pooledObjects.Where(o => o.activeSelf == false).Single();
 
         if(objectToReturn == null) 
@@ -124,15 +128,15 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
             objectToReturn = PhotonNetwork.InstantiateSceneObject(data.pooledObjects.First().name, pos, Quaternion.Euler(orientation));
             int newObjectViewID = objectToReturn.GetPhotonView().ViewID;
 
-            OnAddObjectToPool(newObjectViewID);
-            OnSetObjectState(true, newObjectViewID);
-            OnSetObjectTransform(newObjectViewID, pos, orientation);
+            OnAddObjectToPool.Invoke(newObjectViewID);
+            OnSetObjectState.Invoke(true, newObjectViewID);
+            OnSetObjectTransform.Invoke(newObjectViewID, pos, orientation);
             return;
         }
 
-        OnAddObjectToPool(objectToReturn.GetPhotonView().ViewID);
-        OnSetObjectState(true, objectToReturn.GetPhotonView().ViewID);
-        OnSetObjectTransform(objectToReturn.GetPhotonView().ViewID, pos, orientation);
+        OnAddObjectToPool.Invoke(objectToReturn.GetPhotonView().ViewID);
+        OnSetObjectState.Invoke(true, objectToReturn.GetPhotonView().ViewID);
+        OnSetObjectTransform.Invoke(objectToReturn.GetPhotonView().ViewID, pos, orientation);
     }
 
     public static void Set_ObjectBackToPool(int objectViewID) => OnSetObjectState(false, objectViewID);

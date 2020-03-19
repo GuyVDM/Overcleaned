@@ -4,8 +4,10 @@ using Photon.Pun;
 public class WieldableCleanableObject : WieldableObject
 {
     [Header("Tweakable Parameters:")]
-    [SerializeField]
-    private float start_Penalty_Amount;
+    public int cleaningWeight;
+
+    public bool IsCleanedAndStored => isCleaned && isStored;
+    public bool isStored = false;
 
     [SerializeField]
     private int cleanedToolID = 0;
@@ -67,17 +69,31 @@ public class WieldableCleanableObject : WieldableObject
         {
             uncleaned_Variant.enabled = true;
             cleaned_Variant.enabled = false;
-
-            if(isBreakable) 
-            {
-                BreakObject();
-            }
         }
     }
 
+    public void StoreObject() => isStored = true;
+
     public void BreakObject() 
     {
-        Debug.Log("Should break object later on.");
+        if (isBreakable) 
+        {
+            Debug.Log("Should break object later on.");
+        }
+    }
+
+    public override void OnEnable() 
+    {
+        base.OnEnable();
+
+        toolID = starting_ToolID;
+
+        isCleaned = false;
+        isStored = false;
+
+        uncleaned_Variant.enabled = true;
+        cleaned_Variant.enabled = false;
+
     }
 
     private void OnCollisionEnter(Collision collision)
