@@ -45,8 +45,11 @@ MonoBehaviour:
   - Stream_BreakableProgressBarCreation
   - Stream_BreakableProgressbarFinish
   - Stream_ForceFinishProgression
+  - Stream_GameObjectEnableState
   - Stream_NoToolNoteEnabled
   - Stream_ObjectStateToClean
+  - Stream_ObjectToAddToPool
+  - Stream_ObjectTransform
   - Stream_OnDirtyObject
   - Stream_OnInteractionComplete
   - Stream_PlayerColorOverNetwork
@@ -56,7 +59,4 @@ MonoBehaviour:
   - Stream_RepairProgressbarEnableState
   - Stream_SetRepairState
   - UpdatePlayerElementRPC
-  - Stream_GameObjectEnableState
-  - Stream_ObjectToAddToPool
-  - Stream_ObjectTransform
   DisableAutoOpenWizard: 1
