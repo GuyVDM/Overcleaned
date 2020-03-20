@@ -8,7 +8,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 {
 	[Header("Photon Settings")]
 	public string gameVersion;
-	public byte maxPlayers; 
+	public byte maxPlayers;
 
 	[Header("UI")]
 	public UI_ServerBrowser serverBrowser;
@@ -36,11 +36,20 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 		NetworkManager.onRoomListChange += ShowRoomsOnUI;
 	}
 
-	public bool HostRoom(string roomName)
+	public bool HostRoom(string roomName, string password = "")
 	{
 		if (ServiceLocator.GetServiceOfType<NetworkManager>().ServerNameIsAvailable(roomName))
 		{
-			PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = maxPlayers }, new TypedLobby("Lobby 1", LobbyType.Default));
+			RoomOptions roomOptions = new RoomOptions 
+			{
+				CustomRoomProperties = new ExitGames.Client.Photon.Hashtable()
+			};
+
+			roomOptions.CustomRoomProperties.Add("PW", password);
+			roomOptions.MaxPlayers = maxPlayers;
+
+			PhotonNetwork.CreateRoom(roomName, roomOptions, new TypedLobby("Lobby 1", LobbyType.Default));
+
 			return true;
 		}
 		else
@@ -58,6 +67,32 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 	public void JoinRoom(string roomName)
 	{
 		PhotonNetwork.JoinRoom(roomName);
+	}
+
+	public bool ServerHasPassword(string roomName)
+	{
+		for (int i = 0; i < NetworkManager.onlineRooms.Count; i++)
+		{
+			if (NetworkManager.onlineRooms[i].Name == roomName)
+			{
+				return (string)NetworkManager.onlineRooms[i].CustomProperties["PW"] != "";
+			}
+		}
+
+		return false;
+	}
+
+	public bool PasswordMatches(string roomName, string password)
+	{
+		for (int i = 0; i < NetworkManager.onlineRooms.Count; i++)
+		{
+			if (NetworkManager.onlineRooms[i].Name == roomName)
+			{
+				return (string)NetworkManager.onlineRooms[i].CustomProperties["PW"] == password;
+			}
+		}
+
+		return false;
 	}
 
 	public void LeaveRoom()

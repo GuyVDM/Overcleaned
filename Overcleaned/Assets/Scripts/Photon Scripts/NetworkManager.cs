@@ -44,7 +44,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	public delegate void OnLocalPlayerLeft();
 
 	public static LocalPlayerInformation localPlayerInformation { get; private set; }
-	private List<RoomInfo> onlineRooms = new List<RoomInfo>();
+	public static List<RoomInfo> onlineRooms = new List<RoomInfo>();
 
 	//Nicknaming the player
 	private string[] allProfanity;
