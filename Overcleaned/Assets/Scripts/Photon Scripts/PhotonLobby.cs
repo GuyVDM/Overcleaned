@@ -15,7 +15,6 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 
 	[Header("Debugging")]
 	public bool logMode;
-	public bool debugMode;
 
 	#region Initalize Service
 	private void Awake() => OnInitialise();
@@ -57,11 +56,6 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 			ServiceLocator.GetServiceOfType<UIManager>().ShowMessage("That server name is already in use.");
 			return false;
 		}
-	}
-
-	public static bool DebugMode()
-	{
-		return ServiceLocator.GetServiceOfType<PhotonLobby>().debugMode;
 	}
 
 	public void JoinRoom(string roomName)

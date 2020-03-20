@@ -28,6 +28,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 
 	//Variables
 	public bool logMode;
+	public bool debugMode;
 
 	private bool hasBeenConnected;
 
