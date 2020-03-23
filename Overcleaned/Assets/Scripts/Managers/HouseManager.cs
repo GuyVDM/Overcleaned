@@ -6,7 +6,7 @@ using System;
 
 public class HouseManager : MonoBehaviourPun, IServiceOfType
 {
-	private struct EndGameProgressionStorage
+	private class CleaningProgressionStorage
 	{
 		public float progression;
 		public int team;
@@ -19,7 +19,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	}
 
 	//Static values;
-	public static float CleanPercentage => GetCleanPercentage();
+	public static float CleanPercentage { get; private set; }
 	public static TimeSpan RemainingTime => GetRemainingTime();
 
 	//Events
@@ -41,7 +41,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private bool targetTimeIsCalculated;
 
 	//EndGame
-	private List<EndGameProgressionStorage> endGameProgressionStorage = new List<EndGameProgressionStorage>();
+	private List<CleaningProgressionStorage> cleaningProgressionStorage = new List<CleaningProgressionStorage>();
 
 	#region Initalize Service
 	private void Awake()
@@ -72,6 +72,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	}
 
 	#region Cleaning Progression
+
 	public static float GetCleanPercentage()
 	{
 		int weightCleaned = 0;
@@ -111,6 +112,33 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 		return toReturn;
 	}
+
+	public void OnObjectStatusChanged()
+	{
+		CleanPercentage = GetCleanPercentage();
+		photonView.RPC(nameof(SyncProgressionAcrossClients), RpcTarget.All, CleanPercentage, NetworkManager.localPlayerInformation.team);
+	}
+
+	[PunRPC]
+	private void SyncProgressionAcrossClients(float progression, int teamNumber)
+	{
+		CleaningProgressionStorage writeTo = FindStorageByTeamNumber(teamNumber);
+		writeTo.progression = progression;
+	}
+
+	private CleaningProgressionStorage FindStorageByTeamNumber(int teamNumber)
+	{
+		for (int i = 0; i < cleaningProgressionStorage.Count; i++)
+		{
+			if (cleaningProgressionStorage[i].team == teamNumber)
+			{
+				return cleaningProgressionStorage[i];
+			}
+		}
+
+		return new CleaningProgressionStorage() { team = teamNumber }; 
+	}
+
 	#endregion
 
 	#region Time Tracking
@@ -169,18 +197,14 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	private void EndGame(TimeSpan remainingTime)
 	{
-		print(remainingTime.TotalSeconds);
 		if (remainingTime.TotalSeconds <= 0)
 		{
-			print("BBBBBB");
 			if (!PhotonNetwork.IsMasterClient)
 			{
-				print("CCCCCCC");
 				photonView.RPC(nameof(RecieveProgressionInformation), RpcTarget.MasterClient, CleanPercentage, NetworkManager.localPlayerInformation.team);
 			}
 			else
 			{
-				print("DDDDDD");
 				RecieveProgressionInformation(CleanPercentage, NetworkManager.localPlayerInformation.team);
 			}
 		}
@@ -190,9 +214,9 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	{
 		int winner = -1;
 
-		for (int i = 0; i < endGameProgressionStorage.Count; i++)
+		for (int i = 0; i < cleaningProgressionStorage.Count; i++)
 		{
-			if (winner == -1 || endGameProgressionStorage[i].progression > endGameProgressionStorage[winner].progression)
+			if (winner == -1 || cleaningProgressionStorage[i].progression > cleaningProgressionStorage[winner].progression)
 			{
 				winner = i;
 			}
@@ -204,9 +228,9 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	[PunRPC]
 	private void RecieveProgressionInformation(float percentage, int teamNumber)
 	{
-		endGameProgressionStorage.Add(new EndGameProgressionStorage { progression = percentage, team = teamNumber });
+		FindStorageByTeamNumber(teamNumber).progression = percentage;
 
-		if (ServiceLocator.GetServiceOfType<NetworkManager>().debugMode || endGameProgressionStorage.Count == 2)
+		if (ServiceLocator.GetServiceOfType<NetworkManager>().debugMode || cleaningProgressionStorage.Count == 2)
 		{
 			CalculateWinner();
 		}
