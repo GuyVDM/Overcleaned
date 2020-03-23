@@ -43,6 +43,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 			roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
 			roomOptions.CustomRoomProperties.Add("PW", password);
 			roomOptions.MaxPlayers = maxPlayers;
+			roomOptions.CustomRoomPropertiesForLobby = new string[] { "PW" };
 
 			PhotonNetwork.CreateRoom(roomName, roomOptions, new TypedLobby("Lobby 1", LobbyType.Default));
 
