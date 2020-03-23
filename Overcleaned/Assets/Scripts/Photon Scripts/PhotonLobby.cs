@@ -39,11 +39,8 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 	{
 		if (ServiceLocator.GetServiceOfType<NetworkManager>().ServerNameIsAvailable(roomName))
 		{
-			RoomOptions roomOptions = new RoomOptions 
-			{
-				CustomRoomProperties = new ExitGames.Client.Photon.Hashtable()
-			};
-
+			RoomOptions roomOptions = new RoomOptions();
+			roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
 			roomOptions.CustomRoomProperties.Add("PW", password);
 			roomOptions.MaxPlayers = maxPlayers;
 
@@ -82,7 +79,9 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 		{
 			if (NetworkManager.onlineRooms[i].Name == roomName)
 			{
-				return (string)NetworkManager.onlineRooms[i].CustomProperties["PW"] == password;
+				string passwordOfRoom = (string)NetworkManager.onlineRooms[i].CustomProperties["PW"];
+				print(passwordOfRoom);
+				return passwordOfRoom == password;
 			}
 		}
 

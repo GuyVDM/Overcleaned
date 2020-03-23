@@ -90,6 +90,7 @@ public class UI_ServerBrowser : UIWindow
 		PhotonLobby pl = ServiceLocator.GetServiceOfType<PhotonLobby>();
 		if (pl.ServerHasPassword(chosenRoom))
 		{
+			print("Server has password");
 			OpenSubWindow(serverPasswordWindow);
 		}
 		else
