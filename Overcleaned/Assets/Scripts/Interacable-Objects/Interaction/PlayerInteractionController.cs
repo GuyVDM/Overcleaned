@@ -65,15 +65,6 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     {
         CheckForInteractables();
         Interact();
-        Test();
-    }
-
-    private void Test() 
-    {
-        if(Input.GetKeyDown(KeyCode.Z)) 
-        {
-            ObjectPool.Set_ObjectFromPool("[Repairable]", new Vector3(-3.683469f, 1.5f, -2.24f), Vector3.zero);
-        }
     }
 
     private void Interact() 
@@ -210,6 +201,12 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
             if (NetworkManager.IsConnectedAndInRoom) 
             {
                 photonView.RPC(nameof(Cast_ThrowObject), RpcTarget.AllBuffered, wieldableObject.gameObject.GetPhotonView().ViewID, forceDrop);
+
+                if(currentlyInteracting) 
+                {
+                    currentlyInteracting.DeInteract(this);
+                }
+
                 forceDrop = false;
                 return;
             }
