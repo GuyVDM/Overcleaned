@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: cdb2d608-89b9-4c16-a877-fb7b2057abcb
+    AppIdRealtime: 
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -34,8 +34,10 @@ MonoBehaviour:
   - Cast_ThrowObject
   - DestroySpaceship
   - Fire
+  - HasWonOrLost
   - PlayAudioRPC
   - PlayParticleRPC
+  - RecieveProgressionInformation
   - RespawnSpaceship
   - SetReadyRPC
   - StartGameRPC
@@ -59,9 +61,4 @@ MonoBehaviour:
   - Stream_RepairProgressbarEnableState
   - Stream_SetRepairState
   - UpdatePlayerElementRPC
-  - Stream_GameObjectEnableState
-  - Stream_ObjectToAddToPool
-  - Stream_ObjectTransform
-  - RecieveProgressionInformation
-  - HasWonOrLost
   DisableAutoOpenWizard: 1
