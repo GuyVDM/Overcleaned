@@ -131,7 +131,10 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	private DateTime CalculateTargetTime()
 	{
-		DateTime toReturn = DateTime.Now.Add(TimeSpan.Parse("00:" + gameTimeInMinutes + ":00"));
+		int minutes = gameTimeInMinutes % 60;
+		int hours = (gameTimeInMinutes - minutes) / 60;
+
+		DateTime toReturn = DateTime.Now.Add(TimeSpan.Parse(hours.ToString() + ":" + minutes.ToString() + ":00"));
 		targetTimeIsCalculated = true;
 		return toReturn;
 	}
