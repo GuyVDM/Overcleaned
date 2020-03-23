@@ -38,6 +38,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private static DateTime targetTime;
 	private TimeSpan lastTimeSpan;
 	private bool endOfTimerWasReached;
+	private bool targetTimeIsCalculated;
 
 	//EndGame
 	private List<EndGameProgressionStorage> endGameProgressionStorage = new List<EndGameProgressionStorage>();
@@ -66,7 +67,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	private void Update()
 	{
-		if (!endOfTimerWasReached)
+		if (!endOfTimerWasReached && targetTimeIsCalculated)
 			UpdateTimer();
 	}
 
@@ -130,14 +131,15 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	private DateTime CalculateTargetTime()
 	{
-		return DateTime.Now.Add(TimeSpan.Parse("00:" + gameTimeInMinutes + ":00"));
+		DateTime toReturn = DateTime.Now.Add(TimeSpan.Parse("00:" + gameTimeInMinutes + ":00"));
+		targetTimeIsCalculated = true;
+		return toReturn;
 	}
 
 	private void UpdateTimer()
 	{
 		if (RemainingTime.TotalSeconds <= 0)
 		{
-			print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			OnTimeChanged(RemainingTime);
 			endOfTimerWasReached = true;
 			return;
