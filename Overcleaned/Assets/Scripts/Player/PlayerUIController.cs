@@ -44,6 +44,7 @@ public class PlayerUIController : MonoBehaviour
     private void UpdateCleaningProgressionUI() 
     {
         fill_CleanAmount.fillAmount = HouseManager.CleanPercentage;
+        Debug.Log("Cleaned");
     }
 
     public void UpdateTimer(TimeSpan timeRemaining) 
