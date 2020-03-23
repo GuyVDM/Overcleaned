@@ -92,7 +92,6 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
             {
                 photonView.RPC(nameof(Stream_BreakableProgressBarCreation), RpcTarget.AllBuffered);
         
-                Debug.Log(repairProgressionUI);
             }
             return;
         }
