@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -28,7 +29,10 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	//Delegates for events
 	public delegate void TimeChanged(TimeSpan newtime);
 
-	//Progression tracking
+    //Action event callback
+    public static event Action OnCleanableObjectStatusChanged;
+
+    //Progression tracking
     private static CleanableObject[] cleanableObjects;
 	private static WieldableCleanableObject[] wieldableCleanableObjects;
 	private static int totalWeightOfAllCleanables;
@@ -40,8 +44,8 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private bool endOfTimerWasReached;
 	private bool targetTimeIsCalculated;
 
-	//EndGame
-	private List<CleaningProgressionStorage> cleaningProgressionStorage = new List<CleaningProgressionStorage>();
+    //EndGame
+    private List<CleaningProgressionStorage> cleaningProgressionStorage = new List<CleaningProgressionStorage>();
 
 	#region Initalize Service
 	private void Awake()
@@ -49,13 +53,22 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		OnInitialise();
 		cleanableObjects = FindObjectsOfType<CleanableObject>();
 		wieldableCleanableObjects = FindObjectsOfType<WieldableCleanableObject>();
+
+        OnCleanableObjectStatusChanged += OnObjectStatusChanged;
 	}
-	private void OnDestroy() => OnDeinitialise();
+
+    private void OnDestroy()
+    {
+        OnDeinitialise();
+
+        OnCleanableObjectStatusChanged -= OnObjectStatusChanged;
+    }
+
 	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
 	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
 	#endregion
 
-	void Start()
+	private void Start()
 	{
 		totalWeightOfAllCleanables = GetTotalWeight();
 
@@ -70,6 +83,8 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		if (!endOfTimerWasReached && targetTimeIsCalculated)
 			UpdateTimer();
 	}
+
+    public static void InvokeOnObjectStatusCallback() => OnCleanableObjectStatusChanged?.Invoke();
 
 	#region Cleaning Progression
 
@@ -186,10 +201,6 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 	}
-
-	#endregion
-
-	#region Events
 
 	#endregion
 

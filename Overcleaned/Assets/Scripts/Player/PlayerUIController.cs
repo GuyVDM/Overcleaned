@@ -27,6 +27,7 @@ public class PlayerUIController : MonoBehaviour
     private void OnEnable()
     {
         HouseManager.OnTimeChanged += UpdateTimer;
+        HouseManager.OnCleanableObjectStatusChanged += UpdateCleaningProgressionUI;
     }
 
     private void Update()
@@ -37,6 +38,12 @@ public class PlayerUIController : MonoBehaviour
     private void OnDestroy() 
     {
         HouseManager.OnTimeChanged -= UpdateTimer;
+        HouseManager.OnCleanableObjectStatusChanged -= UpdateCleaningProgressionUI;
+    }
+
+    private void UpdateCleaningProgressionUI() 
+    {
+        fill_CleanAmount.fillAmount = HouseManager.CleanPercentage;
     }
 
     public void UpdateTimer(TimeSpan timeRemaining) 

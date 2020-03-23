@@ -167,6 +167,8 @@ public class CleanableObject : InteractableObject, IPunObservable
     public virtual void OnCleanedObject(PlayerInteractionController interactionController) 
     {
         Set_ObjectStateToClean();
+
+        HouseManager.InvokeOnObjectStatusCallback();
     }
 
     public virtual void DirtyObject() 
@@ -174,6 +176,8 @@ public class CleanableObject : InteractableObject, IPunObservable
         OnDirtyObject?.Invoke();;
         IsCleaned = false;
         IsLocked = false;
+
+        HouseManager.InvokeOnObjectStatusCallback();
     }
 
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
