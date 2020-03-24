@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using System;
-
 public class HouseManager : MonoBehaviourPun, IServiceOfType
 {
 	private class CleaningProgressionStorage
@@ -33,9 +31,10 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
     public static event Action OnCleanableObjectStatusChanged;
 
     //Progression tracking
-    private static CleanableObject[] cleanableObjects;
-	private static WieldableCleanableObject[] wieldableCleanableObjects;
-	private static int totalWeightOfAllCleanables;
+    private static List<CleanableObject> cleanableObjects = new List<CleanableObject>();
+	private static List<WieldableCleanableObject> wieldableCleanableObjects = new List<WieldableCleanableObject>();
+
+	private static float totalWeightOfAllCleanables;
 
 	//Time tracking
 	public int gameTimeInMinutes;
@@ -51,8 +50,6 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private void Awake()
 	{
 		OnInitialise();
-		cleanableObjects = FindObjectsOfType<CleanableObject>();
-		wieldableCleanableObjects = FindObjectsOfType<WieldableCleanableObject>();
 
         OnCleanableObjectStatusChanged += OnObjectStatusChanged;
 	}
@@ -86,13 +83,31 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
     public static void InvokeOnObjectStatusCallback() => OnCleanableObjectStatusChanged?.Invoke();
 
+    public static void AddInteractableToObservedLists(WieldableCleanableObject wieldableCleanableObject = null, CleanableObject cleanableObject = null) 
+    {
+        if (wieldableCleanableObject == null && cleanableObject == null) 
+        {
+            throw new Exception($"You must pass 1 of the parameters...");
+        }
+
+        if(wieldableCleanableObject != null) 
+        {
+            wieldableCleanableObjects.Add(wieldableCleanableObject);
+        }
+
+        if(cleanableObject != null) 
+        {
+            cleanableObjects.Add(cleanableObject);
+        }
+    }
+
 	#region Cleaning Progression
 
 	public static float GetCleanPercentage()
 	{
-		int weightCleaned = 0;
+		float weightCleaned = 0;
 
-		for (int i = 0; i < cleanableObjects.Length; i++)
+		for (int i = 0; i < cleanableObjects.Count; i++)
 		{
 			if (cleanableObjects[i].IsCleaned)
 			{
@@ -100,7 +115,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 
-		for (int i = 0; i < wieldableCleanableObjects.Length; i++)
+		for (int i = 0; i < wieldableCleanableObjects.Count; i++)
 		{
 			if (wieldableCleanableObjects[i].IsCleanedAndStored)
 			{
@@ -108,19 +123,20 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 
-		return (weightCleaned / totalWeightOfAllCleanables) * 100;
+        Debug.Log("Stats: " + cleanableObjects.Count + " : " + wieldableCleanableObjects.Count);
+        return (weightCleaned / totalWeightOfAllCleanables);
 	}
 
-	private static int GetTotalWeight()
+	private static float GetTotalWeight()
 	{
 		int toReturn = 0;
 
-		for (int i = 0; i < cleanableObjects.Length; i++)
+		for (int i = 0; i < cleanableObjects.Count; i++)
 		{
 			toReturn += cleanableObjects[i].cleaningWeight;
 		}
 
-		for (int i = 0; i < wieldableCleanableObjects.Length; i++)
+		for (int i = 0; i < wieldableCleanableObjects.Count; i++)
 		{
 			toReturn += wieldableCleanableObjects[i].cleaningWeight;
 		}

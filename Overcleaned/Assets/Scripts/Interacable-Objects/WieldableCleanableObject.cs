@@ -45,7 +45,12 @@ public class WieldableCleanableObject : WieldableObject
     private int starting_ToolID;
     #endregion
 
-    private void Awake() => starting_ToolID = toolID;
+    private void Awake() 
+    {
+        HouseManager.AddInteractableToObservedLists(this);
+
+        starting_ToolID = toolID;
+    }
 
     public void CleanObject() 
     {
@@ -72,7 +77,11 @@ public class WieldableCleanableObject : WieldableObject
         }
     }
 
-    public void StoreObject() => isStored = true;
+    public void StoreObject()
+    {
+        isStored = true;
+        HouseManager.InvokeOnObjectStatusCallback();
+    }
 
     public void BreakObject() 
     {

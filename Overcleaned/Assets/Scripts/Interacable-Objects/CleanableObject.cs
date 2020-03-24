@@ -127,7 +127,11 @@ public class CleanableObject : InteractableObject, IPunObservable
         HouseManager.InvokeOnObjectStatusCallback();
     }
 
-    protected virtual void Awake() => Create_ProgressBar();
+    protected virtual void Awake()
+    {
+        HouseManager.AddInteractableToObservedLists(null, this);
+        Create_ProgressBar();
+    }
 
     protected virtual void DirtyObject() 
     {
