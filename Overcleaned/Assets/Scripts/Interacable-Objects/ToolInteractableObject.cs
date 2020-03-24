@@ -156,7 +156,7 @@ public class ToolInteractableObject : CleanableObject
         Set_Stream_ForceFinishProgression();
     }
 
-    public override void DirtyObject()
+    protected override void DirtyObject()
     {
         if (toolInteractableType == ToolInteractableType.ToBeCleaned)
         {

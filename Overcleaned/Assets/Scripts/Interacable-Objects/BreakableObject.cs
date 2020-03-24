@@ -197,7 +197,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         Set_RepairState(false);
     }
 
-    public override void DirtyObject()
+    protected override void DirtyObject()
     {
         IsBroken = true;
         onBreakObject?.Invoke();

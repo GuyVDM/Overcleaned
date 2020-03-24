@@ -42,9 +42,27 @@ public class CleanableObject : InteractableObject, IPunObservable
     #region ### RPC Calls ###
 
     [PunRPC]
+    protected void Stream_ObjectStateToDirty()
+    {
+        DirtyObject();
+    }
+
+    protected void Set_ObjectStateToDirty() 
+    {
+        if (NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_ObjectStateToDirty), RpcTarget.AllBuffered);
+            return;
+        }
+
+        Stream_ObjectStateToDirty();
+    }
+
+    [PunRPC]
     protected void Stream_ObjectStateToClean() 
     {
         CleanAndLockObjectLocally();
+        HouseManager.InvokeOnObjectStatusCallback();
     }
 
     protected void Set_ObjectStateToClean() 
@@ -55,7 +73,7 @@ public class CleanableObject : InteractableObject, IPunObservable
             return;
         }
 
-        Stream_ProgressBarCreation();
+        Stream_ObjectStateToClean();
     }
 
     [PunRPC]
@@ -104,10 +122,22 @@ public class CleanableObject : InteractableObject, IPunObservable
         OnCleaned?.Invoke();
         IsCleaned = true;
         IsLocked = true;
+
         Debug.Log("Succesfully cleaned object!");
+        HouseManager.InvokeOnObjectStatusCallback();
     }
 
     protected virtual void Awake() => Create_ProgressBar();
+
+    protected virtual void DirtyObject() 
+    {
+        OnDirtyObject?.Invoke();
+        IsCleaned = false;
+        IsLocked = false;
+
+        Debug.Log("Succesfully dirtied the object!");
+        HouseManager.InvokeOnObjectStatusCallback();
+    }
 
     public override void Interact(PlayerInteractionController interactionController)
     {
@@ -167,17 +197,6 @@ public class CleanableObject : InteractableObject, IPunObservable
     public virtual void OnCleanedObject(PlayerInteractionController interactionController) 
     {
         Set_ObjectStateToClean();
-
-        HouseManager.InvokeOnObjectStatusCallback();
-    }
-
-    public virtual void DirtyObject() 
-    {
-        OnDirtyObject?.Invoke();;
-        IsCleaned = false;
-        IsLocked = false;
-
-        HouseManager.InvokeOnObjectStatusCallback();
     }
 
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
