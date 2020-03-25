@@ -24,7 +24,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
     private UnityEvent onRepairObject;
 
     #region ### Properties ###
-    private bool IsBroken { get; set; }
+    public bool IsBroken { get; set; }
     private float RepairProgression { get; set; }
     #endregion
 

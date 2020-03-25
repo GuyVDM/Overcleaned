@@ -47,7 +47,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         DirtyObject();
     }
 
-    protected void Set_ObjectStateToDirty() 
+    public void Set_ObjectStateToDirty() 
     {
         if (NetworkManager.IsConnectedAndInRoom) 
         {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+
 public class HouseManager : MonoBehaviourPun, IServiceOfType
 {
 	private class CleaningProgressionStorage
@@ -11,10 +12,13 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		public int team;
 	}
 
-	private enum EventType
+	private enum GameEventType
 	{
 		BreakCleanableObject,
+		BreakCleanableObjectWithTimer,
 		SpawnWieldable,
+
+		EnumSize,
 	}
 
 	//Static values;
@@ -23,18 +27,16 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	//Events
 	public static event TimeChanged OnTimeChanged;
+	public static event Action OnCleanableObjectStatusChanged;
 
 	//Delegates for events
 	public delegate void TimeChanged(TimeSpan newtime);
 
-    //Action event callback
-    public static event Action OnCleanableObjectStatusChanged;
-
     //Progression tracking
     private static List<CleanableObject> cleanableObjects = new List<CleanableObject>();
 	private static List<WieldableCleanableObject> wieldableCleanableObjects = new List<WieldableCleanableObject>();
-
 	private static float totalWeightOfAllCleanables;
+	private List<CleaningProgressionStorage> cleaningProgressionStorage = new List<CleaningProgressionStorage>();
 
 	//Time tracking
 	public int gameTimeInMinutes;
@@ -43,8 +45,9 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private bool endOfTimerWasReached;
 	private bool targetTimeIsCalculated;
 
-    //EndGame
-    private List<CleaningProgressionStorage> cleaningProgressionStorage = new List<CleaningProgressionStorage>();
+	//Events
+	public Vector2 gameEventWaitTime;
+
 
 	#region Initalize Service
 	private void Awake()
@@ -70,7 +73,11 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		totalWeightOfAllCleanables = GetTotalWeight();
 
 		if (PhotonNetwork.IsMasterClient)
+		{
+			StartCoroutine(EventLoop());
 			photonView.RPC(nameof(StartTimeTracking), RpcTarget.AllBuffered);
+		}
+
 
 		OnTimeChanged += EndGame;
 	}
@@ -276,6 +283,72 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		{
 			uiManager.ShowWindow("Lose Window");
 		}
+	}
+
+	#endregion
+
+	#region Events
+
+	private IEnumerator EventLoop()
+	{
+		int currentTeam = 1;
+
+		while (!endOfTimerWasReached)
+		{
+			yield return new WaitForSeconds(UnityEngine.Random.Range(gameEventWaitTime.x, gameEventWaitTime.y));
+			photonView.RPC(nameof(StartGameEvent), RpcTarget.All, currentTeam);
+			currentTeam = ChooseNextTeam(currentTeam);
+		}
+	}
+
+	private int ChooseNextTeam(int currentTeam)
+	{
+		if (currentTeam == 1)
+			return 2;
+		else
+			return 1;
+	}
+
+	private void StartGameEvent(int team)
+	{
+		if (team != NetworkManager.localPlayerInformation.team) return;
+
+		GameEventType chosenEventType = (GameEventType)UnityEngine.Random.Range(0, (int)GameEventType.EnumSize);
+
+		switch (chosenEventType)
+		{
+			case GameEventType.BreakCleanableObject:
+				BreakCleanableObject(false);
+				break;
+			case GameEventType.BreakCleanableObjectWithTimer:
+				BreakCleanableObject(true);
+				break;
+			case GameEventType.SpawnWieldable:
+				SpawnWieldable();
+				break;
+		}
+	}
+
+	private void BreakCleanableObject(bool withTimer)
+	{
+		List<BreakableObject> availableBreakableObjects = new List<BreakableObject>();
+
+		for (int i = 0; i < cleanableObjects.Count; i++)
+		{
+			if (cleanableObjects[i].GetType() == typeof(BreakableObject))
+			{
+				BreakableObject breakableObject = (BreakableObject)cleanableObjects[i];
+				if (!breakableObject.IsBroken)
+					availableBreakableObjects.Add(breakableObject);
+			}
+		}
+
+		availableBreakableObjects[UnityEngine.Random.Range(0, availableBreakableObjects.Count)].Set_ObjectStateToDirty();
+	}
+
+	private void SpawnWieldable()
+	{
+
 	}
 
 	#endregion
