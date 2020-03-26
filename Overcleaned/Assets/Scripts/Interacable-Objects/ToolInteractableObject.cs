@@ -73,7 +73,10 @@ public class ToolInteractableObject : CleanableObject
 
         if(toolInteractableType == ToolInteractableType.ToBeCleaned) 
         {
-            HouseManager.AddInteractableToObservedLists(null, this);
+            if (NetworkManager.localPlayerInformation.team == (int)ownedByTeam) 
+            {
+                HouseManager.AddInteractableToObservedLists(null, this);
+            }
         }
     }
 
