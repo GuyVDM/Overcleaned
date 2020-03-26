@@ -37,13 +37,13 @@ public class PlayerUIController : MonoBehaviour
         fill_StartColor = fill_CleanAmount.color;
 
         HouseManager.OnTimeChanged += UpdateTimer;
-        HouseManager.OnCleanableObjectStatusChanged += UpdateCleaningProgressionUI;
+        HouseManager.OnCleaningProgressionVisualChanged += UpdateCleaningProgressionUI;
     }
 
     private void OnDestroy() 
     {
         HouseManager.OnTimeChanged -= UpdateTimer;
-        HouseManager.OnCleanableObjectStatusChanged -= UpdateCleaningProgressionUI;
+        HouseManager.OnCleaningProgressionVisualChanged -= UpdateCleaningProgressionUI;
     }
 
     private void UpdateCleaningProgressionUI(int teamID) 

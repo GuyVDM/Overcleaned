@@ -29,6 +29,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	//Events
 	public static event TimeChanged OnTimeChanged;
 	public static event Action<int> OnCleanableObjectStatusChanged;
+    public static event Action<int> OnCleaningProgressionVisualChanged;
 
 	//Delegates for events
 	public delegate void TimeChanged(TimeSpan newtime);
@@ -177,6 +178,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	{
 		CleanPercentage = Get_CleanPercentage();
 		photonView.RPC(nameof(SyncProgressionAcrossClients), RpcTarget.All, CleanPercentage, ourTeamID);
+        photonView.RPC(nameof(SyncCleaningProgressionUIToTeams), RpcTarget.All, ourTeamID);
 	}
 
 	[PunRPC]
@@ -186,6 +188,12 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		print("<b> progression of team </b>" + teamNumber + "changed to: " + progression);
 		writeTo.progression = progression;
 	}
+
+    [PunRPC]
+    private void SyncCleaningProgressionUIToTeams(int teamID) 
+    {
+        OnCleaningProgressionVisualChanged?.Invoke(teamID);
+    }
 
 	private CleaningProgressionStorage FindStorageByTeamNumber(int teamNumber)
 	{
