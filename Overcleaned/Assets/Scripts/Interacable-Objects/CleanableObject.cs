@@ -129,7 +129,11 @@ public class CleanableObject : InteractableObject, IPunObservable
 
     protected virtual void Awake()
     {
-        HouseManager.AddInteractableToObservedLists(null, this);
+        if (NetworkManager.localPlayerInformation.team == (int)ownedByTeam) 
+        {
+            HouseManager.AddInteractableToObservedLists(null, this);
+        }
+
         Create_ProgressBar();
     }
 

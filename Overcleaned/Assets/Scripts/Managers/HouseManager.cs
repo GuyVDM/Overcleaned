@@ -145,6 +145,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
         {
             if(storage.team == otherTeamID) 
             {
+                Debug.Log("Found storage");
                 value = storage.progression;
                 break;
             }
