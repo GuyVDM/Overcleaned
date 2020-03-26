@@ -122,8 +122,8 @@ public class CleanableObject : InteractableObject, IPunObservable
         IsCleaned = true;
         IsLocked = true;
 
+        
         Debug.Log("Succesfully cleaned object!");
-        HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
     }
 
     protected virtual void Awake()
@@ -206,6 +206,7 @@ public class CleanableObject : InteractableObject, IPunObservable
     public virtual void OnCleanedObject(PlayerInteractionController interactionController) 
     {
         Set_ObjectStateToClean();
+        HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
     }
 
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
