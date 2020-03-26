@@ -45,7 +45,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	public delegate void OnLocalPlayerLeft();
 
 	public static LocalPlayerInformation localPlayerInformation { get; private set; }
-	private List<RoomInfo> onlineRooms = new List<RoomInfo>();
+	public static List<RoomInfo> onlineRooms = new List<RoomInfo>();
 
 	//Nicknaming the player
 	private string[] allProfanity;
@@ -82,7 +82,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 
 	public void SetLocalPlayerNickname(string nickname)
 	{
-		if (NameIsClean(nickname))
+		if (CheckStringForProfanity(nickname))
 		{
 			GiveNicknameToPlayer(nickname);
 		}
@@ -110,24 +110,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		return allWords;
 	}
 
-	private bool NameIsClean(string nickname)
+	public bool CheckStringForProfanity(string nickname)
 	{
 		for (int i = 0; i < allProfanity.Length; i++)
 		{
 			if (nickname.ToLower().Contains(allProfanity[i]))
-			{
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	public bool ServerNameIsAvailable(string newServername)
-	{
-		for (int i = 0; i < onlineRooms.Count; i++)
-		{
-			if (onlineRooms[i].Name == newServername)
 			{
 				return false;
 			}

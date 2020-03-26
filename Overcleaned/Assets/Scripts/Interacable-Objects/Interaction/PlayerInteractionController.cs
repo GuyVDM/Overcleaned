@@ -201,6 +201,12 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
             if (NetworkManager.IsConnectedAndInRoom) 
             {
                 photonView.RPC(nameof(Cast_ThrowObject), RpcTarget.AllBuffered, wieldableObject.gameObject.GetPhotonView().ViewID, forceDrop);
+
+                if(currentlyInteracting) 
+                {
+                    currentlyInteracting.DeInteract(this);
+                }
+
                 forceDrop = false;
                 return;
             }

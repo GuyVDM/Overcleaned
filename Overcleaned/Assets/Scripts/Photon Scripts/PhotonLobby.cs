@@ -8,7 +8,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 {
 	[Header("Photon Settings")]
 	public string gameVersion;
-	public byte maxPlayers; 
+	public byte maxPlayers;
 
 	[Header("UI")]
 	public UI_ServerBrowser serverBrowser;
@@ -35,23 +35,79 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 		NetworkManager.onRoomListChange += ShowRoomsOnUI;
 	}
 
-	public bool HostRoom(string roomName)
+	public bool HostRoom(string roomName, string password = "")
 	{
-		if (ServiceLocator.GetServiceOfType<NetworkManager>().ServerNameIsAvailable(roomName))
+		UIManager uiManager = ServiceLocator.GetServiceOfType<UIManager>();
+
+		if (!ServiceLocator.GetServiceOfType<NetworkManager>().CheckStringForProfanity(roomName))
 		{
-			PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = maxPlayers }, new TypedLobby("Lobby 1", LobbyType.Default));
+			uiManager.ShowMessage("Do not use profanity in your server name.");
+			return false;
+		}
+
+		if (ServerNameIsAvailable(roomName))
+		{
+			RoomOptions roomOptions = new RoomOptions();
+			roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
+			roomOptions.CustomRoomProperties.Add("PW", password);
+			roomOptions.MaxPlayers = maxPlayers;
+			roomOptions.CustomRoomPropertiesForLobby = new string[] { "PW" };
+
+			PhotonNetwork.CreateRoom(roomName, roomOptions, new TypedLobby("Lobby 1", LobbyType.Default));
+
 			return true;
 		}
 		else
 		{
-			ServiceLocator.GetServiceOfType<UIManager>().ShowMessage("That server name is already in use.");
+			uiManager.ShowMessage("That server name is already in use.");
 			return false;
 		}
+	}
+
+	private bool ServerNameIsAvailable(string newServername)
+	{
+		for (int i = 0; i < NetworkManager.onlineRooms.Count; i++)
+		{
+			if (NetworkManager.onlineRooms[i].Name == newServername)
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public void JoinRoom(string roomName)
 	{
 		PhotonNetwork.JoinRoom(roomName);
+	}
+
+	public bool ServerHasPassword(string roomName)
+	{
+		for (int i = 0; i < NetworkManager.onlineRooms.Count; i++)
+		{
+			if (NetworkManager.onlineRooms[i].Name == roomName)
+			{
+				return (string)NetworkManager.onlineRooms[i].CustomProperties["PW"] != "";
+			}
+		}
+
+		return false;
+	}
+
+	public bool PasswordMatches(string roomName, string password)
+	{
+		for (int i = 0; i < NetworkManager.onlineRooms.Count; i++)
+		{
+			if (NetworkManager.onlineRooms[i].Name == roomName)
+			{
+				string passwordOfRoom = (string)NetworkManager.onlineRooms[i].CustomProperties["PW"];
+				print(passwordOfRoom);
+				return passwordOfRoom == password;
+			}
+		}
+
+		return false;
 	}
 
 	public void LeaveRoom()

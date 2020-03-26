@@ -67,9 +67,17 @@ public class ToolInteractableObject : CleanableObject
 
     protected override void Awake()
     {
-        base.Awake();
+        Create_ProgressBar();
         notool_Animator = Instantiate(Resources.Load("NoToolNote") as GameObject, Vector3.zero, Quaternion.identity).GetComponentInChildren<Animator>();
         notool_Animator.transform.root.position = transform.position + object_ui_Offset;
+
+        if(toolInteractableType == ToolInteractableType.ToBeCleaned) 
+        {
+            if (NetworkManager.localPlayerInformation.team == (int)ownedByTeam) 
+            {
+                HouseManager.AddInteractableToObservedLists(null, this);
+            }
+        }
     }
 
     protected virtual void Update()
@@ -156,7 +164,7 @@ public class ToolInteractableObject : CleanableObject
         Set_Stream_ForceFinishProgression();
     }
 
-    public override void DirtyObject()
+    protected override void DirtyObject()
     {
         if (toolInteractableType == ToolInteractableType.ToBeCleaned)
         {

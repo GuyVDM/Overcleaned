@@ -31,18 +31,9 @@ public class GameManager : MonoBehaviour, IServiceOfType
 
 	private void SpawnLocalPlayer()
 	{
-        Debug.LogWarning(NetworkManager.localPlayerInformation.numberInTeam);
 		PlayerManager playerManager = PhotonNetwork.Instantiate(playerPrefab.name, teams[NetworkManager.localPlayerInformation.team].teamSpawnPositions[NetworkManager.localPlayerInformation.numberInTeam].position, Quaternion.identity).GetComponent<PlayerManager>();
 		playerManager.Set_PlayerColor(teams[NetworkManager.localPlayerInformation.team].teamColor);
 		playerManager.Set_EnemyBasePosition(teams[NetworkManager.localPlayerInformation.team].enemyTeamPosition.position);
-	}
-}
-
-public class Gang
-{
-	public void No()
-	{
-
 	}
 }
 

@@ -101,7 +101,7 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
     {
         if(NetworkManager.IsConnectedAndInRoom) 
         {
-            photonView.RPC(nameof(Stream_ObjectTransform), RpcTarget.AllBuffered, pos, rot);
+            photonView.RPC(nameof(Stream_ObjectTransform), RpcTarget.AllBuffered, viewID, pos, rot);
             return;
         }
 
@@ -121,7 +121,19 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
     public static void Set_ObjectFromPool(string objectIndentifier, Vector3 pos, Vector3 orientation) 
     {
         ObjectPoolData data = poolData.Where(o => o.poolID == objectIndentifier).First();
-        GameObject objectToReturn = data.pooledObjects.Where(o => o.activeSelf == false).Single();
+        GameObject objectToReturn = null;
+
+        if(data.pooledObjects.Count > 0) 
+        {
+            for(int i = 0; i < data.pooledObjects.Count; i++) 
+            {
+                if(data.pooledObjects[i].gameObject.activeSelf == false)
+                {
+                    objectToReturn = data.pooledObjects[i];
+                    break;
+                }
+            }
+        }
 
         if(objectToReturn == null) 
         {
@@ -137,6 +149,24 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
         OnAddObjectToPool.Invoke(objectToReturn.GetPhotonView().ViewID);
         OnSetObjectState.Invoke(true, objectToReturn.GetPhotonView().ViewID);
         OnSetObjectTransform.Invoke(objectToReturn.GetPhotonView().ViewID, pos, orientation);
+    }
+
+    public static bool HasPooledObjectAvailable(string identifier)
+    {
+        ObjectPoolData data = poolData.Where(o => o.poolID == identifier).First();
+
+        if (data.pooledObjects.Count > 0)
+        {
+            for (int i = 0; i < data.pooledObjects.Count; i++)
+            {
+                if (data.pooledObjects[i].gameObject.activeSelf == false)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public static void Set_ObjectBackToPool(int objectViewID) => OnSetObjectState(false, objectViewID);

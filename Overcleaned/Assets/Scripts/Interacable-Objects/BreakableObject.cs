@@ -24,7 +24,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
     private UnityEvent onRepairObject;
 
     #region ### Properties ###
-    private bool IsBroken { get; set; }
+    public bool IsBroken { get; set; }
     private float RepairProgression { get; set; }
     #endregion
 
@@ -92,7 +92,6 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
             {
                 photonView.RPC(nameof(Stream_BreakableProgressBarCreation), RpcTarget.AllBuffered);
         
-                Debug.Log(repairProgressionUI);
             }
             return;
         }
@@ -198,9 +197,14 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         Set_RepairState(false);
     }
 
-    public override void DirtyObject()
+    protected override void DirtyObject()
     {
+        RepairProgression = 0;
+        CleaningProgression = 0;
+
         IsBroken = true;
+        Set_ProgressBarEnableState(false);
+
         onBreakObject?.Invoke();
         base.DirtyObject();
     }

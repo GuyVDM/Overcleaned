@@ -19,7 +19,7 @@ public class UI_RoomInformationWindow : UIWindow
 		private Dropdown teamDropdown;
 		private Text playerNameText, teamText, readyText;
 		private Toggle readyToggle;
-
+		private Button kickPlayer;
 
 		public PlayerUIElement(Player player, Transform uiReference)
 		{
@@ -29,9 +29,11 @@ public class UI_RoomInformationWindow : UIWindow
 			playerNameText = uiReference.Find("Player Name").GetComponent<Text>();
 			readyToggle = uiReference.Find("Ready Toggle").GetComponent<Toggle>();
 			readyText = uiReference.Find("Ready Text").GetComponent<Text>();
+			kickPlayer = uiReference.Find("Kick Player Button").GetComponent<Button>();
 
 			teamDropdown.onValueChanged.AddListener(delegate { SetTeamNumber(teamDropdown.value); });
 			readyToggle.onValueChanged.AddListener(delegate { SetReadyValue(readyToggle.isOn); });
+			kickPlayer.onClick.AddListener(delegate { KickPlayer(player); });
 			teamText.text = teamDropdown.options[0].text;
 
 			AssignToPlayer(player);
@@ -52,6 +54,7 @@ public class UI_RoomInformationWindow : UIWindow
 			readyToggle.gameObject.SetActive(IsLocal);
 			teamText.gameObject.SetActive(!IsLocal);
 			readyText.gameObject.SetActive(!IsLocal);
+			kickPlayer.gameObject.SetActive(PhotonNetwork.IsMasterClient && !player.IsLocal);
 
 			playerNameText.text = PlayerName;
 		}
@@ -91,6 +94,12 @@ public class UI_RoomInformationWindow : UIWindow
 		{
 			readyText.text = isReady ? "Ready" : "Not Ready";
 			SetReadyValue(isReady);
+		}
+
+		private void KickPlayer(Player playerToKick)
+		{
+			if (PhotonNetwork.IsMasterClient)
+				PhotonNetwork.CloseConnection(playerToKick);
 		}
 
 		private void SetTeamNumber(int newTeamNumber)

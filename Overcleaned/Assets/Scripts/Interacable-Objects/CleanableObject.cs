@@ -42,6 +42,23 @@ public class CleanableObject : InteractableObject, IPunObservable
     #region ### RPC Calls ###
 
     [PunRPC]
+    protected void Stream_ObjectStateToDirty()
+    {
+        DirtyObject();
+    }
+
+    public void Set_ObjectStateToDirty() 
+    {
+        if (NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_ObjectStateToDirty), RpcTarget.AllBuffered);
+            return;
+        }
+
+        Stream_ObjectStateToDirty();
+    }
+
+    [PunRPC]
     protected void Stream_ObjectStateToClean() 
     {
         CleanAndLockObjectLocally();
@@ -55,7 +72,7 @@ public class CleanableObject : InteractableObject, IPunObservable
             return;
         }
 
-        Stream_ProgressBarCreation();
+        Stream_ObjectStateToClean();
     }
 
     [PunRPC]
@@ -104,10 +121,31 @@ public class CleanableObject : InteractableObject, IPunObservable
         OnCleaned?.Invoke();
         IsCleaned = true;
         IsLocked = true;
+
+        
         Debug.Log("Succesfully cleaned object!");
     }
 
-    protected virtual void Awake() => Create_ProgressBar();
+    protected virtual void Awake()
+    {
+        Debug.Log(NetworkManager.localPlayerInformation.team == (int)ownedByTeam);
+        if (NetworkManager.localPlayerInformation.team == (int)ownedByTeam) 
+        {
+            HouseManager.AddInteractableToObservedLists(null, this);
+        }
+
+        Create_ProgressBar();
+    }
+
+    protected virtual void DirtyObject() 
+    {
+        OnDirtyObject?.Invoke();
+        IsCleaned = false;
+        IsLocked = false;
+
+        Debug.Log("Succesfully dirtied the object!");
+        HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
+    }
 
     public override void Interact(PlayerInteractionController interactionController)
     {
@@ -138,6 +176,7 @@ public class CleanableObject : InteractableObject, IPunObservable
 
             if (CleaningProgression >= cleaningTime)
             {
+                progressBar.Set_BarToFinished();
                 OnCleanedObject(interactionController);
                 interactionController.DeinteractWithCurrentObject();
             }
@@ -167,13 +206,7 @@ public class CleanableObject : InteractableObject, IPunObservable
     public virtual void OnCleanedObject(PlayerInteractionController interactionController) 
     {
         Set_ObjectStateToClean();
-    }
-
-    public virtual void DirtyObject() 
-    {
-        OnDirtyObject?.Invoke();;
-        IsCleaned = false;
-        IsLocked = false;
+        HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
     }
 
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
