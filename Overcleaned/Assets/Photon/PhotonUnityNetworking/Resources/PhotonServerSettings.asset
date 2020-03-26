@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: cdb2d608-89b9-4c16-a877-fb7b2057abcb
+    AppIdRealtime: 
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -40,16 +40,19 @@ MonoBehaviour:
   - RecieveProgressionInformation
   - RespawnSpaceship
   - SetReadyRPC
+  - StartGameEvent
   - StartGameRPC
   - StartTimeTracking
   - StopAllPlayingClipsRPC
   - StopAudioRPC
   - Stream_BreakableProgressBarCreation
   - Stream_BreakableProgressbarFinish
+  - Stream_DisplayStateTooltip
   - Stream_ForceFinishProgression
   - Stream_GameObjectEnableState
   - Stream_NoToolNoteEnabled
   - Stream_ObjectStateToClean
+  - Stream_ObjectStateToDirty
   - Stream_ObjectToAddToPool
   - Stream_ObjectTransform
   - Stream_OnDirtyObject
@@ -60,10 +63,7 @@ MonoBehaviour:
   - Stream_ProgressBarEnableState
   - Stream_RepairProgressbarEnableState
   - Stream_SetRepairState
-  - UpdatePlayerElementRPC
-  - StartGameEvent
-  - Stream_DisplayStateTooltip
-  - Stream_ObjectStateToDirty
   - SyncCleaningProgressionUIToTeams
   - SyncProgressionAcrossClients
+  - UpdatePlayerElementRPC
   DisableAutoOpenWizard: 1
