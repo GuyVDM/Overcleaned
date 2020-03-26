@@ -138,7 +138,19 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
     public static float Get_OtherTeamCleaningPercentage() 
     {
         float otherTeamID = NetworkManager.localPlayerInformation.team == 0 ? 1 : 0;
-        return cleaningProgressionStorage.Where(o => o.team == otherTeamID).First().progression;
+
+        float value = 0;
+
+        foreach(CleaningProgressionStorage storage in cleaningProgressionStorage) 
+        {
+            if(storage.team == otherTeamID) 
+            {
+                value = storage.progression;
+                break;
+            }
+        }
+
+        return value;
     }
 
 	private static float GetTotalWeight()
