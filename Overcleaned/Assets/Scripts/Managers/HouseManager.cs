@@ -194,7 +194,6 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 
-		print("")
 		return new CleaningProgressionStorage() { team = teamNumber }; 
 	}
 
