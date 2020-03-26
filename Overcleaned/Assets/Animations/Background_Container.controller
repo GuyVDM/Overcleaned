@@ -177,7 +177,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 4d8758fdd7e4dd54487c910b300bdfb5, type: 2}
+  m_Motion: {fileID: 7400000, guid: 33770b4cbc7bdef4db81bd431035e99b, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -381,13 +381,13 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Bounce
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -403,7 +403,7 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - serializedVersion: 5
     m_Name: Bounce
-    m_StateMachine: {fileID: -1236828154072661831}
+    m_StateMachine: {fileID: 1081622144668847889}
     m_Mask: {fileID: 0}
     m_Motions: []
     m_Behaviours: []
@@ -593,7 +593,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 4d8758fdd7e4dd54487c910b300bdfb5, type: 2}
+  m_Motion: {fileID: 7400000, guid: 33770b4cbc7bdef4db81bd431035e99b, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
