@@ -2111,7 +2111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownedByTeam: 1
-  cleaningWeight: 25
+  cleaningWeight: 0
   cleaningTime: 5
   OnCleaned:
     m_PersistentCalls:
@@ -4204,15 +4204,20 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 7098697254516115487, guid: fa4503a72f4480c43b971d101a8b73b4,
+    - target: {fileID: 7098697254516115482, guid: fa4503a72f4480c43b971d101a8b73b4,
         type: 3}
-      propertyPath: toolInteractableType
+      propertyPath: cleaningWeight
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7098697254516115487, guid: fa4503a72f4480c43b971d101a8b73b4,
         type: 3}
+      propertyPath: toolInteractableType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098697254516115487, guid: fa4503a72f4480c43b971d101a8b73b4,
+        type: 3}
       propertyPath: ownedByTeam
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8320042540177940009, guid: fa4503a72f4480c43b971d101a8b73b4,
         type: 3}
