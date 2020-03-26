@@ -143,6 +143,8 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
         foreach(CleaningProgressionStorage storage in cleaningProgressionStorage) 
         {
+			print("<b> storage item of team </b>" + storage.team + "has progression of: " + storage.progression);
+
             if(storage.team == otherTeamID) 
             {
                 Debug.Log("Found storage");
@@ -181,6 +183,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private void SyncProgressionAcrossClients(float progression, int teamNumber)
 	{
 		CleaningProgressionStorage writeTo = FindStorageByTeamNumber(teamNumber);
+		print("<b> progression of team </b>" + teamNumber + "changed to: " + progression);
 		writeTo.progression = progression;
 	}
 
@@ -194,7 +197,10 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 
-		return new CleaningProgressionStorage() { team = teamNumber }; 
+		print("<b> ADDED CLEANINGPROGRESSION OF TEAM: </b>" + teamNumber);
+		CleaningProgressionStorage toReturn = new CleaningProgressionStorage() { team = teamNumber };
+		cleaningProgressionStorage.Add(toReturn);
+		return toReturn;
 	}
 
 	#endregion
