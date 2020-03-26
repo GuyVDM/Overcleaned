@@ -18,6 +18,9 @@ public class PlayerUIController : MonoBehaviour
     private Image fill_CleanAmount;
 
     [SerializeField]
+    private Image fill_CleanAmount_OtherTeam;
+
+    [SerializeField]
     private Animator anim_OpponentProgressBar;
 
     [SerializeField]
@@ -48,17 +51,12 @@ public class PlayerUIController : MonoBehaviour
         const string BOUNCE_TRIGGER_STRING = "Bounce";
 
         fill_CleanAmount.fillAmount = HouseManager.CleanPercentage;
-
-        if(Mathf.Approximately(fill_CleanAmount.fillAmount, 1)) 
-        {
-            fill_CleanAmount.color = Color.green;
-        }
-        else 
-        {
-            fill_CleanAmount.color = fill_StartColor;
-        }
-
+        fill_CleanAmount.color = Mathf.Approximately(fill_CleanAmount.fillAmount, 1) ? Color.green : fill_StartColor;
         anim_OurProgressBar.SetTrigger(BOUNCE_TRIGGER_STRING);
+
+        fill_CleanAmount_OtherTeam.fillAmount = HouseManager.Get_OtherTeamCleaningPercentage();
+        fill_CleanAmount_OtherTeam.color = Mathf.Approximately(fill_CleanAmount.fillAmount, 1) ? Color.green : fill_StartColor;
+        anim_OpponentProgressBar.SetTrigger(BOUNCE_TRIGGER_STRING);
     }
 
     private int totalSeconds = 0;

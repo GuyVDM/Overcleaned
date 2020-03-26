@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +37,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
     private static List<CleanableObject> cleanableObjects = new List<CleanableObject>();
 	private static List<WieldableCleanableObject> wieldableCleanableObjects = new List<WieldableCleanableObject>();
 	private static float totalWeightOfAllCleanables;
-	private List<CleaningProgressionStorage> cleaningProgressionStorage = new List<CleaningProgressionStorage>();
+	private static List<CleaningProgressionStorage> cleaningProgressionStorage = new List<CleaningProgressionStorage>();
 
 	//Time tracking
 	public int gameTimeInMinutes;
@@ -110,7 +111,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	#region Cleaning Progression
 
-	public static float GetCleanPercentage()
+	public static float Get_CleanPercentage()
 	{
 		float weightCleaned = 0;
 
@@ -134,6 +135,12 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
         return (weightCleaned / totalWeightOfAllCleanables);
 	}
 
+    public static float Get_OtherTeamCleaningPercentage() 
+    {
+        float otherTeamID = NetworkManager.localPlayerInformation.team == 0 ? 1 : 0;
+        return cleaningProgressionStorage.Where(o => o.team == otherTeamID).First().progression;
+    }
+
 	private static float GetTotalWeight()
 	{
 		int toReturn = 0;
@@ -153,7 +160,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	public void OnObjectStatusChanged()
 	{
-		CleanPercentage = GetCleanPercentage();
+		CleanPercentage = Get_CleanPercentage();
 		photonView.RPC(nameof(SyncProgressionAcrossClients), RpcTarget.All, CleanPercentage, NetworkManager.localPlayerInformation.team);
 	}
 
