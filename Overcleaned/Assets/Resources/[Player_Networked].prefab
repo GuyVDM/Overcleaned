@@ -350,8 +350,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 8100939995989278516}
   - {fileID: 6393120765383580608}
-  viewIdField: 7
-  InstantiationId: 7
+  viewIdField: 10
+  InstantiationId: 10
   isRuntimeInstantiated: 0
 --- !u!1 &977362385202431396
 GameObject:
@@ -382,7 +382,7 @@ Transform:
   m_GameObject: {fileID: 977362385202431396}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.715, z: 0}
-  m_LocalScale: {x: 0.83837456, y: 1.2646041, z: 0.83837456}
+  m_LocalScale: {x: 0.6, y: 1.2646041, z: 0.63}
   m_Children: []
   m_Father: {fileID: 7310821113577667045}
   m_RootOrder: 0
@@ -442,8 +442,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 8
-  InstantiationId: 8
+  viewIdField: 9
+  InstantiationId: 9
   isRuntimeInstantiated: 0
 --- !u!65 &3020005488989559044
 BoxCollider:
@@ -557,8 +557,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 9
-  InstantiationId: 9
+  viewIdField: 8
+  InstantiationId: 8
   isRuntimeInstantiated: 0
 --- !u!1 &1103632569539231498
 GameObject:
@@ -2288,8 +2288,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 10
-  InstantiationId: 10
+  viewIdField: 7
+  InstantiationId: 7
   isRuntimeInstantiated: 0
 --- !u!114 &8100939995989278516
 MonoBehaviour:
@@ -2355,7 +2355,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 0.33
   m_Height: 1.52
   m_Direction: 1
   m_Center: {x: 0, y: 0.99, z: 0}

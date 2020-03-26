@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
 
             transform.eulerAngles = new Vector3(0, lookRot.eulerAngles.y, 0);
 
-            MyRigidBody.AddForce(moveDirection, ForceMode.Force);
+            MyRigidBody.AddForceAtPosition(moveDirection, transform.position, ForceMode.Force);
         }
 
         if (InputAxes == Vector2.zero) 
