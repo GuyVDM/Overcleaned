@@ -132,6 +132,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         if (NetworkManager.localPlayerInformation.team == (int)ownedByTeam) 
         {
             HouseManager.AddInteractableToObservedLists(null, this);
+            Debug.Log("This is from me.");
         }
 
         Create_ProgressBar();
