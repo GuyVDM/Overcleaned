@@ -62,7 +62,6 @@ public class CleanableObject : InteractableObject, IPunObservable
     protected void Stream_ObjectStateToClean() 
     {
         CleanAndLockObjectLocally();
-        HouseManager.InvokeOnObjectStatusCallback();
     }
 
     protected void Set_ObjectStateToClean() 
@@ -124,7 +123,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         IsLocked = true;
 
         Debug.Log("Succesfully cleaned object!");
-        HouseManager.InvokeOnObjectStatusCallback();
+        HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
     }
 
     protected virtual void Awake()
@@ -145,7 +144,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         IsLocked = false;
 
         Debug.Log("Succesfully dirtied the object!");
-        HouseManager.InvokeOnObjectStatusCallback();
+        HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
     }
 
     public override void Interact(PlayerInteractionController interactionController)

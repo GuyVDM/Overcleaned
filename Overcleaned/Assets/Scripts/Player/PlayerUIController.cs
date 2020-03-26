@@ -46,13 +46,17 @@ public class PlayerUIController : MonoBehaviour
         HouseManager.OnCleanableObjectStatusChanged -= UpdateCleaningProgressionUI;
     }
 
-    private void UpdateCleaningProgressionUI() 
+    private void UpdateCleaningProgressionUI(int teamID) 
     {
         const string BOUNCE_TRIGGER_STRING = "Bounce";
 
-        fill_CleanAmount.fillAmount = HouseManager.CleanPercentage;
-        fill_CleanAmount.color = Mathf.Approximately(fill_CleanAmount.fillAmount, 1) ? Color.green : fill_StartColor;
-        anim_OurProgressBar.SetTrigger(BOUNCE_TRIGGER_STRING);
+        if (NetworkManager.localPlayerInformation.team == teamID)
+        {
+            fill_CleanAmount.fillAmount = HouseManager.CleanPercentage;
+            fill_CleanAmount.color = Mathf.Approximately(fill_CleanAmount.fillAmount, 1) ? Color.green : fill_StartColor;
+            anim_OurProgressBar.SetTrigger(BOUNCE_TRIGGER_STRING);
+            return;
+        }
 
         fill_CleanAmount_OtherTeam.fillAmount = HouseManager.Get_OtherTeamCleaningPercentage();
         fill_CleanAmount_OtherTeam.color = Mathf.Approximately(fill_CleanAmount.fillAmount, 1) ? Color.green : fill_StartColor;

@@ -80,7 +80,7 @@ public class WieldableCleanableObject : WieldableObject
     public void StoreObject()
     {
         isStored = true;
-        HouseManager.InvokeOnObjectStatusCallback();
+        HouseManager.InvokeOnObjectStatusCallback(NetworkManager.localPlayerInformation.team);
     }
 
     public void BreakObject() 
@@ -103,7 +103,7 @@ public class WieldableCleanableObject : WieldableObject
         uncleaned_Variant.enabled = true;
         cleaned_Variant.enabled = false;
 
-        HouseManager.InvokeOnObjectStatusCallback();
+        HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
     }
 
     private void OnCollisionEnter(Collision collision)

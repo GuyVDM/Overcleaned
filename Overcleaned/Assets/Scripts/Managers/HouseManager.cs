@@ -28,7 +28,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	//Events
 	public static event TimeChanged OnTimeChanged;
-	public static event Action OnCleanableObjectStatusChanged;
+	public static event Action<int> OnCleanableObjectStatusChanged;
 
 	//Delegates for events
 	public delegate void TimeChanged(TimeSpan newtime);
@@ -89,7 +89,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			UpdateTimer();
 	}
 
-    public static void InvokeOnObjectStatusCallback() => OnCleanableObjectStatusChanged?.Invoke();
+    public static void InvokeOnObjectStatusCallback(int teamID) => OnCleanableObjectStatusChanged?.Invoke(teamID);
 
     public static void AddInteractableToObservedLists(WieldableCleanableObject wieldableCleanableObject = null, CleanableObject cleanableObject = null) 
     {
@@ -171,10 +171,10 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		return toReturn;
 	}
 
-	public void OnObjectStatusChanged()
+	public void OnObjectStatusChanged(int ourTeamID)
 	{
 		CleanPercentage = Get_CleanPercentage();
-		photonView.RPC(nameof(SyncProgressionAcrossClients), RpcTarget.All, CleanPercentage, NetworkManager.localPlayerInformation.team);
+		photonView.RPC(nameof(SyncProgressionAcrossClients), RpcTarget.All, CleanPercentage, ourTeamID);
 	}
 
 	[PunRPC]
