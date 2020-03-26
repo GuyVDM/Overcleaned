@@ -176,6 +176,7 @@ public class CleanableObject : InteractableObject, IPunObservable
 
             if (CleaningProgression >= cleaningTime)
             {
+                progressBar.Set_BarToFinished();
                 OnCleanedObject(interactionController);
                 interactionController.DeinteractWithCurrentObject();
             }
