@@ -37,7 +37,15 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 
 	public bool HostRoom(string roomName, string password = "")
 	{
-		if (ServiceLocator.GetServiceOfType<NetworkManager>().ServerNameIsAvailable(roomName))
+		UIManager uiManager = ServiceLocator.GetServiceOfType<UIManager>();
+
+		if (!ServiceLocator.GetServiceOfType<NetworkManager>().CheckStringForProfanity(roomName))
+		{
+			uiManager.ShowMessage("Do not use profanity in your server name.");
+			return false;
+		}
+
+		if (ServerNameIsAvailable(roomName))
 		{
 			RoomOptions roomOptions = new RoomOptions();
 			roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
@@ -51,9 +59,22 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 		}
 		else
 		{
-			ServiceLocator.GetServiceOfType<UIManager>().ShowMessage("That server name is already in use.");
+			uiManager.ShowMessage("That server name is already in use.");
 			return false;
 		}
+	}
+
+	private bool ServerNameIsAvailable(string newServername)
+	{
+		for (int i = 0; i < NetworkManager.onlineRooms.Count; i++)
+		{
+			if (NetworkManager.onlineRooms[i].Name == newServername)
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public void JoinRoom(string roomName)
