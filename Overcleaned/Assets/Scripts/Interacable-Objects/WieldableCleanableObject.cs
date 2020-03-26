@@ -103,6 +103,7 @@ public class WieldableCleanableObject : WieldableObject
         uncleaned_Variant.enabled = true;
         cleaned_Variant.enabled = false;
 
+        HouseManager.InvokeOnObjectStatusCallback();
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -199,7 +199,12 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
     protected override void DirtyObject()
     {
+        RepairProgression = 0;
+        CleaningProgression = 0;
+
         IsBroken = true;
+        Set_ProgressBarEnableState(false);
+
         onBreakObject?.Invoke();
         base.DirtyObject();
     }

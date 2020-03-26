@@ -297,23 +297,22 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		{
 			yield return new WaitForSeconds(UnityEngine.Random.Range(gameEventWaitTime.x, gameEventWaitTime.y));
 			photonView.RPC(nameof(StartGameEvent), RpcTarget.All, currentTeam);
+            Debug.Log($"SendingEvent : { currentTeam }");
+
 			currentTeam = ChooseNextTeam(currentTeam);
 		}
 	}
 
-	private int ChooseNextTeam(int currentTeam)
-	{
-		if (currentTeam == 1)
-			return 2;
-		else
-			return 1;
-	}
+	private int ChooseNextTeam(int currentTeam) => currentTeam == 0 ? 1 : 0;
 
+    [PunRPC]
 	private void StartGameEvent(int team)
 	{
 		if (team != NetworkManager.localPlayerInformation.team) return;
 
 		GameEventType chosenEventType = (GameEventType)UnityEngine.Random.Range(0, (int)GameEventType.EnumSize);
+
+        Debug.Log("Calling event");
 
 		switch (chosenEventType)
 		{
@@ -343,13 +342,48 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 
-		availableBreakableObjects[UnityEngine.Random.Range(0, availableBreakableObjects.Count)].Set_ObjectStateToDirty();
+        if (availableBreakableObjects.Count > 0) 
+        {
+            availableBreakableObjects[UnityEngine.Random.Range(0, availableBreakableObjects.Count)].Set_ObjectStateToDirty();
+        }
 	}
 
 	private void SpawnWieldable()
 	{
+        const string WIELDABLE_POOL_ID = "[CleanableWieldables]";
 
+        if(ObjectPool.HasPooledObjectAvailable(WIELDABLE_POOL_ID)) 
+        {
+            ObjectPool.Set_ObjectFromPool(WIELDABLE_POOL_ID, GetTeamCleanableObjectSpawnRegion(), Vector3.zero);
+            return;
+        }
 	}
+
+    private Vector3 GetTeamCleanableObjectSpawnRegion() 
+    {
+        float x_min = 0, x_max = 0;
+        float z_min = 0, z_max = 0;
+
+        const float Y_SPAWNHEIGHT = 5;
+
+
+        switch(NetworkManager.localPlayerInformation.team) 
+        {
+            case 0:
+                x_min = -10.425f;
+                x_max = 9.72f;
+
+                z_min = -9.21f;
+                z_max = 7.3f;
+                break;
+
+            case 1:
+                //No known boundries declared...
+                break;
+        }
+
+        return new Vector3(UnityEngine.Random.Range(x_min, x_max), Y_SPAWNHEIGHT, UnityEngine.Random.Range(z_min, z_max));
+    }
 
 	#endregion
 

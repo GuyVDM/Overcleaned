@@ -151,5 +151,23 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
         OnSetObjectTransform.Invoke(objectToReturn.GetPhotonView().ViewID, pos, orientation);
     }
 
+    public static bool HasPooledObjectAvailable(string identifier)
+    {
+        ObjectPoolData data = poolData.Where(o => o.poolID == identifier).First();
+
+        if (data.pooledObjects.Count > 0)
+        {
+            for (int i = 0; i < data.pooledObjects.Count; i++)
+            {
+                if (data.pooledObjects[i].gameObject.activeSelf == false)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static void Set_ObjectBackToPool(int objectViewID) => OnSetObjectState(false, objectViewID);
 }
