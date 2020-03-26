@@ -47,7 +47,10 @@ public class WieldableCleanableObject : WieldableObject
 
     private void Awake() 
     {
-        HouseManager.AddInteractableToObservedLists(this);
+        if ((int)ownedByTeam == NetworkManager.localPlayerInformation.team) 
+        {
+            HouseManager.AddInteractableToObservedLists(this);
+        }
 
         starting_ToolID = toolID;
     }
