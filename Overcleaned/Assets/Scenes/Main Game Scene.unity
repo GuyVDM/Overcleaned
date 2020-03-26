@@ -928,7 +928,7 @@ MonoBehaviour:
   tooltip: Cleaning the stick so we can repair the sink...
   object_ui_Offset: {x: 0, y: 1, z: 0}
   required_ToolID: 0
-  toolInteractableType: 1
+  toolInteractableType: 0
 --- !u!65 &410996146
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3681,7 +3681,7 @@ MonoBehaviour:
   tooltip: Cleaning the stick so we can repair the sink...
   object_ui_Offset: {x: 0, y: 1, z: 0}
   required_ToolID: 0
-  toolInteractableType: 1
+  toolInteractableType: 0
 --- !u!65 &2100942535
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4203,6 +4203,16 @@ PrefabInstance:
         type: 3}
       propertyPath: InstantiationId
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098697254516115487, guid: fa4503a72f4480c43b971d101a8b73b4,
+        type: 3}
+      propertyPath: toolInteractableType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098697254516115487, guid: fa4503a72f4480c43b971d101a8b73b4,
+        type: 3}
+      propertyPath: ownedByTeam
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8320042540177940009, guid: fa4503a72f4480c43b971d101a8b73b4,
         type: 3}
