@@ -216,9 +216,12 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
         if (currentlyWielding != null) 
         {
             const int HAND_LAYER = 1;
+
             playerAnimator.SetLayerWeight(HAND_LAYER, 0);
 
+            currentlyWielding.DeInteract(this);
             currentlyWielding = null;
+
             if (NetworkManager.IsConnectedAndInRoom) 
             {
                 photonView.RPC(nameof(Cast_ThrowObject), RpcTarget.AllBuffered, wieldableObject.gameObject.GetPhotonView().ViewID, forceDrop);

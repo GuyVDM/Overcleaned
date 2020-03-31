@@ -11,7 +11,7 @@ public abstract class InteractableObject : MonoBehaviourPunCallbacks, IInteracta
         Everyone = 2
     }
 
-    public bool IsLocked { get; protected set; }
+    public bool IsLocked;
 
     public abstract void Interact(PlayerInteractionController interactionController);
 
