@@ -15,6 +15,12 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     [SerializeField]
     private Transform arrow_Selection_UX;
 
+    [SerializeField]
+    private Animator playerAnimator;
+
+    [SerializeField]
+    private Transform h2_Anchor;
+
     [Header("Debugging:")]
     public WieldableObject currentlyWielding;
 
@@ -29,7 +35,9 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
 
     private Vector3 arrow_UX_Offset = new Vector3(0, 2, 0);
 
-    private bool forceDrop = false; 
+    private bool forceDrop = false;
+
+    private const int HAND_LAYER = 1;
     #endregion
 
     #region ### RPC Calls ###
@@ -38,6 +46,8 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     {
         const float THROW_FORCE_FORWARD = 10;
         const float THROW_FORCE_UP = 3;
+
+        playerAnimator.SetLayerWeight(HAND_LAYER, 0);
 
         Vector3 throwVelocity = hasForceDropped ? Vector3.zero : (transform.forward * THROW_FORCE_FORWARD) + (transform.up * THROW_FORCE_UP);
 
@@ -52,9 +62,11 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     private void Cast_PickupObject(int handID, int objectID, Vector3 rotation, Vector3 localPosition) 
     {
         Transform currentlyWielded = NetworkManager.GetViewByID(objectID).transform;
-        Transform handToChildTo = NetworkManager.GetViewByID(handID).transform;
+        Transform handToChildTo = handID == 0 ? hand.transform : h2_Anchor;
 
-        currentlyWielded.transform.SetParent(hand.transform);
+        playerAnimator.SetLayerWeight(HAND_LAYER, 1);
+
+        currentlyWielded.transform.SetParent(handToChildTo);
         currentlyWielded.transform.localPosition = localPosition;
         currentlyWielded.transform.localEulerAngles = rotation;
         currentlyWielded.transform.GetComponent<Rigidbody>().isKinematic = true;
@@ -105,15 +117,13 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
             }
         }
 
-        if(Input.GetKey(useWieldableKey)) 
+        if(Input.GetKeyDown(useWieldableKey)) 
         {
+            const string HIT_TRIGGER = "Smack";
+
             if(currentlyWielding != null) 
             {
-                if (currentlyWielding.GetType() == typeof(WieldableInteractableObject))
-                {
-                    WieldableInteractableObject currentItem = (WieldableInteractableObject)currentlyWielding;
-                    currentItem.Use_WieldableObject(this);
-                }
+                playerAnimator.SetTrigger(HIT_TRIGGER);
             }
         }
         #endregion
@@ -169,6 +179,14 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
 
     public void PickupObject(WieldableObject wieldableObject, Vector3 localHandOffset, Vector3 localRotationOffset) 
     {
+        const string H1_PICKUP = "1h";
+        const string H2_PICKUP = "2h";
+
+        int targetViewID = wieldableObject.handedType == WieldableObject.Handed_Type.H1Handed ? 0 : 1;
+        string targetTrigger = wieldableObject.handedType == WieldableObject.Handed_Type.H1Handed ? H1_PICKUP : H2_PICKUP;
+
+        playerAnimator.SetTrigger(targetTrigger);
+
         if(currentlyWielding == null) 
         {
             currentlyWielding = wieldableObject;
@@ -176,7 +194,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
             if(NetworkManager.IsConnectedAndInRoom) 
             {
                 photonView.RPC(nameof(Cast_PickupObject), RpcTarget.AllBuffered,
-                hand.GetPhotonView().ViewID,
+                targetViewID,
                 wieldableObject.gameObject.GetPhotonView().ViewID,
                 localRotationOffset,
                 localHandOffset
@@ -185,7 +203,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
             }
 
             Cast_PickupObject(
-                hand.GetPhotonView().ViewID,
+                targetViewID,
                 wieldableObject.gameObject.GetPhotonView().ViewID,
                 localRotationOffset,
                 localHandOffset
@@ -197,6 +215,9 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     {
         if (currentlyWielding != null) 
         {
+            const int HAND_LAYER = 1;
+            playerAnimator.SetLayerWeight(HAND_LAYER, 0);
+
             currentlyWielding = null;
             if (NetworkManager.IsConnectedAndInRoom) 
             {

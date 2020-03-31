@@ -19,7 +19,7 @@ MonoBehaviour:
   OwnershipTransfer: 1
   ObservedComponents:
   - {fileID: 1114638708}
-  viewIdField: 14
+  viewIdField: 0
   InstantiationId: 14
   isRuntimeInstantiated: 0
 --- !u!114 &1114638708
@@ -36,6 +36,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ownedByTeam: 2
   toolID: 0
+  handedType: 0
   pickup_Offset: {x: 0, y: 0, z: 0}
   rotation_Offset: {x: 0, y: 0, z: 0}
   cleaningWeight: 0

@@ -4,8 +4,17 @@ using Photon.Pun;
 [RequireComponent(typeof(Rigidbody))]
 public class WieldableObject : InteractableObject, IPunObservable
 {
+
+    public enum Handed_Type
+    {
+        H1Handed = 0,
+        H2Handed = 1
+    }
+
     [Header("Tweakable Parameters:")]
     public int toolID;
+
+    public Handed_Type handedType = 0;
 
     [Space(10)]
 

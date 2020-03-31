@@ -350,8 +350,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 8100939995989278516}
   - {fileID: 6393120765383580608}
-  viewIdField: 10
-  InstantiationId: 10
+  viewIdField: 3
+  InstantiationId: 3
   isRuntimeInstantiated: 0
 --- !u!1 &977362385202431396
 GameObject:
@@ -420,6 +420,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   arrow_Selection_UX: {fileID: 8994339082462930250}
+  playerAnimator: {fileID: 556778803801175452}
+  h2_Anchor: {fileID: 1982598958996714453}
   currentlyWielding: {fileID: 0}
   currentSelected: {fileID: 0}
   currentlyInteracting: {fileID: 0}
@@ -442,8 +444,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 9
-  InstantiationId: 9
+  viewIdField: 4
+  InstantiationId: 4
   isRuntimeInstantiated: 0
 --- !u!65 &3020005488989559044
 BoxCollider:
@@ -487,7 +489,8 @@ Transform:
   m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.6205072, y: 0.3690586, z: 0.31424507}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1982598958996714453}
   m_Father: {fileID: 7310821113577667045}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -557,8 +560,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 8
-  InstantiationId: 8
+  viewIdField: 5
+  InstantiationId: 5
   isRuntimeInstantiated: 0
 --- !u!1 &1103632569539231498
 GameObject:
@@ -1961,6 +1964,59 @@ RectTransform:
   m_AnchoredPosition: {x: -403.00003, y: -257.99997}
   m_SizeDelta: {x: 806, y: 516}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &6567233102068297677
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1982598958996714453}
+  - component: {fileID: 6833515834459401326}
+  m_Layer: 0
+  m_Name: 2_Handed_Pivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1982598958996714453
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6567233102068297677}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.341, y: -0, z: 0.097}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3559685064175142856}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6833515834459401326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6567233102068297677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 7
+  InstantiationId: 7
+  isRuntimeInstantiated: 0
 --- !u!1 &6755039247536879640
 GameObject:
   m_ObjectHideFlags: 0
@@ -2288,8 +2344,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 7
-  InstantiationId: 7
+  viewIdField: 6
+  InstantiationId: 6
   isRuntimeInstantiated: 0
 --- !u!114 &8100939995989278516
 MonoBehaviour:
@@ -2324,6 +2380,15 @@ MonoBehaviour:
   - Type: 3
     SynchronizeType: 2
     Name: State
+  - Type: 9
+    SynchronizeType: 0
+    Name: 2h
+  - Type: 9
+    SynchronizeType: 0
+    Name: 1h
+  - Type: 9
+    SynchronizeType: 0
+    Name: Smack
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
