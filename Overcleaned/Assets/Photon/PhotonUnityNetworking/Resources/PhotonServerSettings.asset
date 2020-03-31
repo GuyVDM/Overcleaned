@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: cdb2d608-89b9-4c16-a877-fb7b2057abcb
+    AppIdRealtime: 
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -29,7 +29,6 @@ MonoBehaviour:
   EnableSupportLogger: 0
   RunInBackground: 1
   RpcList:
-  - Cast_LockingState
   - Cast_PickupObject
   - Cast_ThrowObject
   - DestroySpaceship
@@ -50,6 +49,7 @@ MonoBehaviour:
   - Stream_DisplayStateTooltip
   - Stream_ForceFinishProgression
   - Stream_GameObjectEnableState
+  - Stream_LockingState
   - Stream_NoToolNoteEnabled
   - Stream_ObjectStateToClean
   - Stream_ObjectStateToDirty
@@ -66,5 +66,4 @@ MonoBehaviour:
   - SyncCleaningProgressionUIToTeams
   - SyncProgressionAcrossClients
   - UpdatePlayerElementRPC
-  - Stream_LockingState
   DisableAutoOpenWizard: 1
