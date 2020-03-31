@@ -34,6 +34,17 @@ public class WieldableObject : InteractableObject, IPunObservable
     {
         Debug.Log("Completed interaction!");
     }
+
+    protected override void Set_LockingState(bool isLocked)
+    {
+        if (NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_LockingState), RpcTarget.AllBuffered, isLocked);
+            return;
+        }
+
+        Stream_LockingState(isLocked);
+    }
     #endregion
 
     private void Awake() => GetTriggerField();
@@ -70,7 +81,10 @@ public class WieldableObject : InteractableObject, IPunObservable
 
             if (interactionController.currentlyWielding != null) 
             {
-                interactionController.DropObject(interactionController.currentlyWielding);
+                if (interactionController.currentlyWielding != this)
+                {
+                    interactionController.DropObject(interactionController.currentlyWielding);
+                }
             }
 
             interactionController.PickupObject(this, pickup_Offset, rotation_Offset);

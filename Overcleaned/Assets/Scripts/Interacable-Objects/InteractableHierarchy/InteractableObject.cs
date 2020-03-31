@@ -22,17 +22,17 @@ public abstract class InteractableObject : MonoBehaviourPunCallbacks, IInteracta
 
     #region ### RPC Calls ###
     [PunRPC]
-    protected void Cast_LockingState(bool isLocked) => this.IsLocked = isLocked;
+    protected void Stream_LockingState(bool isLocked) => this.IsLocked = isLocked;
 
-    protected void Set_LockingState(bool isLocked)
+    protected virtual void Set_LockingState(bool isLocked)
     {
         if (NetworkManager.IsConnectedAndInRoom)
         {
-            photonView.RPC(nameof(Cast_LockingState), RpcTarget.OthersBuffered, isLocked);
+            photonView.RPC(nameof(Stream_LockingState), RpcTarget.OthersBuffered, isLocked);
             return;
         }
 
-        Cast_LockingState(isLocked);
+        Stream_LockingState(isLocked);
     }
     #endregion
 
