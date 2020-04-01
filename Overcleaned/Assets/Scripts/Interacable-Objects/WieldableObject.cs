@@ -101,6 +101,15 @@ public class WieldableObject : InteractableObject, IPunObservable
         }
     }
 
+    public void UnlockObjectManually() 
+    {
+        if (lockedForOthers == true) 
+        {
+            lockedForOthers = false;
+            Set_LockingState(false);
+        }
+    }
+
     /// <summary>
     /// A function used to initiate some event whenever a tool has been used for a interactable.
     /// </summary>

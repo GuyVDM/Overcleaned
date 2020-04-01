@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using System;
+using System.Threading.Tasks;
 
 public class PlayerInteractionController : MonoBehaviourPunCallbacks
 {
@@ -119,14 +121,26 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
 
         if(Input.GetKeyDown(useWieldableKey)) 
         {
-            const string HIT_TRIGGER = "Smack";
-
-            if(currentlyWielding != null) 
-            {
-                playerAnimator.SetTrigger(HIT_TRIGGER);
-            }
+            HitWithWieldingObject();
         }
         #endregion
+    }
+
+    private bool isHitting = false;
+    private async void HitWithWieldingObject() 
+    {
+        if (isHitting || currentlyWielding == null) return;
+
+        const string HIT_TRIGGER = "Smack";
+
+        isHitting = true;
+
+        playerAnimator.SetTrigger(HIT_TRIGGER);
+        currentlyWielding.gameObject.AddComponent<StunComponent>();
+
+        await Task.Delay(TimeSpan.FromSeconds(0.7f));
+
+        isHitting = false;
     }
 
     private void CheckForInteractables() 
@@ -219,7 +233,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
 
             playerAnimator.SetLayerWeight(HAND_LAYER, 0);
 
-            currentlyWielding.DeInteract(this);
+            currentlyWielding.UnlockObjectManually();
             currentlyWielding = null;
 
             if (NetworkManager.IsConnectedAndInRoom) 

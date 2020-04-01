@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
-using System;
+using UnityEngine;
+using Photon.Pun;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPunCallbacks
 {
 
     [Header("Movement Parameters:")]
@@ -36,6 +35,10 @@ public class PlayerController : MonoBehaviour
     #region ### Private Variables ###
     private readonly Vector3 stunParticle_Offset = new Vector3(0, 1.5f, 0);
 
+    private const string PARTICLE_VFX_ID = "KNOCKOUT_FX";
+
+    private bool isStunned = false;
+
     private Vector3 moveDirection = Vector3.zero;
 
     private EffectsManager effectsManager;
@@ -53,9 +56,33 @@ public class PlayerController : MonoBehaviour
     private AnimationState myAnimationState;
     #endregion
 
+    #region ### RPC Calls ###
+    [PunRPC]
+    private void Stream_StunParticlesAtPosition(Vector3 offset) => effectsManager.PlayParticle(PARTICLE_VFX_ID, offset, Quaternion.identity);
+
+    private void Set_StunParticlesAtPosition(Vector3 offset) 
+    {
+        effectsManager.PlayParticle(PARTICLE_VFX_ID, offset, Quaternion.identity);
+
+        if (NetworkManager.IsConnectedAndInRoom)
+        {
+            photonView.RPC(nameof(Stream_StunParticlesAtPosition), RpcTarget.Others, offset);
+        }
+    }
+    
+    [PunRPC]
+    private void Stream_StunPlayer(float duration) => StunPlayer(duration);
+    #endregion 
+
     private void Awake() => effectsManager = ServiceLocator.GetServiceOfType<EffectsManager>();
 
-    private void FixedUpdate() => MovePlayer();
+    private void FixedUpdate() 
+    {
+        if (isStunned == false) 
+        {
+            MovePlayer();
+        }
+    }
 
     private void Update()
     {
@@ -112,10 +139,15 @@ public class PlayerController : MonoBehaviour
     //Stuns the player for X time and prevents movement.
     public void StunPlayer(float duration)
     {
-        effectsManager.PlayParticle("Knockout_FX", transform.position + stunParticle_Offset, Quaternion.identity);
-        Set_PlayerAnimationState(AnimationState.Stunned);
-        ResetToIdle(duration);
+        if (isStunned == false) 
+        {
+            isStunned = true;
 
+            Set_StunParticlesAtPosition(transform.position + stunParticle_Offset);
+            Set_PlayerAnimationState(AnimationState.Stunned);
+
+            ResetToIdle(duration);
+        }
     }
 
     //Resets player animationstate to idle after stun event has been called for example.
@@ -123,6 +155,8 @@ public class PlayerController : MonoBehaviour
     {
         await Task.Delay(TimeSpan.FromSeconds(duration));
         Set_PlayerAnimationState(AnimationState.Idle);
+
+        isStunned = false;
     }
 
     private Vector3 GetDirection() 
