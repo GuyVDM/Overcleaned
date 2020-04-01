@@ -71,10 +71,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    private void Stream_StunPlayer(float duration, Vector3 velocity) 
+    private void Stream_StunPlayer(float duration, Vector3 velocity, int teamId) 
     {
-        MyRigidBody.AddForceAtPosition(velocity, transform.position);
-        StunPlayer(duration);
+        if (teamId != NetworkManager.localPlayerInformation.team)
+        {
+            MyRigidBody.AddForceAtPosition(velocity, transform.position);
+            StunPlayer(duration);
+        }
     }
     #endregion 
 

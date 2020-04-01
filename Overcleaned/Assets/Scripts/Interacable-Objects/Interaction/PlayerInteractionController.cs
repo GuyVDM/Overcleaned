@@ -129,16 +129,19 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     private bool isHitting = false;
     private async void HitWithWieldingObject() 
     {
-        if (isHitting || currentlyWielding == null) return;
+        if (isHitting || currentlyWielding == null)
+            return;
 
         const string HIT_TRIGGER = "Smack";
 
         isHitting = true;
-
         playerAnimator.SetTrigger(HIT_TRIGGER);
+
+        await Task.Delay(TimeSpan.FromSeconds(0.3f));
+
         currentlyWielding.gameObject.AddComponent<StunComponent>();
 
-        await Task.Delay(TimeSpan.FromSeconds(0.7f));
+        await Task.Delay(TimeSpan.FromSeconds(0.3f));
 
         isHitting = false;
     }
