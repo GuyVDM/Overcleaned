@@ -51,12 +51,15 @@ public class StunComponent : MonoBehaviour
                     if (!AlreadyDetected(collisions[i].transform.parent.gameObject.GetPhotonView().ViewID)) 
                     {
                         const string TARGET_METHOD_NAME = "Stream_StunPlayer";
+                        const int FORCE = 500;
 
                         Player owner = collisions[i].transform.parent.gameObject.GetPhotonView().Owner;
 
                         hitPhotonIds.Add(collisions[i].transform.parent.gameObject.GetPhotonView().ViewID);
 
-                        collisions[i].transform.parent.gameObject.GetPhotonView().RPC(TARGET_METHOD_NAME, owner, PUNISHMENT_DURATION, transform.forward);
+                        collisions[i].transform.parent.gameObject.GetPhotonView().RPC(TARGET_METHOD_NAME, owner, PUNISHMENT_DURATION, transform.forward * FORCE);
+
+                        collisions[i].transform.parent.GetComponent<Rigidbody>().AddForceAtPosition(transform.forward * FORCE, transform.position);
                     }
                 }
             }

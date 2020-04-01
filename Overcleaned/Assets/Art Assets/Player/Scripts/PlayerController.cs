@@ -73,9 +73,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [PunRPC]
     private void Stream_StunPlayer(float duration, Vector3 velocity) 
     {
-        const int FORCE = 500;
-
-        MyRigidBody.AddForceAtPosition(velocity * FORCE, transform.position);
+        MyRigidBody.AddForceAtPosition(velocity, transform.position);
         StunPlayer(duration);
     }
     #endregion 
