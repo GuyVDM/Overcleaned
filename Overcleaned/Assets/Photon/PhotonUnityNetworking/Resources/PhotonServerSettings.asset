@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: cdb2d608-89b9-4c16-a877-fb7b2057abcb
+    AppIdRealtime: 
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: eu
+    FixedRegion: 
     Server: 
     Port: 0
     Protocol: 0
@@ -63,9 +63,9 @@ MonoBehaviour:
   - Stream_ProgressBarEnableState
   - Stream_RepairProgressbarEnableState
   - Stream_SetRepairState
+  - Stream_StunParticlesAtPosition
+  - Stream_StunPlayer
   - SyncCleaningProgressionUIToTeams
   - SyncProgressionAcrossClients
   - UpdatePlayerElementRPC
-  - Stream_StunParticlesAtPosition
-  - Stream_StunPlayer
   DisableAutoOpenWizard: 1
