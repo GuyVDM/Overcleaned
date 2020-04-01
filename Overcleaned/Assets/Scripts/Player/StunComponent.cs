@@ -10,9 +10,9 @@ public class StunComponent : MonoBehaviour
 
     Collider[] collisions;
     List<int> hitPhotonIds = new List<int>();
-    Vector3 offset = new Vector3(0, 0.3f, 0);
+    Vector3 offset = new Vector3(0, 1, 0);
 
-    private const float RADIUS = 0.2f;
+    private const float RADIUS = 0.4f;
     private const int TARGETMASK = 1 << 9; //PlayerCollision layer
 
     private const float ATTACK_DURATION = 0.6f;
@@ -40,7 +40,7 @@ public class StunComponent : MonoBehaviour
 
     private void FixedUpdate()
     {
-        collisions = Physics.OverlapSphere(transform.position + transform.InverseTransformDirection(offset), RADIUS, TARGETMASK);
+        collisions = Physics.OverlapSphere(transform.position + transform.TransformDirection(offset), RADIUS, TARGETMASK);
 
         if (collisions.Length > 0)
         {
@@ -66,7 +66,7 @@ public class StunComponent : MonoBehaviour
 #if UNITY_EDITOR
     public void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position + transform.InverseTransformDirection(offset), RADIUS);
+        Gizmos.DrawWireSphere(transform.position + transform.TransformDirection(offset), RADIUS);
     }
 #endif
 }
