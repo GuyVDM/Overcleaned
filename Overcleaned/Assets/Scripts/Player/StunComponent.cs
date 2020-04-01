@@ -44,12 +44,13 @@ public class StunComponent : MonoBehaviour
         {
             for (int i = 0; i < collisions.Length; i++) 
             {
-                Debug.Log(collisions[i].name);
-
                 if (collisions[i].transform.parent.gameObject.GetPhotonView().Owner != PhotonNetwork.LocalPlayer)
                 {
-                    if (AlreadyDetected(collisions[i].transform.parent.gameObject.GetPhotonView().ViewID)) 
+                    Debug.Log("Someone else..");
+
+                    if (!AlreadyDetected(collisions[i].transform.parent.gameObject.GetPhotonView().ViewID)) 
                     {
+                        Debug.Log("Streaming hit..");
                         const string TARGET_METHOD_NAME = "Stream_StunPlayer";
 
                         Player owner = collisions[i].transform.parent.gameObject.GetPhotonView().Owner;

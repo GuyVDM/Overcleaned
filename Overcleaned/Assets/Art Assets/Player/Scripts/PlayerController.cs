@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     #region ### Private Variables ###
     private readonly Vector3 stunParticle_Offset = new Vector3(0, 1.5f, 0);
 
-    private const string PARTICLE_VFX_ID = "KNOCKOUT_FX";
+    private const string PARTICLE_VFX_ID = "Knockout_FX";
 
     private bool isStunned = false;
 
