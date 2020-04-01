@@ -8,7 +8,14 @@ using Photon.Realtime;
 public class StunComponent : MonoBehaviour
 {
 
-    private const float ATTACK_DURATION = 0.3f;
+    Collider[] collisions;
+    List<int> hitPhotonIds = new List<int>();
+    Vector3 offset = new Vector3(0, 0.3f, 0);
+
+    private const float RADIUS = 0.2f;
+    private const int TARGETMASK = 1 << 9; //PlayerCollision layer
+
+    private const float ATTACK_DURATION = 0.6f;
     private const float PUNISHMENT_DURATION = 3;
 
     private async void Start()
@@ -31,14 +38,9 @@ public class StunComponent : MonoBehaviour
         return false;
     }
 
-    Collider[] collisions;
-    List<int> hitPhotonIds = new List<int>();
     private void FixedUpdate()
     {
-        const float RADIUS = 0.2f;
-        const int TARGETMASK = 1 << 9; //PlayerCollision layer
-
-        collisions = Physics.OverlapSphere(transform.position, RADIUS, TARGETMASK);
+        collisions = Physics.OverlapSphere(transform.position + transform.InverseTransformDirection(offset), RADIUS, TARGETMASK);
 
         if (collisions.Length > 0)
         {
@@ -46,11 +48,8 @@ public class StunComponent : MonoBehaviour
             {
                 if (collisions[i].transform.parent.gameObject.GetPhotonView().Owner != PhotonNetwork.LocalPlayer)
                 {
-                    Debug.Log("Someone else..");
-
                     if (!AlreadyDetected(collisions[i].transform.parent.gameObject.GetPhotonView().ViewID)) 
                     {
-                        Debug.Log("Streaming hit..");
                         const string TARGET_METHOD_NAME = "Stream_StunPlayer";
 
                         Player owner = collisions[i].transform.parent.gameObject.GetPhotonView().Owner;
@@ -63,4 +62,11 @@ public class StunComponent : MonoBehaviour
             }
         }
     }
+
+#if UNITY_EDITOR
+    public void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position + transform.InverseTransformDirection(offset), RADIUS);
+    }
+#endif
 }
