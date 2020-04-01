@@ -69,9 +69,15 @@ public class PlayerController : MonoBehaviourPunCallbacks
             photonView.RPC(nameof(Stream_StunParticlesAtPosition), RpcTarget.Others, offset);
         }
     }
-    
+
     [PunRPC]
-    private void Stream_StunPlayer(float duration) => StunPlayer(duration);
+    private void Stream_StunPlayer(float duration, Vector3 velocity) 
+    {
+        const int FORCE = 500;
+
+        MyRigidBody.AddForceAtPosition(velocity * FORCE, transform.position);
+        StunPlayer(duration);
+    }
     #endregion 
 
     private void Awake() => effectsManager = ServiceLocator.GetServiceOfType<EffectsManager>();

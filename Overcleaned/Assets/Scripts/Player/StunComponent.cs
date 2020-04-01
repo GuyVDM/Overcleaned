@@ -56,7 +56,7 @@ public class StunComponent : MonoBehaviour
 
                         hitPhotonIds.Add(collisions[i].transform.parent.gameObject.GetPhotonView().ViewID);
 
-                        collisions[i].transform.parent.gameObject.GetPhotonView().RPC(TARGET_METHOD_NAME, owner, PUNISHMENT_DURATION);
+                        collisions[i].transform.parent.gameObject.GetPhotonView().RPC(TARGET_METHOD_NAME, owner, PUNISHMENT_DURATION, transform.forward);
                     }
                 }
             }
