@@ -4,8 +4,17 @@ using Photon.Pun;
 [RequireComponent(typeof(Rigidbody))]
 public class WieldableObject : InteractableObject, IPunObservable
 {
+
+    public enum Handed_Type
+    {
+        H1Handed = 0,
+        H2Handed = 1
+    }
+
     [Header("Tweakable Parameters:")]
     public int toolID;
+
+    public Handed_Type handedType = 0;
 
     [Space(10)]
 
@@ -24,6 +33,17 @@ public class WieldableObject : InteractableObject, IPunObservable
     protected virtual void Stream_OnInteractionComplete() 
     {
         Debug.Log("Completed interaction!");
+    }
+
+    protected override void Set_LockingState(bool isLocked)
+    {
+        if (NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_LockingState), RpcTarget.AllBuffered, isLocked);
+            return;
+        }
+
+        Stream_LockingState(isLocked);
     }
     #endregion
 
@@ -61,7 +81,10 @@ public class WieldableObject : InteractableObject, IPunObservable
 
             if (interactionController.currentlyWielding != null) 
             {
-                interactionController.DropObject(interactionController.currentlyWielding);
+                if (interactionController.currentlyWielding != this)
+                {
+                    interactionController.DropObject(interactionController.currentlyWielding);
+                }
             }
 
             interactionController.PickupObject(this, pickup_Offset, rotation_Offset);
@@ -75,6 +98,15 @@ public class WieldableObject : InteractableObject, IPunObservable
             lockedForOthers = false;
             Set_LockingState(false);
             interactionController.DropObject(this);
+        }
+    }
+
+    public void UnlockObjectManually() 
+    {
+        if (lockedForOthers == true) 
+        {
+            lockedForOthers = false;
+            Set_LockingState(false);
         }
     }
 

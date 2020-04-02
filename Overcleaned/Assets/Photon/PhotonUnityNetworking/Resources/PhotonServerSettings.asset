@@ -29,7 +29,6 @@ MonoBehaviour:
   EnableSupportLogger: 0
   RunInBackground: 1
   RpcList:
-  - Cast_LockingState
   - Cast_PickupObject
   - Cast_ThrowObject
   - DestroySpaceship
@@ -50,6 +49,7 @@ MonoBehaviour:
   - Stream_DisplayStateTooltip
   - Stream_ForceFinishProgression
   - Stream_GameObjectEnableState
+  - Stream_LockingState
   - Stream_NoToolNoteEnabled
   - Stream_ObjectStateToClean
   - Stream_ObjectStateToDirty
@@ -63,6 +63,8 @@ MonoBehaviour:
   - Stream_ProgressBarEnableState
   - Stream_RepairProgressbarEnableState
   - Stream_SetRepairState
+  - Stream_StunParticlesAtPosition
+  - Stream_StunPlayer
   - SyncCleaningProgressionUIToTeams
   - SyncProgressionAcrossClients
   - UpdatePlayerElementRPC
