@@ -60,6 +60,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
     {
         if (photonView.IsMine || PhotonNetwork.IsConnected == false) 
         {
+            Set_PlayerLockingstate(true);
             OnInitialise();
             Set_TeamState();
             player_Controller.enabled = true;
