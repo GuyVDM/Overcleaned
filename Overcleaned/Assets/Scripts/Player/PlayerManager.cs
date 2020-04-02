@@ -6,6 +6,8 @@ using Photon.Pun;
 [RequireComponent(typeof(PhotonView))]
 public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
 {
+    public static bool LockedComponents { get; private set; } = true;
+
     public enum Team 
     {
         Team1 = 0,
@@ -98,4 +100,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
         Stream_PlayerColorOverNetwork(playerColor.a, playerColor.b, playerColor.g, playerColor.r);
     }
 
+    public void Set_PlayerLockingstate(bool isLocked) 
+    {
+        LockedComponents = isLocked;
+    }
 }
