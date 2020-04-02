@@ -103,5 +103,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
     public void Set_PlayerLockingstate(bool isLocked) 
     {
         LockedComponents = isLocked;
+        player_InteractionController.enabled = LockedComponents;
     }
 }
