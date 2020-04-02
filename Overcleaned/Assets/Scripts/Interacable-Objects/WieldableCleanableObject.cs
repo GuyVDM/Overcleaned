@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using System.Linq;
 
 public class WieldableCleanableObject : WieldableObject
 {
@@ -47,6 +48,7 @@ public class WieldableCleanableObject : WieldableObject
 
     private void Awake() 
     {
+
         if ((int)ownedByTeam == NetworkManager.localPlayerInformation.team) 
         {
             HouseManager.AddInteractableToObservedLists(this);
