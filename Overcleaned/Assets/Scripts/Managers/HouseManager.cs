@@ -385,10 +385,16 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private void SpawnWieldable()
 	{
         const string WIELDABLE_POOL_ID = "[CleanableWieldables]";
+        const string PARTICLE_ID = "VFX_Object_Spawn_Effect";
 
-        if(ObjectPool.HasPooledObjectAvailable(WIELDABLE_POOL_ID)) 
+        if (ObjectPool.HasPooledObjectAvailable(WIELDABLE_POOL_ID)) 
         {
-            ObjectPool.Set_ObjectFromPool(WIELDABLE_POOL_ID, GetTeamCleanableObjectSpawnRegion(), Vector3.zero);
+            Vector3 instancePos = GetTeamCleanableObjectSpawnRegion();
+
+            ObjectPool.Set_ObjectFromPool(WIELDABLE_POOL_ID, instancePos, Vector3.zero);
+
+            GameObject particle = Resources.Load(PARTICLE_ID) as GameObject;
+            particle.transform.position = instancePos;
             return;
         }
 	}

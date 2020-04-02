@@ -83,9 +83,10 @@ public class PlayerCameraController : MonoBehaviour
 
     private void FixedUpdate() 
     {
+        MoveCamera();
+
         if (!PlayerManager.LockedComponents) 
         {
-            MoveCamera();
             Zoom();
             LockMovement();
         }

@@ -6,7 +6,7 @@ using Photon.Pun;
 [RequireComponent(typeof(PhotonView))]
 public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
 {
-    public static bool LockedComponents { get; private set; } = true;
+    public static bool LockedComponents { get; private set; }
 
     public enum Team 
     {
@@ -60,7 +60,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
     {
         if (photonView.IsMine || PhotonNetwork.IsConnected == false) 
         {
-            Set_PlayerLockingstate(true);
+            Set_PlayerLockingstate(false);
+
             OnInitialise();
             Set_TeamState();
             player_Controller.enabled = true;
@@ -104,6 +105,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IServiceOfType
     public void Set_PlayerLockingstate(bool isLocked) 
     {
         LockedComponents = isLocked;
-        player_InteractionController.enabled = LockedComponents;
+        player_InteractionController.enabled = !LockedComponents;
     }
 }
