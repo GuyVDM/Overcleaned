@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using System.Linq;
 
 [RequireComponent(typeof(Rigidbody))]
-public class WieldableObject : InteractableObject, IPunObservable
-{
+public class WieldableObject : InteractableObject, IPunObservable {
 
-    public enum Handed_Type
-    {
+    public enum Handed_Type {
         H1Handed = 0,
         H2Handed = 1
     }
@@ -26,16 +25,17 @@ public class WieldableObject : InteractableObject, IPunObservable
 
     #region ### Private Variables ###
     private Collider triggerField;
+
+    private Collider nonTriggerCollider;
     #endregion
 
     #region ### RPC Calls ###
     [PunRPC]
-    protected virtual void Stream_OnInteractionComplete() 
-    {
+    protected virtual void Stream_OnInteractionComplete() {
         Debug.Log("Completed interaction!");
     }
 
-    protected override void Set_LockingState(bool isLocked)
+    protected override void Set_LockingState(bool isLocked) 
     {
         if (NetworkManager.IsConnectedAndInRoom) 
         {
@@ -45,9 +45,31 @@ public class WieldableObject : InteractableObject, IPunObservable
 
         Stream_LockingState(isLocked);
     }
+
+    [PunRPC]
+    private void Stream_OnSetEnableStateCollider(bool isEnabled) 
+    {
+        nonTriggerCollider.enabled = isEnabled;
+    }
+
+    private void Set_OnSetEnableStateCollider(bool isEnabled) 
+    {
+        if(NetworkManager.IsConnectedAndInRoom) 
+        {
+            photonView.RPC(nameof(Stream_OnSetEnableStateCollider), RpcTarget.AllBuffered, isEnabled);
+            return;
+        }
+
+        Stream_OnSetEnableStateCollider(isEnabled);
+    }
     #endregion
 
-    private void Awake() => GetTriggerField();
+    private void Awake()
+    {
+        nonTriggerCollider  = GetComponentsInChildren<Collider>().Where(o => o.isTrigger == false).First();
+
+        GetTriggerField();
+    } 
 
     private void GetTriggerField() 
     {
@@ -76,6 +98,8 @@ public class WieldableObject : InteractableObject, IPunObservable
             {
                 lockedForOthers = true;
                 Set_LockingState(true);
+                Set_OnSetEnableStateCollider(true);
+
                 photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
             }
 
@@ -98,6 +122,7 @@ public class WieldableObject : InteractableObject, IPunObservable
             lockedForOthers = false;
             Set_LockingState(false);
             interactionController.DropObject(this);
+            Set_OnSetEnableStateCollider(false);
         }
     }
 
@@ -107,6 +132,7 @@ public class WieldableObject : InteractableObject, IPunObservable
         {
             lockedForOthers = false;
             Set_LockingState(false);
+            Set_OnSetEnableStateCollider(false);
         }
     }
 

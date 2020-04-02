@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void FixedUpdate() 
     {
-        if (isStunned == false) 
+        if (isStunned == false && PlayerManager.LockedComponents == false) 
         {
             MovePlayer();
         }
