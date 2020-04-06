@@ -151,6 +151,25 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
         OnSetObjectTransform.Invoke(objectToReturn.GetPhotonView().ViewID, pos, orientation);
     }
 
+<<<<<<< Updated upstream
+=======
+    public static void RemoveObjectFromPool(GameObject objectToCompare) 
+    {
+        foreach (ObjectPoolData data in poolData) 
+        {
+            for (int i = 0; i < data.pooledObjects.Count; i++) 
+            {
+                if (GameObject.ReferenceEquals(objectToCompare, data.pooledObjects[i])) 
+                {
+                    data.pooledObjects.RemoveAt(i);
+                    Debug.Log($"[ObjectPool] Succesfully removed the object { objectToCompare.name } from the pool.");
+                    return;
+                }
+            }
+        }
+    } 
+
+>>>>>>> Stashed changes
     public static bool HasPooledObjectAvailable(string identifier)
     {
         ObjectPoolData data = poolData.Where(o => o.poolID == identifier).First();
