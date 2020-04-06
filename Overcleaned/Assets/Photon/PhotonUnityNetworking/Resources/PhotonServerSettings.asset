@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: cdb2d608-89b9-4c16-a877-fb7b2057abcb
+    AppIdRealtime: 
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -57,6 +57,7 @@ MonoBehaviour:
   - Stream_ObjectTransform
   - Stream_OnDirtyObject
   - Stream_OnInteractionComplete
+  - Stream_OnSetEnableStateCollider
   - Stream_PlayerColorOverNetwork
   - Stream_PlayerTeamOverNetwork
   - Stream_ProgressBarCreation
@@ -68,5 +69,4 @@ MonoBehaviour:
   - SyncCleaningProgressionUIToTeams
   - SyncProgressionAcrossClients
   - UpdatePlayerElementRPC
-  - Stream_OnSetEnableStateCollider
   DisableAutoOpenWizard: 1
