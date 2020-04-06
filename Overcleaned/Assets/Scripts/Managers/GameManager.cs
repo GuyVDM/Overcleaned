@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 		playerManager.Set_PlayerColor(teams[NetworkManager.localPlayerInformation.team].teamColor);
 		playerManager.Set_EnemyBasePosition(teams[NetworkManager.localPlayerInformation.team].enemyTeamPosition.position);
 
-		photonView.RPC(nameof(ThisClientIsReady), RpcTarget.MasterClient);
+		//photonView.RPC(nameof(ThisClientIsReady), RpcTarget.MasterClient);
 	}
 
 	[PunRPC]
