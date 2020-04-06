@@ -5,6 +5,16 @@ using Photon.Pun;
 public class CleanableObject : InteractableObject, IPunObservable
 {
 
+    [Header("References:")]
+    [SerializeField]
+    private Material dirty_Material;
+
+    [SerializeField]
+    private Material cleaned_Material;
+
+    [SerializeField]
+    private MeshRenderer object_Renderer;
+
     [Header("Tweakable Parameters:")]
     [SerializeField]
     public int cleaningWeight = 25;
@@ -12,7 +22,8 @@ public class CleanableObject : InteractableObject, IPunObservable
     [SerializeField]
     private float cleaningTime = 5;
 
-    [Header("Event Params:")]
+    [Header("On Cleaned/Dirty Callbacks:")]
+    [Tooltip("Used to play particles for example, or to turn something off/invoke an action.")]
     [SerializeField]
     private UnityEvent OnCleaned;
 
@@ -122,7 +133,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         IsCleaned = true;
         IsLocked = true;
 
-        
+        object_Renderer.material = cleaned_Material;
         Debug.Log("Succesfully cleaned object!");
     }
 
@@ -143,7 +154,9 @@ public class CleanableObject : InteractableObject, IPunObservable
         IsCleaned = false;
         IsLocked = false;
 
-        Debug.Log("Succesfully dirtied the object!");
+        object_Renderer.material = dirty_Material;
+        Debug.Log("Succesfully dirtied object!");
+
         HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
     }
 

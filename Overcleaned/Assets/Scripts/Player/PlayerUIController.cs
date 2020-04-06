@@ -59,7 +59,7 @@ public class PlayerUIController : MonoBehaviour
         }
 
         fill_CleanAmount_OtherTeam.fillAmount = HouseManager.Get_OtherTeamCleaningPercentage();
-        fill_CleanAmount_OtherTeam.color = Mathf.Approximately(fill_CleanAmount.fillAmount, 1) ? Color.green : fill_StartColor;
+        fill_CleanAmount_OtherTeam.color = Mathf.Approximately(fill_CleanAmount_OtherTeam.fillAmount, 1) ? Color.green : fill_StartColor;
         anim_OpponentProgressBar.SetTrigger(BOUNCE_TRIGGER_STRING);
     }
 

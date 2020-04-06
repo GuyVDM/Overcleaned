@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using System.Linq;
 
 public class WieldableCleanableObject : WieldableObject
 {
-    [Header("Tweakable Parameters:")]
-    public int cleaningWeight;
-
     public bool IsCleanedAndStored => isCleaned && isStored;
-    public bool isStored = false;
+
+    public bool isCleaned { get; private set; }
+    public bool isStored { get; private set; }
+
+    [Header("Cleaning Wieldable Specific Parameters:")]
+    public int cleaningWeight;
 
     [SerializeField]
     private int cleanedToolID = 0;
@@ -15,27 +18,49 @@ public class WieldableCleanableObject : WieldableObject
     [SerializeField]
     private bool isBreakable;
 
-    [Header("Renderers:")]
+    [Header("References:")]
     [SerializeField]
-    private MeshRenderer uncleaned_Variant;
+    private Material dirty_Material;
 
     [SerializeField]
-    private MeshRenderer cleaned_Variant;
+    private Material cleaned_Material;
 
-    [Header("Debug Settings:")]
-    public bool isCleaned = false;
+    [SerializeField]
+    private MeshRenderer object_Renderer;
 
     #region ### RPC Calls ###
     [PunRPC]
-    protected override void Stream_OnInteractionComplete() 
+    protected override void Stream_OnInteractionComplete()
     {
         CleanObject();
     }
 
     [PunRPC]
-    private void Stream_OnDirtyObject() 
+    private void Stream_OnDirtyObject()
     {
         DirtyObject();
+    }
+
+    [PunRPC]
+    private void Stream_BreakObjectCompletely() 
+    {
+        isCleaned = false;
+        isStored = false;
+
+        //--- Done in order to prevent the object from being pooled again, thus permanently applying the penalty ---//
+        ObjectPool.RemoveObjectFromPool(this.gameObject);
+        gameObject.SetActive(false);
+    }
+
+    private void Set_BreakObjectCompletely()
+    {
+        if (NetworkManager.IsConnectedAndInRoom)
+        {
+            photonView.RPC(nameof(Stream_BreakObjectCompletely), RpcTarget.AllBuffered);
+            return;
+        }
+
+        Stream_BreakObjectCompletely();
     }
     #endregion
 
@@ -45,9 +70,14 @@ public class WieldableCleanableObject : WieldableObject
     private int starting_ToolID;
     #endregion
 
-    private void Awake() 
+    protected override void Awake() 
     {
-        HouseManager.AddInteractableToObservedLists(this);
+        base.Awake();
+
+        if ((int)ownedByTeam == NetworkManager.localPlayerInformation.team) 
+        {
+            HouseManager.AddInteractableToObservedLists(this);
+        }
 
         starting_ToolID = toolID;
     }
@@ -58,11 +88,7 @@ public class WieldableCleanableObject : WieldableObject
         isCleaned = true;
         Debug.LogWarning("[WieldableCleanableObject] This script still needs to assign penalty on instance, and remove when this function is called.");
 
-        if (uncleaned_Variant && cleaned_Variant) 
-        {
-            uncleaned_Variant.enabled = false;
-            cleaned_Variant.enabled = true;
-        }
+        object_Renderer.material = cleaned_Material;
     }
 
     public void DirtyObject() 
@@ -70,11 +96,7 @@ public class WieldableCleanableObject : WieldableObject
         toolID = starting_ToolID;
         isCleaned = false;
 
-        if (uncleaned_Variant && cleaned_Variant) 
-        {
-            uncleaned_Variant.enabled = true;
-            cleaned_Variant.enabled = false;
-        }
+        object_Renderer.material = dirty_Material;
     }
 
     public void StoreObject()
@@ -87,7 +109,7 @@ public class WieldableCleanableObject : WieldableObject
     {
         if (isBreakable) 
         {
-            Debug.Log("Should break object later on.");
+            Set_BreakObjectCompletely();
         }
     }
 
@@ -100,8 +122,7 @@ public class WieldableCleanableObject : WieldableObject
         isCleaned = false;
         isStored = false;
 
-        uncleaned_Variant.enabled = true;
-        cleaned_Variant.enabled = false;
+        object_Renderer.material = cleaned_Material;
 
         HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
     }

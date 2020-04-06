@@ -18,7 +18,7 @@ MonoBehaviour:
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: eu
+    FixedRegion: 
     Server: 
     Port: 0
     Protocol: 0
@@ -29,43 +29,47 @@ MonoBehaviour:
   EnableSupportLogger: 0
   RunInBackground: 1
   RpcList:
-  - Cast_LockingState
   - Cast_PickupObject
   - Cast_ThrowObject
   - DestroySpaceship
   - Fire
+  - HasWonOrLost
   - PlayAudioRPC
   - PlayParticleRPC
+  - RecieveProgressionInformation
   - RespawnSpaceship
   - SetReadyRPC
+  - StartGameEvent
   - StartGameRPC
   - StartTimeTracking
   - StopAllPlayingClipsRPC
   - StopAudioRPC
   - Stream_BreakableProgressBarCreation
   - Stream_BreakableProgressbarFinish
+  - Stream_DisplayStateTooltip
   - Stream_ForceFinishProgression
   - Stream_GameObjectEnableState
+  - Stream_LockingState
   - Stream_NoToolNoteEnabled
   - Stream_ObjectStateToClean
+  - Stream_ObjectStateToDirty
   - Stream_ObjectToAddToPool
   - Stream_ObjectTransform
   - Stream_OnDirtyObject
   - Stream_OnInteractionComplete
+  - Stream_OnSetEnableStateCollider
   - Stream_PlayerColorOverNetwork
   - Stream_PlayerTeamOverNetwork
   - Stream_ProgressBarCreation
   - Stream_ProgressBarEnableState
   - Stream_RepairProgressbarEnableState
   - Stream_SetRepairState
-  - UpdatePlayerElementRPC
-  - Stream_GameObjectEnableState
-  - Stream_ObjectToAddToPool
-  - Stream_ObjectTransform
-  - RecieveProgressionInformation
-  - HasWonOrLost
-  - Stream_DisplayStateTooltip
+  - Stream_StunParticlesAtPosition
+  - Stream_StunPlayer
+  - SyncCleaningProgressionUIToTeams
   - SyncProgressionAcrossClients
-  - Stream_ObjectStateToDirty
-  - StartGameEvent
+  - UpdatePlayerElementRPC
+  - StartCountdown
+  - Stream_BreakObjectCompletely
+  - ThisClientIsReady
   DisableAutoOpenWizard: 1
