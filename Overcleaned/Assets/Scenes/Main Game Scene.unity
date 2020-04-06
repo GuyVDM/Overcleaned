@@ -1608,13 +1608,33 @@ PrefabInstance:
     - target: {fileID: 7146177287944073409, guid: 842f5fb9a7a866b4586e2402b5577bfb,
         type: 3}
       propertyPath: rotation_Offset.x
-      value: -180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7146177287944073409, guid: 842f5fb9a7a866b4586e2402b5577bfb,
         type: 3}
       propertyPath: pickup_Offset.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7146177287944073409, guid: 842f5fb9a7a866b4586e2402b5577bfb,
+        type: 3}
+      propertyPath: isBreakable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7146177287944073409, guid: 842f5fb9a7a866b4586e2402b5577bfb,
+        type: 3}
+      propertyPath: object_Renderer
+      value: 
+      objectReference: {fileID: 1016015157891607071}
+    - target: {fileID: 7146177287944073409, guid: 842f5fb9a7a866b4586e2402b5577bfb,
+        type: 3}
+      propertyPath: cleaned_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 06577c7ec4b48ba449223105bcd68d30, type: 2}
+    - target: {fileID: 7146177287944073409, guid: 842f5fb9a7a866b4586e2402b5577bfb,
+        type: 3}
+      propertyPath: dirty_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 06577c7ec4b48ba449223105bcd68d30, type: 2}
     - target: {fileID: 7367674738666867447, guid: 842f5fb9a7a866b4586e2402b5577bfb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1705,6 +1725,12 @@ MonoBehaviour:
   viewIdField: 13
   InstantiationId: 13
   isRuntimeInstantiated: 0
+--- !u!23 &1016015157891607071 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 186965840851716483, guid: 842f5fb9a7a866b4586e2402b5577bfb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1016015157891607068}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7098697254516115485
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: 
+    AppIdRealtime: cdb2d608-89b9-4c16-a877-fb7b2057abcb
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -69,4 +69,7 @@ MonoBehaviour:
   - SyncCleaningProgressionUIToTeams
   - SyncProgressionAcrossClients
   - UpdatePlayerElementRPC
+  - StartCountdown
+  - Stream_BreakObjectCompletely
+  - ThisClientIsReady
   DisableAutoOpenWizard: 1

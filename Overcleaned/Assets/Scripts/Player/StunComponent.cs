@@ -8,15 +8,19 @@ using Photon.Realtime;
 public class StunComponent : MonoBehaviour
 {
 
-    Collider[] collisions;
-    List<int> hitPhotonIds = new List<int>();
-    Vector3 offset = new Vector3(0, 1, 0);
+    public WieldableObject OwningObject { get; set; }
 
+    #region ### Private Variables ###
     private const float RADIUS = 0.4f;
     private const int TARGETMASK = 1 << 9; //PlayerCollision layer
 
     private const float ATTACK_DURATION = 0.6f;
     private const float PUNISHMENT_DURATION = 3;
+
+    private Collider[] collisions;
+    private List<int> hitPhotonIds = new List<int>();
+    private Vector3 offset = new Vector3(0, 0.6f, 0);
+    #endregion
 
     private async void Start()
     {
@@ -41,6 +45,7 @@ public class StunComponent : MonoBehaviour
     private void FixedUpdate()
     {
         collisions = Physics.OverlapSphere(transform.position + transform.TransformDirection(offset), RADIUS, TARGETMASK);
+        bool collidedWithAnother = false;
 
         if (collisions.Length > 0)
         {
@@ -58,6 +63,7 @@ public class StunComponent : MonoBehaviour
                         hitPhotonIds.Add(collisions[i].transform.parent.gameObject.GetPhotonView().ViewID);
 
                         collisions[i].transform.parent.gameObject.GetPhotonView().RPC(TARGET_METHOD_NAME, owner, 
+
                         //---Parameters---//
                         PUNISHMENT_DURATION, 
                         transform.forward * FORCE,
@@ -65,8 +71,18 @@ public class StunComponent : MonoBehaviour
                         );
 
                         collisions[i].transform.parent.GetComponent<Rigidbody>().AddForceAtPosition(transform.forward * FORCE, transform.position);
+                        collidedWithAnother = true;
                     }
                 }
+            }
+        }
+
+        if (collidedWithAnother) 
+        {
+            if (OwningObject.GetType() == typeof(WieldableCleanableObject)) 
+            {
+                WieldableCleanableObject currentCleanableWieldable = (WieldableCleanableObject)OwningObject;
+                currentCleanableWieldable.BreakObject();
             }
         }
     }
