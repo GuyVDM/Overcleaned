@@ -2069,7 +2069,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pool:
   - poolID: '[CleanableWieldables]'
-    pooledObjects: []
+    pooledObjects:
+    - {fileID: 438590407}
+    - {fileID: 513631888}
+    - {fileID: 1252052790}
+    - {fileID: 1016015157891607069}
+    - {fileID: 1619373189}
+    - {fileID: 687997335}
 --- !u!4 &1610453078
 Transform:
   m_ObjectHideFlags: 0
