@@ -67,6 +67,12 @@ public class WieldableObject : InteractableObject, IPunObservable {
     protected virtual void Awake()
     {
         nonTriggerCollider  = GetComponentsInChildren<Collider>().Where(o => o.isTrigger == false).First();
+
+        if(nonTriggerCollider == null) 
+        {
+            nonTriggerCollider = GetComponents<Collider>().Where(o => o.isTrigger == false).First();
+        }
+
         Debug.Log(nonTriggerCollider);
 
         GetTriggerField();
@@ -77,6 +83,17 @@ public class WieldableObject : InteractableObject, IPunObservable {
         Collider[] allColliders = GetComponentsInChildren<Collider>();
 
         foreach (Collider col in allColliders) 
+        {
+            if (col.isTrigger == true)
+            {
+                triggerField = col;
+                return;
+            }
+        }
+
+        allColliders = GetComponents<Collider>();
+
+        foreach (Collider col in allColliders)
         {
             if (col.isTrigger == true)
             {

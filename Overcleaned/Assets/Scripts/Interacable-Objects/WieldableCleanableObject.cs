@@ -74,8 +74,6 @@ public class WieldableCleanableObject : WieldableObject
     {
         base.Awake();
 
-        ObjectPool.set
-
         if ((int)ownedByTeam == NetworkManager.localPlayerInformation.team) 
         {
             HouseManager.AddInteractableToObservedLists(this);
