@@ -292,8 +292,8 @@ public class UI_RoomInformationWindow : UIWindow
 
 		PlayerUIElement toReturn = new PlayerUIElement(player, newObject.transform);
 
-		toReturn.AddListenerToDropDown(delegate { UpdatePlayerElement(player.NickName, toReturn.teamNumber); });
-		toReturn.AddListenerToReadyToggle(delegate { SetReady(player.NickName, toReturn.GetToggleValue()); });
+		toReturn.AddListenerToDropDown(delegate { UpdatePlayerElement(player.ActorNumber, toReturn.teamNumber); });
+		toReturn.AddListenerToReadyToggle(delegate { SetReady(player.ActorNumber, toReturn.GetToggleValue()); });
 		allPlayerElements.Add(toReturn);
 
 		return toReturn;
@@ -301,7 +301,7 @@ public class UI_RoomInformationWindow : UIWindow
 
 	private void DeletePlayerElement(Player player)
 	{
-		PlayerUIElement toDestroy = FindUIElementByPlayerName(player.NickName);
+		PlayerUIElement toDestroy = FindUIElementByPlayerNumber(player.ActorNumber);
 		allPlayerElements.Remove(toDestroy);
 		toDestroy.DestroyReference();
 	}
@@ -332,11 +332,11 @@ public class UI_RoomInformationWindow : UIWindow
 		return toReturn;
 	}
 
-	private PlayerUIElement FindUIElementByPlayerName(string playerName)
+	private PlayerUIElement FindUIElementByPlayerNumber(int playerNumber)
 	{
 		for (int i = 0; i < allPlayerElements.Count; i++)
 		{
-			if (allPlayerElements[i].PlayerName == playerName)
+			if (allPlayerElements[i].PlayerNumber == playerNumber)
 			{
 				return allPlayerElements[i];
 			}
@@ -358,15 +358,15 @@ public class UI_RoomInformationWindow : UIWindow
 
 	#region Functions for RPC calls
 
-	private void SetReady(string playerName, bool ready)
+	private void SetReady(int playerNumber, bool ready)
 	{
-		photonView.RPC(nameof(SetReadyRPC), RpcTarget.OthersBuffered, playerName, ready);
+		photonView.RPC(nameof(SetReadyRPC), RpcTarget.OthersBuffered, playerNumber, ready);
 	}
 
-	private void UpdatePlayerElement(string playerName, int dropdownIndex)
+	private void UpdatePlayerElement(int playerNumber, int dropdownIndex)
 	{
 		//NetworkManager.SetLocalPlayerInfo(dropdownIndex, GetNumberInTeam(dropdownIndex));
-		photonView.RPC(nameof(UpdatePlayerElementRPC), RpcTarget.OthersBuffered, playerName, dropdownIndex);
+		photonView.RPC(nameof(UpdatePlayerElementRPC), RpcTarget.OthersBuffered, playerNumber, dropdownIndex);
 	}
 
 	#endregion
@@ -374,9 +374,9 @@ public class UI_RoomInformationWindow : UIWindow
 	#region RPCs
 
 	[PunRPC]
-	private void UpdatePlayerElementRPC(string playerName, int dropdownIndex)
+	private void UpdatePlayerElementRPC(int playerNumber, int dropdownIndex)
 	{ 
-		FindUIElementByPlayerName(playerName).ChangeTeamText(dropdownIndex);
+		FindUIElementByPlayerNumber(playerNumber).ChangeTeamText(dropdownIndex);
 	}
 
 	[PunRPC]
@@ -390,9 +390,9 @@ public class UI_RoomInformationWindow : UIWindow
 	}
 
 	[PunRPC]
-	private void SetReadyRPC(string playerName, bool ready)
+	private void SetReadyRPC(int playerNumber, bool ready)
 	{
-		FindUIElementByPlayerName(playerName).SetReady(ready);
+		FindUIElementByPlayerNumber(playerNumber).SetReady(ready);
 	}
 
 	#endregion
