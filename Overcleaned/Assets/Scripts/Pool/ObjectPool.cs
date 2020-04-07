@@ -10,7 +10,7 @@ public struct ObjectPoolData
     public string poolID;
     public List<GameObject> pooledObjects;
 
-    public ObjectPoolData(string poolID, List<GameObject> pooledObjects) 
+    public ObjectPoolData(string poolID, List<GameObject> pooledObjects)
     {
         this.poolID = poolID;
         this.pooledObjects = pooledObjects;
@@ -30,7 +30,7 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
     private List<ObjectPoolData> pool = new List<ObjectPoolData>();
 
     #region ### ServiceLocator Snipper ###
-    private void Awake() 
+    private void Awake()
     {
         OnInitialise();
         poolData = pool;
@@ -41,7 +41,7 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
 
     }
 
-    private void OnDestroy() 
+    private void OnDestroy()
     {
         OnDeinitialise();
 
@@ -57,9 +57,9 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
     #endregion
 
     #region ### RPC Calls ###
-    private void Set_GameObjectEnableState(bool enableState, int viewID) 
+    private void Set_GameObjectEnableState(bool enableState, int viewID)
     {
-        if(NetworkManager.IsConnectedAndInRoom) 
+        if (NetworkManager.IsConnectedAndInRoom)
         {
             photonView.RPC(nameof(Stream_GameObjectEnableState), RpcTarget.AllBuffered, enableState, viewID);
             return;
@@ -69,19 +69,19 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
     }
 
     [PunRPC]
-    private void Stream_GameObjectEnableState(bool enableState, int viewID) 
+    private void Stream_GameObjectEnableState(bool enableState, int viewID)
     {
         GameObject newObject = NetworkManager.GetViewByID(viewID).gameObject;
 
-        if(newObject != null) 
+        if (newObject != null)
         {
             newObject.SetActive(enableState);
         }
     }
 
-    private void Set_ObjectToAddToPool(int viewID) 
+    private void Set_ObjectToAddToPool(int viewID)
     {
-        if(NetworkManager.IsConnectedAndInRoom) 
+        if (NetworkManager.IsConnectedAndInRoom)
         {
             photonView.RPC(nameof(Stream_ObjectToAddToPool), RpcTarget.AllBuffered, viewID);
             return;
@@ -89,7 +89,7 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
     }
 
     [PunRPC]
-    private void Stream_ObjectToAddToPool(int viewID, string poolID) 
+    private void Stream_ObjectToAddToPool(int viewID, string poolID)
     {
         ObjectPoolData poolData = pool.Where(o => o.poolID == poolID).First();
         GameObject newObject = NetworkManager.GetViewByID(viewID).gameObject;
@@ -97,9 +97,9 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
         poolData.pooledObjects.Add(newObject);
     }
 
-    private void Set_ObjectTransform(int viewID, Vector3 pos, Vector3 rot) 
+    private void Set_ObjectTransform(int viewID, Vector3 pos, Vector3 rot)
     {
-        if(NetworkManager.IsConnectedAndInRoom) 
+        if (NetworkManager.IsConnectedAndInRoom)
         {
             photonView.RPC(nameof(Stream_ObjectTransform), RpcTarget.AllBuffered, viewID, pos, rot);
             return;
@@ -109,7 +109,7 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
     }
 
     [PunRPC]
-    private void Stream_ObjectTransform(int viewID, Vector3 pos, Vector3 rot) 
+    private void Stream_ObjectTransform(int viewID, Vector3 pos, Vector3 rot)
     {
         GameObject pooledObjectByViewID = NetworkManager.GetViewByID(viewID).gameObject;
 
@@ -118,16 +118,16 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
     }
     #endregion
 
-    public static void Set_ObjectFromPool(string objectIndentifier, Vector3 pos, Vector3 orientation) 
+    public static void Set_ObjectFromPool(string objectIndentifier, Vector3 pos, Vector3 orientation)
     {
         ObjectPoolData data = poolData.Where(o => o.poolID == objectIndentifier).First();
         GameObject objectToReturn = null;
 
-        if(data.pooledObjects.Count > 0) 
+        if (data.pooledObjects.Count > 0)
         {
-            for(int i = 0; i < data.pooledObjects.Count; i++) 
+            for (int i = 0; i < data.pooledObjects.Count; i++)
             {
-                if(data.pooledObjects[i].gameObject.activeSelf == false)
+                if (data.pooledObjects[i].gameObject.activeSelf == false)
                 {
                     objectToReturn = data.pooledObjects[i];
                     break;
@@ -135,7 +135,7 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
             }
         }
 
-        if(objectToReturn == null) 
+        if (objectToReturn == null)
         {
             objectToReturn = PhotonNetwork.InstantiateSceneObject(data.pooledObjects.First().name, pos, Quaternion.Euler(orientation));
             int newObjectViewID = objectToReturn.GetPhotonView().ViewID;
@@ -151,20 +151,20 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
         OnSetObjectTransform.Invoke(objectToReturn.GetPhotonView().ViewID, pos, orientation);
     }
 
-    public static void RemoveObjectFromPool(GameObject objectToCompare) 
+    public static void RemoveObjectFromPool(GameObject objectToCompare)
     {
-        foreach (ObjectPoolData data in poolData) 
+        foreach (ObjectPoolData data in poolData)
         {
-            for (int i = 0; i < data.pooledObjects.Count; i++) 
+            for (int i = 0; i < data.pooledObjects.Count; i++)
             {
-                if (GameObject.ReferenceEquals(objectToCompare, data.pooledObjects[i])) 
+                if (GameObject.ReferenceEquals(objectToCompare, data.pooledObjects[i]))
                 {
                     data.pooledObjects.RemoveAt(i);
                     return;
                 }
             }
         }
-    } 
+    }
 
     public static bool HasPooledObjectAvailable(string identifier)
     {

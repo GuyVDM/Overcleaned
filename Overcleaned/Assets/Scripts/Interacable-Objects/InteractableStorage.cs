@@ -65,15 +65,18 @@ public class InteractableStorage : InteractableObject
         {
             if(DoesAllowForObjectID(interactionController.currentlyWielding.toolID)) 
             {
-                if (interactionController.currentlyWielding.GetType() == typeof(WieldableCleanableObject)) 
+                if (interactionController.currentlyWielding.GetType() == typeof(WieldableCleanableObject))
                 {
                     WieldableCleanableObject wieldable = (WieldableCleanableObject)interactionController.currentlyWielding;
 
-                    interactionController.DropObject(wieldable);
-                    wieldable.StoreObject();
+                    if (wieldable.isCleaned)
+                    {
+                        interactionController.DropObject(wieldable);
+                        wieldable.StoreObject();
 
-                    ObjectPool.Set_ObjectBackToPool(wieldable.photonView.ViewID);
-                    return;
+                        ObjectPool.Set_ObjectBackToPool(wieldable.photonView.ViewID);
+                        return;
+                    }
                 }
             }
 
