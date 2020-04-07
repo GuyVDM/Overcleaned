@@ -9,12 +9,13 @@ public class UI_CountdownWindow : UIWindow
 
 	private Animator anim;
 
-	private void Awake()
+	public override void Awake()
 	{
+		base.Awake();
 		anim = GetComponent<Animator>();
 	}
 
-	public void SetNewNumber(string newNumber)
+	public void ShowText(string newNumber)
 	{
 		countdownText.text = newNumber;
 		anim.SetTrigger("Bounce");

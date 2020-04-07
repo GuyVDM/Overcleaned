@@ -124,14 +124,14 @@ public class UI_RoomInformationWindow : UIWindow
 	private List<PlayerUIElement> allPlayerElements = new List<PlayerUIElement>();
 	private PhotonView photonView;
 
-	private void Awake()
+	public override void Awake()
 	{
+		base.Awake();
 		photonView = GetComponent<PhotonView>();
 	}
 
-	public override void Start()
+	public void Start()
 	{
-		base.Start();
 		NetworkManager.onPlayerListChange += UpdatePlayerList;
 		NetworkManager.onMasterClientSwitch += MasterClientLeft;
 		NetworkManager.onLocalPlayerLeft += LocalPlayerLeft;

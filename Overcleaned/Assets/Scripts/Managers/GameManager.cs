@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 
 	private void SceneStart(string sceneName)
 	{
-		print("SCENE START");
 		photonView.RPC(nameof(ThisClientIsReady), RpcTarget.MasterClient);
 	}
 
@@ -80,9 +79,12 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 
 		for (int i = 3; i > 0; i--)
 		{
-			countdownWindow.SetNewNumber(i.ToString());
+			countdownWindow.ShowText(i.ToString());
 			yield return new WaitForSeconds(1);
 		}
+
+		countdownWindow.ShowText("GO!");
+		yield return new WaitForSeconds(1);
 
 		ServiceLocator.GetServiceOfType<PlayerManager>().Set_PlayerLockingstate(false);
 		uiManager.HideAllWindows();
