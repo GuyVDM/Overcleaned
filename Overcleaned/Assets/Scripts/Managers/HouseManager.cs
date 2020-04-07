@@ -80,7 +80,6 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			photonView.RPC(nameof(StartTimeTracking), RpcTarget.AllBuffered);
 		}
 
-
 		OnTimeChanged += EndGame;
 	}
 
@@ -332,7 +331,6 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			yield return new WaitForSeconds(UnityEngine.Random.Range(gameEventWaitTime.x, gameEventWaitTime.y));
 
 			currentTeam = ChooseNextTeam(currentTeam);
-			print("AAAAAAAAAAAA " + currentTeam);
 
 			photonView.RPC(nameof(StartGameEvent), RpcTarget.All, currentTeam);
 		}
