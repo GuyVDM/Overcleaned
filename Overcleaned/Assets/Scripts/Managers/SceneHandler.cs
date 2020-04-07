@@ -17,6 +17,9 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 	public SceneSetting[] sceneSettings;
 	public int currentSceneSetting { get; private set; }
 
+	public delegate void OnSceneIsLoadedAndReady(string sceneName);
+	public static OnSceneIsLoadedAndReady onSceneIsLoadedAndReady;
+
 	[Header("Fade Properties")]
 	public float fadeDuration;
 	public Image fadeScreen;
@@ -96,6 +99,8 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 		yield return new WaitUntil(() => isLoadingScene == false);
 
 		SceneManager.UnloadSceneAsync(1);
+
+		onSceneIsLoadedAndReady.Invoke(buildName);
 
 		FadeIn();
 	}
