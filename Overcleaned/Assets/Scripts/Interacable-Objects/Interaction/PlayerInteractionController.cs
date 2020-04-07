@@ -139,7 +139,8 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
 
         await Task.Delay(TimeSpan.FromSeconds(0.3f));
 
-        currentlyWielding.gameObject.AddComponent<StunComponent>();
+        StunComponent currentStunCheck = currentlyWielding.gameObject.AddComponent<StunComponent>();
+        currentStunCheck.OwningObject = currentlyWielding;
 
         await Task.Delay(TimeSpan.FromSeconds(0.3f));
 
