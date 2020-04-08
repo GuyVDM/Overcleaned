@@ -18,11 +18,15 @@ public class InteractableStorage : InteractableObject
     [SerializeField]
     private Animator wrongItem_Animator;
 
+    [SerializeField]
+    private Animator noCleanedItem_Animator;
+
     #region ### Private Variables ###
     private enum TooltipType 
     {
         NoItem = 0,
-        WrongItem = 1
+        WrongItem = 1,
+        NotCleanedItem = 2
     }
     #endregion
 
@@ -77,7 +81,11 @@ public class InteractableStorage : InteractableObject
                         ObjectPool.Set_ObjectBackToPool(wieldable.photonView.ViewID);
                         return;
                     }
+
+                    Set_DisplayStateTooltip((int)TooltipType.NotCleanedItem);
                 }
+
+                //NOTE: No Warning here because we assume that the storage can only store cleanable objects...
             }
 
             Set_DisplayStateTooltip((int)TooltipType.WrongItem);
@@ -99,7 +107,23 @@ public class InteractableStorage : InteractableObject
     {
         const string POPUP_BOOLID = "Popup";
 
-        Animator toDisplay = (type == TooltipType.NoItem) ? noItem_Animator : wrongItem_Animator;
+        Animator toDisplay = null;
+
+        switch(type) 
+        {
+            case TooltipType.NoItem:
+                toDisplay = noItem_Animator;
+                break;
+
+            case TooltipType.WrongItem:
+                toDisplay = wrongItem_Animator;
+                break;
+
+            case TooltipType.NotCleanedItem:
+                toDisplay = noCleanedItem_Animator;
+                break;
+
+        }
 
         toDisplay.SetBool(POPUP_BOOLID, true);
 
