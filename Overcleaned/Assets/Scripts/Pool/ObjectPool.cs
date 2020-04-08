@@ -29,6 +29,8 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
     [SerializeField]
     private List<ObjectPoolData> pool = new List<ObjectPoolData>();
 
+    private EffectsManager effectsManager;
+
     #region ### ServiceLocator Snipper ###
     private void Awake()
     {
@@ -40,6 +42,7 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
         OnAddObjectToPool += Set_ObjectBackToPool;
 
     }
+    private void Start() => effectsManager = ServiceLocator.GetServiceOfType<EffectsManager>();
 
     private void OnDestroy()
     {
@@ -112,6 +115,10 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
     private void Stream_ObjectTransform(int viewID, Vector3 pos, Vector3 rot)
     {
         GameObject pooledObjectByViewID = NetworkManager.GetViewByID(viewID).gameObject;
+        const string PARTICLE_ID = "VFX_Object_Spawn_Effect";
+
+        //NOTE: Still need to assign the particle within the manager.
+        effectsManager.PlayParticle(PARTICLE_ID, pos, Quaternion.Euler(rot));
 
         pooledObjectByViewID.transform.position = pos;
         pooledObjectByViewID.transform.eulerAngles = rot;
