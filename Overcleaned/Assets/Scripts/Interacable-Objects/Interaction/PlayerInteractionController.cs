@@ -127,7 +127,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     }
 
     private bool isHitting = false;
-    private async void HitWithWieldingObject() 
+    private async void HitWithWieldingObject()
     {
         if (isHitting || currentlyWielding == null)
             return;
@@ -139,8 +139,11 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
 
         await Task.Delay(TimeSpan.FromSeconds(0.3f));
 
-        StunComponent currentStunCheck = currentlyWielding.gameObject.AddComponent<StunComponent>();
-        currentStunCheck.OwningObject = currentlyWielding;
+        if (currentlyWielding != null)
+        {
+            StunComponent currentStunCheck = currentlyWielding.gameObject.AddComponent<StunComponent>();
+            currentStunCheck.OwningObject = currentlyWielding;
+        }
 
         await Task.Delay(TimeSpan.FromSeconds(0.3f));
 
