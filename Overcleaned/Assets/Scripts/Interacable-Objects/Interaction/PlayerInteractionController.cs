@@ -36,6 +36,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     private readonly KeyCode useWieldableKey = KeyCode.Return;
 
     private Vector3 arrow_UX_Offset = new Vector3(0, 2, 0);
+    private Vector3 boxcast_HalfExtends = new Vector3(0.4f, 0.75f, 0.07f);
 
     private bool forceDrop = false;
 
@@ -153,11 +154,11 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     private void CheckForInteractables() 
     {
         Ray interactableRay = new Ray(transform.position, transform.forward);
-        ExtDebug.DrawBoxCastBox(transform.position, new Vector3(0.5f, 0.75f, 0.5f), transform.rotation, transform.forward, RAY_LENGTH, Color.red);
+        ExtDebug.DrawBoxCastBox(transform.position, boxcast_HalfExtends, transform.rotation, transform.forward, RAY_LENGTH, Color.red);
 
         RaycastHit hitPoint;
 
-        if (Physics.BoxCast(transform.position, new Vector3(0.4f, 0.75f, 0.4f), transform.forward, out hitPoint, transform.rotation, RAY_LENGTH, interactableMask)) 
+        if (Physics.BoxCast(transform.position, boxcast_HalfExtends, transform.forward, out hitPoint, transform.rotation, RAY_LENGTH, interactableMask)) 
         {
             if (hitPoint.transform.GetComponent<InteractableObject>() != null) 
             {
@@ -237,6 +238,11 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
         if (currentlyWielding != null) 
         {
             const int HAND_LAYER = 1;
+
+            if (currentlyWielding.GetComponent<StunComponent>())
+            {
+                Destroy(currentlyWielding.GetComponent<StunComponent>());
+            }
 
             playerAnimator.SetLayerWeight(HAND_LAYER, 0);
 

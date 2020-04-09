@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [PunRPC]
     private void Stream_StunParticlesAtPosition(Vector3 offset) => effectsManager.PlayParticle(PARTICLE_VFX_ID, offset, Quaternion.identity);
 
-    private void Set_StunParticlesAtPosition(Vector3 offset) 
+    private void Set_StunParticlesAtPosition(Vector3 offset)
     {
         effectsManager.PlayParticle(PARTICLE_VFX_ID, offset, Quaternion.identity);
 
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    private void Stream_StunPlayer(float duration, Vector3 velocity, int teamId) 
+    private void Stream_StunPlayer(float duration, Vector3 velocity, int teamId)
     {
         if (teamId != NetworkManager.localPlayerInformation.team)
         {
@@ -83,20 +83,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void Awake() => effectsManager = ServiceLocator.GetServiceOfType<EffectsManager>();
 
-    private void FixedUpdate() 
+    private void FixedUpdate()
     {
-        if (isStunned == false && PlayerManager.LockedComponents == false) 
+        if (isStunned == false && PlayerManager.LockedComponents == false)
         {
             MovePlayer();
-        }
-    }
-
-    private void Update()
-    {
-        //TODO: Create a trigger for this.
-        if (Input.GetButtonDown("Jump")) 
-        {
-            StunPlayer(5f);
         }
     }
 
@@ -108,7 +99,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         float normalizedSpeed = Mathf.Abs(InputAxes.x) * NORMALIZE_SPEEDMOD + Mathf.Abs(InputAxes.y) * NORMALIZE_SPEEDMOD;
         normalizedSpeed = Mathf.Clamp(normalizedSpeed, Mathf.NegativeInfinity, 1);
 
-        moveDirection = GetDirection() * speed;
+        moveDirection = GetDirection() * normalizedSpeed;
 
         if (myAnimationState == AnimationState.Stunned)
         {
@@ -121,12 +112,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
             Quaternion newRot = Quaternion.LookRotation(GetDirection());
             Quaternion lookRot = Quaternion.RotateTowards(transform.rotation, newRot, maxTurnSpeed * Time.deltaTime);
 
+            Vector3 adjustedVelocity = (new Vector3(InputAxes.x, 0, InputAxes.y) * speed / normalizedSpeed) * Time.deltaTime;
+            adjustedVelocity.y = MyRigidBody.velocity.y;
+
             transform.eulerAngles = new Vector3(0, lookRot.eulerAngles.y, 0);
 
-            MyRigidBody.AddForceAtPosition(moveDirection, transform.position, ForceMode.Force);
+            MyRigidBody.velocity = adjustedVelocity;
+        }
+        else 
+        {
+            MyRigidBody.velocity = new Vector3(0, MyRigidBody.velocity.y, 0);
         }
 
-        if (InputAxes == Vector2.zero) 
+        if (InputAxes == Vector2.zero)
         {
             Set_PlayerAnimationState(AnimationState.Idle);
             return;
@@ -146,7 +144,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     //Stuns the player for X time and prevents movement.
     public void StunPlayer(float duration)
     {
-        if (isStunned == false) 
+        if (isStunned == false)
         {
             isStunned = true;
 
@@ -166,29 +164,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
         isStunned = false;
     }
 
-    private Vector3 GetDirection() 
+    private Vector3 GetDirection()
     {
         Vector3 direction = Vector3.zero;
 
-        if(Input.GetKey(KeyCode.W)) 
-        {
-            direction += Vector3.forward;
-        }
-
-        if(Input.GetKey(KeyCode.S)) 
-        {
-            direction += Vector3.back;
-        }
-
-        if(Input.GetKey(KeyCode.A)) 
-        {
-            direction += Vector3.left;
-        }
-
-        if (Input.GetKey(KeyCode.D)) 
-        {
-            direction += Vector3.right;
-        }
+        direction += Input.GetKey(KeyCode.W) ? Vector3.forward : Input.GetKey(KeyCode.S) ? Vector3.back : Vector3.zero;
+        direction += Input.GetKey(KeyCode.A) ? Vector3.left : Input.GetKey(KeyCode.D) ? Vector3.right : Vector3.zero;
 
         return direction;
     }
