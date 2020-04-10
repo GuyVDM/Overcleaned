@@ -50,8 +50,8 @@ public class PlayerCameraController : MonoBehaviour
     private bool shouldDisplayProgressBar;
 
     private readonly KeyCode spyBaseKey = KeyCode.O;
-    private readonly KeyCode zoomInKey = KeyCode.PageUp;
-    private readonly KeyCode zoomOutKey = KeyCode.PageDown;
+    private readonly KeyCode zoomInKey = KeyCode.Minus;
+    private readonly KeyCode zoomOutKey = KeyCode.Plus;
     #endregion
 
 

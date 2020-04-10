@@ -181,9 +181,12 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
         {
             for (int i = 0; i < data.pooledObjects.Count; i++)
             {
-                if (data.pooledObjects[i].gameObject.activeSelf == false)
+                if (data.pooledObjects[i] != null)
                 {
-                    return true;
+                    if (data.pooledObjects[i].gameObject.activeSelf == false)
+                    {
+                        return true;
+                    }
                 }
             }
         }

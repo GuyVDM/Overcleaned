@@ -350,8 +350,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 8100939995989278516}
   - {fileID: 6393120765383580608}
-  viewIdField: 3
-  InstantiationId: 3
+  viewIdField: 7
+  InstantiationId: 7
   isRuntimeInstantiated: 0
 --- !u!1 &977362385202431396
 GameObject:
@@ -444,8 +444,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 4
-  InstantiationId: 4
+  viewIdField: 6
+  InstantiationId: 6
   isRuntimeInstantiated: 0
 --- !u!65 &3020005488989559044
 BoxCollider:
@@ -2014,8 +2014,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 7
-  InstantiationId: 7
+  viewIdField: 3
+  InstantiationId: 3
   isRuntimeInstantiated: 0
 --- !u!1 &6755039247536879640
 GameObject:
@@ -2323,8 +2323,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f85ebacddc0a6d4699d5e5c7125f1cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
-  maxTurnSpeed: 400
+  currentVelo: {x: 0, y: 0, z: 0}
+  speed: 160
+  maxTurnSpeed: 600
 --- !u!114 &1080600953416085825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2344,8 +2345,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 6
-  InstantiationId: 6
+  viewIdField: 4
+  InstantiationId: 4
   isRuntimeInstantiated: 0
 --- !u!114 &8100939995989278516
 MonoBehaviour:
