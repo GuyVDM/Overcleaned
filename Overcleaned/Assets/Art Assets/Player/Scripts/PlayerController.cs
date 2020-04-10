@@ -6,6 +6,8 @@ using Photon.Pun;
 public class PlayerController : MonoBehaviourPunCallbacks
 {
 
+    public Vector3 currentVelo = Vector3.zero;
+
     [Header("Movement Parameters:")]
     [SerializeField]
     private float speed = 6.0f;
@@ -93,6 +95,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void MovePlayer()
     {
+        currentVelo = MyRigidBody.velocity;
+
         const float MOVELERPTIME = 0.1f;
         const float NORMALIZE_SPEEDMOD = 0.67f;
 
@@ -113,6 +117,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
             Quaternion lookRot = Quaternion.RotateTowards(transform.rotation, newRot, maxTurnSpeed * Time.deltaTime);
 
             Vector3 adjustedVelocity = (new Vector3(InputAxes.x, 0, InputAxes.y) * speed / normalizedSpeed) * Time.deltaTime;
+
+            adjustedVelocity.x = float.IsNaN(adjustedVelocity.x) ? 0 : adjustedVelocity.x;
+            adjustedVelocity.z = float.IsNaN(adjustedVelocity.x) ? 0 : adjustedVelocity.z;
+
             adjustedVelocity.y = MyRigidBody.velocity.y;
 
             transform.eulerAngles = new Vector3(0, lookRot.eulerAngles.y, 0);
