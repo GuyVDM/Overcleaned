@@ -118,8 +118,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             Vector3 adjustedVelocity = (new Vector3(InputAxes.x, 0, InputAxes.y) * speed / normalizedSpeed) * Time.deltaTime;
 
-            adjustedVelocity.x = Mathf.Clamp(adjustedVelocity.x, 0, 1);
-            adjustedVelocity.z = Mathf.Clamp(adjustedVelocity.z, 0, 1);
+            adjustedVelocity.x = Mathf.Clamp(adjustedVelocity.x, -(speed * Time.deltaTime), (speed * Time.deltaTime));
+            adjustedVelocity.z = Mathf.Clamp(adjustedVelocity.z, -(speed * Time.deltaTime), (speed * Time.deltaTime));
 
             adjustedVelocity.y = MyRigidBody.velocity.y;
 

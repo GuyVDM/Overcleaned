@@ -50,6 +50,16 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	//Events
 	public Vector2 gameEventWaitTime;
 
+	[System.Serializable]
+	private struct SpawnRegionAnchors 
+	{
+		public Vector3 topleftAnchor;
+		public Vector3 bottomRightAnchor;
+	}
+
+	[Header("Event Spawn Regions:")]
+	[SerializeField]
+	private SpawnRegionAnchors[] spawnRegions;
 
 	#region Initalize Service
 	private void Awake()
@@ -400,30 +410,39 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
     private Vector3 GetTeamCleanableObjectSpawnRegion() 
     {
-        float x_min = 0, x_max = 0;
-        float z_min = 0, z_max = 0;
+		const float SPAWN_HEIGHT = 5.5f;
 
-        const float Y_SPAWNHEIGHT = 5;
+		if(NetworkManager.localPlayerInformation.team > 1)
+		{
+			if(spawnRegions.Length > 1) 
+			{
+				SpawnRegionAnchors anchors = spawnRegions[NetworkManager.localPlayerInformation.team];
+				float randomizedXPos = UnityEngine.Random.Range(anchors.topleftAnchor.x, anchors.bottomRightAnchor.x);
+				float randomizedZPos = UnityEngine.Random.Range(anchors.bottomRightAnchor.z, anchors.topleftAnchor.z);
 
+				return new Vector3(randomizedXPos, SPAWN_HEIGHT, randomizedZPos);
+			}
+		}
 
-        switch(NetworkManager.localPlayerInformation.team) 
-        {
-            case 0:
-                x_min = -10.425f;
-                x_max = 9.72f;
+		Debug.LogError("[HouseManager] Please assign 2 spawnregions for dirty objects.");
+		return Vector3.zero;
+	}
 
-                z_min = -9.21f;
-                z_max = 7.3f;
-                break;
+#if UNITY_EDITOR
+	public void OnDrawGizmos() 
+    {
+		const float RADIUS = 0.5f;
 
-            case 1:
-                //No known boundries declared...
-                break;
-        }
-
-        return new Vector3(UnityEngine.Random.Range(x_min, x_max), Y_SPAWNHEIGHT, UnityEngine.Random.Range(z_min, z_max));
-    }
-
-	#endregion
+		if(spawnRegions.Length > 1) 
+		{
+			for(int i = 0; i < spawnRegions.Length; i++) 
+		    {
+				Gizmos.DrawSphere(spawnRegions[i].topleftAnchor, RADIUS);
+				Gizmos.DrawSphere(spawnRegions[i].bottomRightAnchor, RADIUS);
+			}
+		}
+	}
+#endif
+#endregion
 
 }

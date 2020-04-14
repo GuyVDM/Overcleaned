@@ -22,9 +22,6 @@ public class PlayerCameraController : MonoBehaviour
     private Camera uiCamera;
 
     [SerializeField]
-    private Vector3 enemy_Base_Pos;
-
-    [SerializeField]
     private Animator canvas_Anim;
 
     [SerializeField]
@@ -44,6 +41,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private const string TRIGGER_NAME = "Popup";
 
+    private Vector3 enemy_Base_Pos = Vector3.zero;
     private Vector3 current_Target_Pos;
     private Vector3 last_Pos;
 
@@ -59,7 +57,11 @@ public class PlayerCameraController : MonoBehaviour
 
     private static bool WithinXBoundries(float x_pos1, float x_pos2, float x_yourPos) => (x_yourPos > x_pos1 && x_yourPos < x_pos2);
 
-    private void Start() => transform.position = last_Pos + camera_Offset;
+    private void Start()
+    {
+        transform.position = last_Pos + camera_Offset;
+        enemy_Base_Pos.x = NetworkManager.localPlayerInformation.team == 0 ? 19.45f : -19.45f;
+    }
 
     private void OnEnable()
     {
