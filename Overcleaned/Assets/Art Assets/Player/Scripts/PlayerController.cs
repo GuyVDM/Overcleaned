@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         const float NORMALIZE_SPEEDMOD = 0.67f;
 
         float normalizedSpeed = Mathf.Abs(InputAxes.x) * NORMALIZE_SPEEDMOD + Mathf.Abs(InputAxes.y) * NORMALIZE_SPEEDMOD;
-        normalizedSpeed = Mathf.Clamp(normalizedSpeed, Mathf.NegativeInfinity, 1);
+        normalizedSpeed = Mathf.Clamp(normalizedSpeed, 0, 1);
 
         moveDirection = GetDirection() * normalizedSpeed;
 
@@ -118,8 +118,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
             Vector3 adjustedVelocity = (new Vector3(InputAxes.x, 0, InputAxes.y) * speed / normalizedSpeed) * Time.deltaTime;
 
-            adjustedVelocity.x = float.IsNaN(adjustedVelocity.x) ? 0 : adjustedVelocity.x;
-            adjustedVelocity.z = float.IsNaN(adjustedVelocity.x) ? 0 : adjustedVelocity.z;
+            adjustedVelocity.x = Mathf.Clamp(adjustedVelocity.x, 0, 1);
+            adjustedVelocity.z = Mathf.Clamp(adjustedVelocity.z, 0, 1);
 
             adjustedVelocity.y = MyRigidBody.velocity.y;
 
