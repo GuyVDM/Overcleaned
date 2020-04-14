@@ -21,11 +21,24 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 	private int clientsReady;
 
 	#region Initalize Service
-	private void Awake() => OnInitialise();
-	private void OnDestroy() => OnDeinitialise();
+	private void Awake() 
+	{
+		OnInitialise();
+		SceneHandler.onSceneIsLoadedAndReady += SceneStart;
+	}
+	private void OnDestroy()
+	{
+		OnDeinitialise();
+		SceneHandler.onSceneIsLoadedAndReady -= SceneStart;
+	}
 	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
 	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
 	#endregion
+
+	private void SceneStart(string sceneName)
+	{
+		photonView.RPC(nameof(ThisClientIsReady), RpcTarget.MasterClient);
+	}
 
 	private void Start()
 	{
@@ -39,8 +52,6 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 		PlayerManager playerManager = PhotonNetwork.Instantiate(playerPrefab.name, teams[NetworkManager.localPlayerInformation.team].teamSpawnPositions[NetworkManager.localPlayerInformation.numberInTeam].position, Quaternion.identity).GetComponent<PlayerManager>();
 		playerManager.Set_PlayerColor(teams[NetworkManager.localPlayerInformation.team].teamColor);
 		playerManager.Set_EnemyBasePosition(teams[NetworkManager.localPlayerInformation.team].enemyTeamPosition.position);
-
-		photonView.RPC(nameof(ThisClientIsReady), RpcTarget.MasterClient);
 	}
 
 	[PunRPC]
@@ -58,20 +69,27 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 	[PunRPC]
 	private void StartCountdown()
 	{
-		StartCoroutine(nameof(Countdown));
+		StartCoroutine(Countdown());
 	}
 
 	private IEnumerator Countdown()
 	{
 		UIManager uiManager = ServiceLocator.GetServiceOfType<UIManager>();
+		EffectsManager effectsManager = ServiceLocator.GetServiceOfType<EffectsManager>();
 		UI_CountdownWindow countdownWindow = uiManager.ShowWindowReturn("Countdown Window") as UI_CountdownWindow;
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 3; i > 0; i--)
 		{
-			countdownWindow.SetNewNumber(i.ToString());
+			countdownWindow.ShowText(i.ToString());
+			effectsManager.PlayAudio("Countdown 2");
 			yield return new WaitForSeconds(1);
 		}
 
+		countdownWindow.ShowText("GO!");
+		effectsManager.PlayAudio("Countdown 1");
+		yield return new WaitForSeconds(1);
+
+		ServiceLocator.GetServiceOfType<PlayerManager>().Set_PlayerLockingstate(false);
 		uiManager.HideAllWindows();
 	}
 

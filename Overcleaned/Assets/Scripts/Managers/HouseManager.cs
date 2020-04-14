@@ -80,7 +80,6 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			photonView.RPC(nameof(StartTimeTracking), RpcTarget.AllBuffered);
 		}
 
-
 		OnTimeChanged += EndGame;
 	}
 
@@ -308,14 +307,17 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private void HasWonOrLost(int winningTeam)
 	{
 		UIManager uiManager = ServiceLocator.GetServiceOfType<UIManager>();
+		EffectsManager effectsManager = ServiceLocator.GetServiceOfType<EffectsManager>();
 
 		if (winningTeam == NetworkManager.localPlayerInformation.team)
 		{
 			uiManager.ShowWindow("Win Window");
+			effectsManager.PlayAudio("Game Win");
 		}
 		else
 		{
 			uiManager.ShowWindow("Lose Window");
+			effectsManager.PlayAudio("Game Lost");
 		}
 	}
 
@@ -330,10 +332,10 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		while (!endOfTimerWasReached)
 		{
 			yield return new WaitForSeconds(UnityEngine.Random.Range(gameEventWaitTime.x, gameEventWaitTime.y));
-			photonView.RPC(nameof(StartGameEvent), RpcTarget.All, currentTeam);
-            Debug.Log($"SendingEvent : { currentTeam }");
 
 			currentTeam = ChooseNextTeam(currentTeam);
+
+			photonView.RPC(nameof(StartGameEvent), RpcTarget.All, currentTeam);
 		}
 	}
 
@@ -346,7 +348,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 		GameEventType chosenEventType = (GameEventType)UnityEngine.Random.Range(0, (int)GameEventType.EnumSize);
 
-        Debug.Log("Calling event");
+        Debug.Log("Calling event of type: " + chosenEventType.ToString() + " to team: " + team);
 
 		switch (chosenEventType)
 		{
@@ -385,7 +387,6 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private void SpawnWieldable()
 	{
         const string WIELDABLE_POOL_ID = "[CleanableWieldables]";
-        const string PARTICLE_ID = "VFX_Object_Spawn_Effect";
 
         if (ObjectPool.HasPooledObjectAvailable(WIELDABLE_POOL_ID)) 
         {
@@ -393,8 +394,6 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
             ObjectPool.Set_ObjectFromPool(WIELDABLE_POOL_ID, instancePos, Vector3.zero);
 
-            GameObject particle = Resources.Load(PARTICLE_ID) as GameObject;
-            particle.transform.position = instancePos;
             return;
         }
 	}

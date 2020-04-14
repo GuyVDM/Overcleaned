@@ -8,9 +8,9 @@ public class UIWindow : MonoBehaviour
 	public bool lockWindow;
 	internal bool isActive;
 
-	public virtual void Start()
+	public virtual void Awake()
 	{
-		ServiceLocator.GetServiceOfType<UIManager>().AddWindowToList(this);
+		UIManager.AddWindowToList(this);
 	}
 
 	public virtual void ShowThisWindow()

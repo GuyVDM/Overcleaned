@@ -1,6 +1,8 @@
 ﻿using Photon.Pun;
 using UnityEngine;
+using System;
 
+[RequireComponent(typeof(PhotonView))]
 public abstract class InteractableObject : MonoBehaviourPunCallbacks, IInteractableObject 
 {
 
@@ -11,7 +13,7 @@ public abstract class InteractableObject : MonoBehaviourPunCallbacks, IInteracta
         Everyone = 2
     }
 
-    public bool IsLocked;
+    public bool IsLocked { get; protected set; }
 
     public abstract void Interact(PlayerInteractionController interactionController);
 

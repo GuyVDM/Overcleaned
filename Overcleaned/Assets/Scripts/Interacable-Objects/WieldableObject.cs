@@ -47,12 +47,12 @@ public class WieldableObject : InteractableObject, IPunObservable {
     }
 
     [PunRPC]
-    private void Stream_OnSetEnableStateCollider(bool isEnabled) 
+    protected void Stream_OnSetEnableStateCollider(bool isEnabled) 
     {
         nonTriggerCollider.enabled = isEnabled;
     }
 
-    private void Set_OnSetEnableStateCollider(bool isEnabled) 
+    protected void Set_OnSetEnableStateCollider(bool isEnabled) 
     {
         if(NetworkManager.IsConnectedAndInRoom) 
         {
@@ -64,9 +64,16 @@ public class WieldableObject : InteractableObject, IPunObservable {
     }
     #endregion
 
-    private void Awake()
+    protected virtual void Awake()
     {
         nonTriggerCollider  = GetComponentsInChildren<Collider>().Where(o => o.isTrigger == false).First();
+
+        if(nonTriggerCollider == null) 
+        {
+            nonTriggerCollider = GetComponents<Collider>().Where(o => o.isTrigger == false).First();
+        }
+
+        Debug.Log(nonTriggerCollider);
 
         GetTriggerField();
     } 
@@ -76,6 +83,17 @@ public class WieldableObject : InteractableObject, IPunObservable {
         Collider[] allColliders = GetComponentsInChildren<Collider>();
 
         foreach (Collider col in allColliders) 
+        {
+            if (col.isTrigger == true)
+            {
+                triggerField = col;
+                return;
+            }
+        }
+
+        allColliders = GetComponents<Collider>();
+
+        foreach (Collider col in allColliders)
         {
             if (col.isTrigger == true)
             {
@@ -98,7 +116,7 @@ public class WieldableObject : InteractableObject, IPunObservable {
             {
                 lockedForOthers = true;
                 Set_LockingState(true);
-                Set_OnSetEnableStateCollider(true);
+                Set_OnSetEnableStateCollider(false);
 
                 photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
             }
@@ -122,7 +140,7 @@ public class WieldableObject : InteractableObject, IPunObservable {
             lockedForOthers = false;
             Set_LockingState(false);
             interactionController.DropObject(this);
-            Set_OnSetEnableStateCollider(false);
+            Set_OnSetEnableStateCollider(true);
         }
     }
 
@@ -132,7 +150,7 @@ public class WieldableObject : InteractableObject, IPunObservable {
         {
             lockedForOthers = false;
             Set_LockingState(false);
-            Set_OnSetEnableStateCollider(false);
+            Set_OnSetEnableStateCollider(true);
         }
     }
 

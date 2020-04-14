@@ -11,12 +11,16 @@ public class UIManager : MonoBehaviour, IServiceOfType
 	public KeyBinding[] keyBindings;
 	public TextMeshProUGUI messageObject;
 
-	private Dictionary<string, UIWindow> allwindows = new Dictionary<string, UIWindow>();
+	private static Dictionary<string, UIWindow> allwindows = new Dictionary<string, UIWindow>();
 	private string activeWindowName;
 
 	#region Initalize Service
 	private void Awake() => OnInitialise();
-	private void OnDestroy() => OnDeinitialise();
+	private void OnDestroy() 
+	{
+		allwindows.Clear();
+		OnDeinitialise();
+	} 
 	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
 	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
 	#endregion
@@ -40,7 +44,7 @@ public class UIManager : MonoBehaviour, IServiceOfType
 		}
 	}
 
-	public void AddWindowToList(UIWindow window)
+	public static void AddWindowToList(UIWindow window)
 	{
 		if (!allwindows.ContainsKey(window.windowName))
 			allwindows.Add(window.windowName, window);
