@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
+[System.Serializable]
 public class SerializableData
 {
 
@@ -87,7 +88,7 @@ public static class SerializationManager {
                     toReturn = LoadByBinary(Path.Combine(directory, fileName + fileExtension))[0];
                     break;
                 case SerializationMode.JSON:
-                    toReturn = LoadByJSON(Path.Combine(directory, fileName + fileExtension))[0];
+                    toReturn = LoadByJSON(Path.Combine(directory, fileName + fileExtension));
                     break;
             }
 
@@ -118,7 +119,7 @@ public static class SerializationManager {
                     toReturn = LoadByBinary(Path.Combine(directory, fileName + fileExtension));
                     break;
                 case SerializationMode.JSON:
-                    toReturn = LoadByJSON(Path.Combine(directory, fileName + fileExtension));
+                    toReturn = ArrayLoadByJSON(Path.Combine(directory, fileName + fileExtension));
                     break;
             }
 
@@ -209,7 +210,21 @@ public static class SerializationManager {
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
-    private static SerializableData[] LoadByJSON(string path)
+    private static SerializableData LoadByJSON(string path)
+    {
+        string json = File.ReadAllText(path);
+        SerializableData toReturn = JsonUtility.FromJson<SerializableData>(json);
+        Debug.Log(toReturn);
+
+        return toReturn;
+    }
+
+    /// <summary>
+    /// Loads JSON files from a given path
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    private static SerializableData[] ArrayLoadByJSON(string path)
     {
         string json = File.ReadAllText(path);
         SerializableData[] toReturn = JsonUtility.FromJson<SerializableData[]>(json);

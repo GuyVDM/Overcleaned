@@ -7,11 +7,19 @@ using System;
 
 public class UI_OptionsWindow : UIWindow
 {
-	class GameSettings : SerializableData
+	[Serializable]
+	private class GameSettings : SerializableData
 	{
 		public float masterVolume;
 		public float sfxVolume;
 		public float musicVolume;
+	}
+
+	private enum AudioSettings
+	{
+		Master,
+		SFX,
+		Music,
 	}
 
 	private GameSettings currentSettings;
@@ -19,12 +27,20 @@ public class UI_OptionsWindow : UIWindow
 	public Slider masterVolumeSlider, sfxVolumeSlider, musicVolumeSlider;
 
 	//File Directory
-	private string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/Test/Settings";
-	private string fileName = "Settings";
-	private string fileExtension = ".data";
+	private string path;
+	private string fileName;
+	private string fileExtension;
 
 	public override void Awake()
 	{
+		path = Application.dataPath;
+		fileName = "Settings";
+		fileExtension = ".data";
+
+		base.Awake();
+
+		AddListenerToSlider();
+
 		if (SerializationManager.FileExists(path, fileName, fileExtension))
 		{
 			currentSettings = SerializationManager.LoadFile(path, fileName, fileExtension, SerializationManager.SerializationMode.Binary) as GameSettings;
@@ -35,20 +51,25 @@ public class UI_OptionsWindow : UIWindow
 			currentSettings = ReadSettingsFromUI();
 		}
 
-		ApplySettingsToGame();
+		Invoke(nameof(ApplySettingsToGame), 0.01f);
 
-		base.Awake();
 	}
 
-	private void SaveSettings()
+	public void SaveSettings()
 	{
+		ApplySettingsToGame();
 		currentSettings = ReadSettingsFromUI();
 		SerializationManager.SaveFile(currentSettings, path, fileName, fileExtension, SerializationManager.SerializationMode.Binary);
 	}
 
 	private GameSettings ReadSettingsFromUI()
 	{
-		return new GameSettings() { masterVolume = masterVolumeSlider.value, sfxVolume = sfxVolumeSlider.value, musicVolume = musicVolumeSlider.value };
+		return new GameSettings() 
+		{ 
+			masterVolume = masterVolumeSlider.value, 
+			sfxVolume = sfxVolumeSlider.value, 
+			musicVolume = musicVolumeSlider.value 
+		};
 	}
 
 	private void SetUIToCurrentSettings()
@@ -60,10 +81,45 @@ public class UI_OptionsWindow : UIWindow
 
 	private void ApplySettingsToGame()
 	{
-		//Audio
 		AudioMixer audioMixer = ServiceLocator.GetServiceOfType<EffectsManager>().audioMixer;
-		audioMixer.SetFloat("Master", currentSettings.masterVolume);
-		audioMixer.SetFloat("Sfx", currentSettings.sfxVolume);
-		audioMixer.SetFloat("Music", currentSettings.musicVolume);
+		audioMixer.SetFloat("MasterVolume", ConvertToAudioMixerValue(masterVolumeSlider.value));
+		audioMixer.SetFloat("MusicVolume", ConvertToAudioMixerValue(musicVolumeSlider.value));
+		audioMixer.SetFloat("SfxVolume", ConvertToAudioMixerValue(sfxVolumeSlider.value));
 	}
+
+	#region Audio
+
+	private void ImmediatelyApplyAudio(AudioSettings setting)
+	{
+		AudioMixer audioMixer = ServiceLocator.GetServiceOfType<EffectsManager>().audioMixer;
+
+		switch (setting)
+		{
+			case AudioSettings.Master:
+				audioMixer.SetFloat("MasterVolume", ConvertToAudioMixerValue(masterVolumeSlider.value));
+				break;
+			case AudioSettings.Music:
+				audioMixer.SetFloat("MusicVolume", ConvertToAudioMixerValue(musicVolumeSlider.value));
+				break;
+			case AudioSettings.SFX:
+				audioMixer.SetFloat("SfxVolume", ConvertToAudioMixerValue(sfxVolumeSlider.value));
+				break;
+		}
+
+	}
+
+	private int ConvertToAudioMixerValue(float sliderValue)
+	{
+		return Mathf.RoundToInt(-80 + (80 * sliderValue));
+	}
+	private void AddListenerToSlider()
+	{
+		masterVolumeSlider.onValueChanged.AddListener(delegate { ImmediatelyApplyAudio(AudioSettings.Master); });
+		musicVolumeSlider.onValueChanged.AddListener(delegate { ImmediatelyApplyAudio(AudioSettings.Music); });
+		sfxVolumeSlider.onValueChanged.AddListener(delegate { ImmediatelyApplyAudio(AudioSettings.SFX); });
+	}
+
+	#endregion
+
+
 }
