@@ -141,7 +141,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 		if (logMode)
 			Debug.Log("Connected to Lobby");
 
-		ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Name Input");
+		ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Titlescreen");
 	}
 
 	public override void OnJoinedRoom()
