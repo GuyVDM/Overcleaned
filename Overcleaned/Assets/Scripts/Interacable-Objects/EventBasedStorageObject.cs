@@ -93,6 +93,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
         if (isBeingPooledFrom)
         {
             toStore.transform.localPosition = Vector3.zero;
+            timer = 0;
             return;
         }
 
@@ -287,18 +288,27 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
 
         for (int i = 0; i < allContainedObjects.Count; i++)
         {
-            allContainedObjects[i].GetComponent<WieldableCleanableObject>().CleanObject();
+            allContainedObjects[i].GetComponent<WieldableCleanableObject>().OnToolInteractionComplete();
         }
 
         Set_ProgressbarPopup(false);
         Set_StateOfObject(StateOfObject.Done);
     }
 
+    private float progressbarFill = 0;
+    private void Update() 
+    {
+        if(currentState == StateOfObject.Washing) 
+        {
+            progressbarFill = Mathf.Lerp(progressbarFill, timer, 0.3f * Time.deltaTime);
+            progressBar.Set_CurrentProgress(timer / waitingTimeInSeconds);
+        }
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if(stream.IsReading) 
         {
-            progressBar.Set_CurrentProgress(timer);
             timer = (float)stream.ReceiveNext();
         } 
         else
