@@ -49,7 +49,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private readonly KeyCode spyBaseKey = KeyCode.O;
     private readonly KeyCode zoomInKey = KeyCode.Minus;
-    private readonly KeyCode zoomOutKey = KeyCode.Plus;
+    private readonly KeyCode zoomOutKey = KeyCode.Equals;
     #endregion
 
 

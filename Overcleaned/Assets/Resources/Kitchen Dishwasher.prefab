@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 2707096482569634635}
   - component: {fileID: 8551491830968893362}
   - component: {fileID: 7712885113683632795}
-  m_Layer: 0
+  - component: {fileID: 7378918059808183674}
+  - component: {fileID: 7378918059808183673}
+  m_Layer: 8
   m_Name: Kitchen Dishwasher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,6 +34,7 @@ Transform:
   m_Children:
   - {fileID: 376134933404703120}
   - {fileID: 1171221606294604310}
+  - {fileID: 868676357389207987}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90.00001, z: 0}
@@ -102,8 +105,184 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 0}
   viewIdField: 0
-  InstantiationId: 3
+  InstantiationId: 30
   isRuntimeInstantiated: 0
+--- !u!65 &7378918059808183674
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7967385127629884270}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.571921, z: 1}
+  m_Center: {x: 0, y: 0.03596045, z: 0}
+--- !u!114 &7378918059808183673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7967385127629884270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34ff8105b5a9f4419c13f55cc8db3a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownedByTeam: 2
+  acceptedItemIds: 
+  maxSlotsAvailable: 5
+  waitingTimeInSeconds: 5
+  progressBar: {fileID: 6241766847402680401}
+--- !u!1001 &645976751874314469
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6398083826312739197}
+    m_Modifications:
+    - target: {fileID: 516851850442399, guid: a46d908b9feb51d478f6069a4dec2d4a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321024457759594821, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_Text
+      value: In progress of cleaning the dishes...
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.635
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 640
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 480
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3140577960891815004, guid: a46d908b9feb51d478f6069a4dec2d4a,
+        type: 3}
+      propertyPath: m_Name
+      value: Progressbar
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a46d908b9feb51d478f6069a4dec2d4a, type: 3}
+--- !u!224 &868676357389207987 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 358265854595946838, guid: a46d908b9feb51d478f6069a4dec2d4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 645976751874314469}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6241766847402680401 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6803194723811864756, guid: a46d908b9feb51d478f6069a4dec2d4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 645976751874314469}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6c675dcedae2174e9a25f92822e2b17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2989185846058073916
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -115,6 +294,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Kitchen_Dishwasher_Door
+      objectReference: {fileID: 0}
+    - target: {fileID: 1880443965158692031, guid: ca779dfb8c104564bbdfbb6377c3adc3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3189661285647738540, guid: ca779dfb8c104564bbdfbb6377c3adc3,
         type: 3}
@@ -205,6 +389,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Kitchen_Dishwasher Rack
+      objectReference: {fileID: 0}
+    - target: {fileID: 654286650649840256, guid: fb7051962f8101f49a1d312391791f96,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4561908820352530579, guid: fb7051962f8101f49a1d312391791f96,
         type: 3}

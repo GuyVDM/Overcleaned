@@ -52,6 +52,23 @@ public class WieldableCleanableObject : WieldableObject
         gameObject.SetActive(false);
     }
 
+    [PunRPC]
+    private void Stream_RigidbodyState(bool isKinematic) 
+    {
+        GetComponent<Rigidbody>().isKinematic = isKinematic;
+    }
+
+    public void Set_RigidbodyState(bool isKinematic) 
+    {
+        if(NetworkManager.IsConnectedAndInRoom)
+        {
+            photonView.RPC(nameof(Stream_RigidbodyState), RpcTarget.AllBuffered, isKinematic); 
+            return;
+        }
+
+        Stream_RigidbodyState(isKinematic);
+    }
+
     private void Set_BreakObjectCompletely()
     {
         if (NetworkManager.IsConnectedAndInRoom)

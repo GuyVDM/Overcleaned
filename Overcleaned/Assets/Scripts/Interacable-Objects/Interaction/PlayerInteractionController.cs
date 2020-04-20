@@ -85,13 +85,25 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     private void Interact() 
     {
         #region ### When starting to interact ###
-        if (Input.GetKey(interactKey) && currentSelected != null) 
+        if (currentSelected != null)
         {
-            if (currentSelected.IsLocked == false && HasAccessToInteract(currentSelected))
+            if (Input.GetKey(interactKey) && (currentSelected.GetType() == typeof(CleanableObject) || currentSelected.GetType().IsSubclassOf(typeof(CleanableObject))))
             {
-                arrow_Selection_UX.gameObject.SetActive(false);
-                currentlyInteracting = currentSelected;
-                currentlyInteracting.Interact(this);
+                if (currentSelected.IsLocked == false && HasAccessToInteract(currentSelected))
+                {
+                    arrow_Selection_UX.gameObject.SetActive(false);
+                    currentlyInteracting = currentSelected;
+                    currentlyInteracting.Interact(this);
+                }
+            }
+            else if(Input.GetKeyDown(interactKey)) 
+            {
+                if (currentSelected.IsLocked == false && HasAccessToInteract(currentSelected))
+                {
+                    arrow_Selection_UX.gameObject.SetActive(false);
+                    currentlyInteracting = currentSelected;
+                    currentlyInteracting.Interact(this);
+                }
             }
         }
         #endregion

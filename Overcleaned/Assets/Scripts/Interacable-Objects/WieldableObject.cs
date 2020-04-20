@@ -64,6 +64,10 @@ public class WieldableObject : InteractableObject, IPunObservable {
     }
     #endregion
 
+    #region ### Properties ###
+    public bool CanBeInteractedWith { get; set; } = true;
+    #endregion
+
     protected virtual void Awake()
     {
         nonTriggerCollider  = GetComponentsInChildren<Collider>().Where(o => o.isTrigger == false).First();

@@ -61,6 +61,9 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	[SerializeField]
 	private SpawnRegionAnchors[] spawnRegions;
 
+	[SerializeField]
+	private bool shouldDisplaySpawnAnchors = true;
+
 	#region Initalize Service
 	private void Awake()
 	{
@@ -433,12 +436,18 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
     {
 		const float RADIUS = 0.5f;
 
-		if(spawnRegions.Length > 1) 
+		if (shouldDisplaySpawnAnchors)
 		{
-			for(int i = 0; i < spawnRegions.Length; i++) 
-		    {
-				Gizmos.DrawSphere(spawnRegions[i].topleftAnchor, RADIUS);
-				Gizmos.DrawSphere(spawnRegions[i].bottomRightAnchor, RADIUS);
+			if (spawnRegions.Length > 1)
+			{
+				for (int i = 0; i < spawnRegions.Length; i++)
+				{
+					Gizmos.DrawSphere(spawnRegions[i].topleftAnchor, RADIUS);
+					Gizmos.DrawSphere(spawnRegions[i].bottomRightAnchor, RADIUS);
+
+					UnityEditor.Handles.Label(spawnRegions[i].topleftAnchor, "Spawnregion Anchor [Topleft]");
+					UnityEditor.Handles.Label(spawnRegions[i].bottomRightAnchor, "Spawnregion Anchor [Bottomright]");
+				}
 			}
 		}
 	}
