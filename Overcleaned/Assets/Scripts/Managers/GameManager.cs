@@ -37,12 +37,12 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 
 	private void SceneStart(string sceneName)
 	{
-		SceneHandler.onSceneIsLoadedAndReady += SceneStart;
 		photonView.RPC(nameof(ThisClientIsReady), RpcTarget.MasterClient);
 	}
 
 	private void Start()
 	{
+		SceneHandler.onSceneIsLoadedAndReady += SceneStart;
 		SpawnLocalPlayer();
 	}
 
