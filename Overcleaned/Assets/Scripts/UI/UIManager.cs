@@ -54,6 +54,12 @@ public class UIManager : MonoBehaviour, IServiceOfType
 
 	public UIWindow ShowWindowReturn(string windowName)
 	{
+		if (!allwindows.ContainsKey(windowName))
+		{
+			Debug.LogError("The UI Manager does not contain a window named: " + windowName);
+		}
+
+
 		if (activeWindowName != null && activeWindowName != "")
 			if (!allwindows[activeWindowName].lockWindow)
 				HideWindow(activeWindowName);

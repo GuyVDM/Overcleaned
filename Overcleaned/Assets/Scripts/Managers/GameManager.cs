@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 	private void Awake() 
 	{
 		OnInitialise();
-		SceneHandler.onSceneIsLoadedAndReady += SceneStart;
+
 	}
 	private void OnDestroy()
 	{
@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 
 	private void SceneStart(string sceneName)
 	{
+		SceneHandler.onSceneIsLoadedAndReady += SceneStart;
 		photonView.RPC(nameof(ThisClientIsReady), RpcTarget.MasterClient);
 	}
 
