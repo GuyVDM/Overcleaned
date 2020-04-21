@@ -121,6 +121,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
             adjustedVelocity.x = Mathf.Clamp(adjustedVelocity.x, -(speed * Time.deltaTime), (speed * Time.deltaTime));
             adjustedVelocity.z = Mathf.Clamp(adjustedVelocity.z, -(speed * Time.deltaTime), (speed * Time.deltaTime));
 
+            adjustedVelocity.x = float.IsNaN(adjustedVelocity.x) ? 0 : adjustedVelocity.x;
+            adjustedVelocity.z = float.IsNaN(adjustedVelocity.z) ? 0 : adjustedVelocity.z;
+
             adjustedVelocity.y = MyRigidBody.velocity.y;
 
             transform.eulerAngles = new Vector3(0, lookRot.eulerAngles.y, 0);
