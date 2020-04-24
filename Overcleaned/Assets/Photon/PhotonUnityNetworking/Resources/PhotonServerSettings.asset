@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: cdb2d608-89b9-4c16-a877-fb7b2057abcb
+    AppIdRealtime: 
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -48,8 +48,12 @@ MonoBehaviour:
   - Stream_BreakableProgressBarCreation
   - Stream_BreakableProgressbarFinish
   - Stream_BreakObjectCompletely
+  - Stream_DisableKineticsOfStoredObjects
+  - Stream_DishwasherOpenState
   - Stream_DisplayStateTooltip
+  - Stream_EnableStateWarningProgressbar
   - Stream_ForceFinishProgression
+  - Stream_ForceToObject
   - Stream_GameObjectEnableState
   - Stream_GrabItemFromObject
   - Stream_LockingState
