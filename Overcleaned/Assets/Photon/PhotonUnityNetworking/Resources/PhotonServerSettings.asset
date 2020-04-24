@@ -18,7 +18,7 @@ MonoBehaviour:
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: eu
+    FixedRegion: 
     Server: 
     Port: 0
     Protocol: 0
@@ -51,6 +51,7 @@ MonoBehaviour:
   - Stream_DisplayStateTooltip
   - Stream_ForceFinishProgression
   - Stream_GameObjectEnableState
+  - Stream_GrabItemFromObject
   - Stream_LockingState
   - Stream_NoToolNoteEnabled
   - Stream_ObjectStateToClean
@@ -64,18 +65,16 @@ MonoBehaviour:
   - Stream_PlayerTeamOverNetwork
   - Stream_ProgressBarCreation
   - Stream_ProgressBarEnableState
+  - Stream_ProgressbarPopup
   - Stream_RepairProgressbarEnableState
+  - Stream_RigidbodyState
   - Stream_SetRepairState
+  - Stream_StateOfObject
+  - Stream_StoreObject
   - Stream_StunParticlesAtPosition
   - Stream_StunPlayer
   - SyncCleaningProgressionUIToTeams
   - SyncProgressionAcrossClients
   - ThisClientIsReady
   - UpdatePlayerElementRPC
-  - Stream_GrabItemFromObject
-  - Stream_ProgressbarPopup
-  - Stream_RigidbodyState
-  - Stream_SetActiveState
-  - Stream_StateOfObject
-  - Stream_StoreObject
   DisableAutoOpenWizard: 1
