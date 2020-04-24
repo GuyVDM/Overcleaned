@@ -159,6 +159,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             isStunned = true;
 
+            Debug.Log("Got hit");
+
             Set_StunParticlesAtPosition(transform.position + stunParticle_Offset);
             Set_PlayerAnimationState(AnimationState.Stunned);
 
