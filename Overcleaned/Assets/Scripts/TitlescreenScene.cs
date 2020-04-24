@@ -9,10 +9,13 @@ public class TitlescreenScene : MonoBehaviour
     private Rigidbody fridgeDoor;
 
     [SerializeField]
-    private Rigidbody playerBody;
+    private Rigidbody car;
 
     [SerializeField]
-    private Rigidbody car;
+    private Rigidbody frontdoor;
+
+    [SerializeField]
+    private Rigidbody frontdoor_Man;
 
     public void Start() 
     {
@@ -28,17 +31,27 @@ public class TitlescreenScene : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         EjectDoor();
+
+        yield return new WaitForSeconds(2f);
+        EjectFrontDoor();
     }
 
-    public void EjectDoor() 
+    private void EjectDoor() 
     {
         const float FORCE = 20;
 
         fridgeDoor.isKinematic = false;
-        fridgeDoor.AddForce(playerBody.transform.forward * FORCE, ForceMode.Impulse);
+        fridgeDoor.AddForce(-fridgeDoor.transform.forward * FORCE, ForceMode.Impulse);
+    }
 
-        playerBody.isKinematic = false;
-        playerBody.GetComponent<Collider>().enabled = true;
-        playerBody.AddForce(playerBody.transform.forward * FORCE, ForceMode.Impulse);
+    private void EjectFrontDoor() 
+    {
+        const float FORCE = 40;
+
+        frontdoor.isKinematic = false;
+        frontdoor.AddForce(fridgeDoor.transform.forward * FORCE, ForceMode.Impulse);
+
+        frontdoor_Man.isKinematic = false;
+        frontdoor_Man.AddForce(fridgeDoor.transform.forward * FORCE, ForceMode.Impulse);
     }
 }
