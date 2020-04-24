@@ -3965,6 +3965,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2682211321236787454, guid: 08a59a89324fce34581fbb9e39f03ab8,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 7064217890854240749, guid: 272e37260f225d24bae77da9d46db269,
+        type: 3}
     - target: {fileID: 3353109870955241793, guid: 08a59a89324fce34581fbb9e39f03ab8,
         type: 3}
       propertyPath: m_Layer
@@ -4467,13 +4473,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ownedByTeam: 0
   currentState: 0
+  storagePlaces: []
   acceptedItemIds: 01000000
   maxSlotsAvailable: 5
   waitingTimeInSeconds: 5
+  timeTillRejectionOfObjects: 5
   header: Dishwasher be washing woo woo!
   tooltip: Busy cleaning everything...
+  header_Warning: O-oh, it's making weird noises...
+  tooltip_Warning: Better unload it fast...
   progressBar: {fileID: 1899187067}
-  allContainedObjects: []
+  progressBar_Warning: {fileID: 0}
+  thisAnimator: {fileID: 0}
+  warning_Icon: {fileID: 0}
+  handsFull_Icon: {fileID: 0}
+  objectIsFull_Icon: {fileID: 0}
+  wrongItem_Icon: {fileID: 0}
+  storageEmpty_Icon: {fileID: 0}
+  busyWashing_Icon: {fileID: 0}
 --- !u!114 &7098697254516115508
 MonoBehaviour:
   m_ObjectHideFlags: 0
