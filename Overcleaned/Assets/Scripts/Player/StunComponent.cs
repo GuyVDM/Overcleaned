@@ -7,7 +7,6 @@ using Photon.Realtime;
 
 public class StunComponent : MonoBehaviour
 {
-    private static PlayerManager playerManager;
 
     public WieldableObject OwningObject { get; set; }
 
@@ -25,11 +24,6 @@ public class StunComponent : MonoBehaviour
 
     private async void Start()
     {
-        if(playerManager == null) 
-        {
-            playerManager = ServiceLocator.GetServiceOfType<PlayerManager>();
-        }
-
         await Task.Delay(TimeSpan.FromSeconds(ATTACK_DURATION));
 
         Destroy(this);
@@ -88,8 +82,6 @@ public class StunComponent : MonoBehaviour
             if (OwningObject.GetType() == typeof(WieldableCleanableObject)) 
             {
                 WieldableCleanableObject currentCleanableWieldable = (WieldableCleanableObject)OwningObject;
-                OwningObject.DeInteract(playerManager.player_InteractionController);
-
                 currentCleanableWieldable.BreakObject();
             }
         }
