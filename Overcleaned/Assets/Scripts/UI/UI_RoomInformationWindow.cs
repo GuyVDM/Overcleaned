@@ -56,7 +56,6 @@ public class UI_RoomInformationWindow : UIWindow
 			readyText.gameObject.SetActive(!IsLocal);
 			kickPlayer.gameObject.SetActive(PhotonNetwork.IsMasterClient && !player.IsLocal);
 
-			print(PlayerName);
 			playerNameText.text = PlayerName;
 		}
 
