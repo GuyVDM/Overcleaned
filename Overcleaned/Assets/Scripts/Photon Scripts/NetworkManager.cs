@@ -62,7 +62,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 		localPlayerInformation.numberInTeam = numberInTeam;
 	}
 
-	private void ReturnToMainMenu()
+	public void ReturnToMainMenu()
 	{
 		SceneHandler sceneHandler = ServiceLocator.GetServiceOfType<SceneHandler>();
 		sceneHandler.LoadScene(0);

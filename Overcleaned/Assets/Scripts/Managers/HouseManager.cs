@@ -29,13 +29,13 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	//Events
 	public static event TimeChanged OnTimeChanged;
 	public static event Action<int> OnCleanableObjectStatusChanged;
-    public static event Action<int> OnCleaningProgressionVisualChanged;
+	public static event Action<int> OnCleaningProgressionVisualChanged;
 
 	//Delegates for events
 	public delegate void TimeChanged(TimeSpan newtime);
 
-    //Progression tracking
-    private static List<CleanableObject> cleanableObjects = new List<CleanableObject>();
+	//Progression tracking
+	private static List<CleanableObject> cleanableObjects = new List<CleanableObject>();
 	private static List<WieldableCleanableObject> wieldableCleanableObjects = new List<WieldableCleanableObject>();
 	private static float totalWeightOfAllCleanables;
 	private static List<CleaningProgressionStorage> cleaningProgressionStorage = new List<CleaningProgressionStorage>();
@@ -51,7 +51,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	public Vector2 gameEventWaitTime;
 
 	[System.Serializable]
-	private struct SpawnRegionAnchors 
+	private struct SpawnRegionAnchors
 	{
 		public Vector3 topleftAnchor;
 		public Vector3 bottomRightAnchor;
@@ -69,15 +69,15 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	{
 		OnInitialise();
 
-        OnCleanableObjectStatusChanged += OnObjectStatusChanged;
+		OnCleanableObjectStatusChanged += OnObjectStatusChanged;
 	}
 
-    private void OnDestroy()
-    {
-        OnDeinitialise();
+	private void OnDestroy()
+	{
+		OnDeinitialise();
 
-        OnCleanableObjectStatusChanged -= OnObjectStatusChanged;
-    }
+		OnCleanableObjectStatusChanged -= OnObjectStatusChanged;
+	}
 
 	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
 	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
@@ -102,25 +102,25 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			UpdateTimer();
 	}
 
-    public static void InvokeOnObjectStatusCallback(int teamID) => OnCleanableObjectStatusChanged?.Invoke(teamID);
+	public static void InvokeOnObjectStatusCallback(int teamID) => OnCleanableObjectStatusChanged?.Invoke(teamID);
 
-    public static void AddInteractableToObservedLists(WieldableCleanableObject wieldableCleanableObject = null, CleanableObject cleanableObject = null) 
-    {
-        if (wieldableCleanableObject == null && cleanableObject == null) 
-        {
-            throw new Exception($"You must pass 1 of the parameters...");
-        }
+	public static void AddInteractableToObservedLists(WieldableCleanableObject wieldableCleanableObject = null, CleanableObject cleanableObject = null)
+	{
+		if (wieldableCleanableObject == null && cleanableObject == null)
+		{
+			throw new Exception($"You must pass 1 of the parameters...");
+		}
 
-        if(wieldableCleanableObject != null) 
-        {
-            wieldableCleanableObjects.Add(wieldableCleanableObject);
-        }
+		if (wieldableCleanableObject != null)
+		{
+			wieldableCleanableObjects.Add(wieldableCleanableObject);
+		}
 
-        if(cleanableObject != null) 
-        {
-            cleanableObjects.Add(cleanableObject);
-        }
-    }
+		if (cleanableObject != null)
+		{
+			cleanableObjects.Add(cleanableObject);
+		}
+	}
 
 	#region Cleaning Progression
 
@@ -144,30 +144,30 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 
-        Debug.Log("Stats: " + cleanableObjects.Count + " : " + wieldableCleanableObjects.Count);
-        return (weightCleaned / totalWeightOfAllCleanables);
+		Debug.Log("Stats: " + cleanableObjects.Count + " : " + wieldableCleanableObjects.Count);
+		return (weightCleaned / totalWeightOfAllCleanables);
 	}
 
-    public static float Get_OtherTeamCleaningPercentage() 
-    {
-        int otherTeamID = NetworkManager.localPlayerInformation.team == 0 ? 1 : 0;
+	public static float Get_OtherTeamCleaningPercentage()
+	{
+		int otherTeamID = NetworkManager.localPlayerInformation.team == 0 ? 1 : 0;
 
-        float value = 0;
+		float value = 0;
 
-        foreach(CleaningProgressionStorage storage in cleaningProgressionStorage) 
-        {
+		foreach (CleaningProgressionStorage storage in cleaningProgressionStorage)
+		{
 			print("<b> storage item of team </b>" + storage.team + "has progression of: " + storage.progression);
 
-            if(storage.team == otherTeamID) 
-            {
-                Debug.Log("Found storage");
-                value = storage.progression;
-                break;
-            }
-        }
+			if (storage.team == otherTeamID)
+			{
+				Debug.Log("Found storage");
+				value = storage.progression;
+				break;
+			}
+		}
 
-        return value;
-    }
+		return value;
+	}
 
 	private static float GetTotalWeight()
 	{
@@ -190,7 +190,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	{
 		CleanPercentage = Get_CleanPercentage();
 		photonView.RPC(nameof(SyncProgressionAcrossClients), RpcTarget.All, CleanPercentage, ourTeamID);
-        photonView.RPC(nameof(SyncCleaningProgressionUIToTeams), RpcTarget.All, ourTeamID);
+		photonView.RPC(nameof(SyncCleaningProgressionUIToTeams), RpcTarget.All, ourTeamID);
 	}
 
 	[PunRPC]
@@ -201,11 +201,11 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		writeTo.progression = progression;
 	}
 
-    [PunRPC]
-    private void SyncCleaningProgressionUIToTeams(int teamID) 
-    {
-        OnCleaningProgressionVisualChanged?.Invoke(teamID);
-    }
+	[PunRPC]
+	private void SyncCleaningProgressionUIToTeams(int teamID)
+	{
+		OnCleaningProgressionVisualChanged?.Invoke(teamID);
+	}
 
 	private CleaningProgressionStorage FindStorageByTeamNumber(int teamNumber)
 	{
@@ -274,6 +274,11 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	#endregion
 
 	#region Winning and Losing
+
+	public void ReturnToMainMenu()
+	{
+		ServiceLocator.GetServiceOfType<NetworkManager>().ReturnToMainMenu();
+	}
 
 	private void EndGame(TimeSpan remainingTime)
 	{
@@ -354,14 +359,14 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	private int ChooseNextTeam(int currentTeam) => currentTeam == 0 ? 1 : 0;
 
-    [PunRPC]
+	[PunRPC]
 	private void StartGameEvent(int team)
 	{
 		if (team != NetworkManager.localPlayerInformation.team) return;
 
 		GameEventType chosenEventType = (GameEventType)UnityEngine.Random.Range(0, (int)GameEventType.EnumSize);
 
-        Debug.Log("Calling event of type: " + chosenEventType.ToString() + " to team: " + team);
+		Debug.Log("Calling event of type: " + chosenEventType.ToString() + " to team: " + team);
 
 		switch (chosenEventType)
 		{
@@ -391,33 +396,33 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 
-        if (availableBreakableObjects.Count > 0) 
-        {
-            availableBreakableObjects[UnityEngine.Random.Range(0, availableBreakableObjects.Count)].Set_ObjectStateToDirty();
-        }
+		if (availableBreakableObjects.Count > 0)
+		{
+			availableBreakableObjects[UnityEngine.Random.Range(0, availableBreakableObjects.Count)].Set_ObjectStateToDirty();
+		}
 	}
 
 	private void SpawnWieldable()
 	{
-        const string WIELDABLE_POOL_ID = "[CleanableWieldables]";
+		const string WIELDABLE_POOL_ID = "[CleanableWieldables]";
 
-        if (ObjectPool.HasPooledObjectAvailable(WIELDABLE_POOL_ID)) 
-        {
-            Vector3 instancePos = GetTeamCleanableObjectSpawnRegion();
+		if (ObjectPool.HasPooledObjectAvailable(WIELDABLE_POOL_ID))
+		{
+			Vector3 instancePos = GetTeamCleanableObjectSpawnRegion();
 
-            ObjectPool.Set_ObjectFromPool(WIELDABLE_POOL_ID, instancePos, Vector3.zero);
+			ObjectPool.Set_ObjectFromPool(WIELDABLE_POOL_ID, instancePos, Vector3.zero);
 
-            return;
-        }
+			return;
+		}
 	}
 
-    private Vector3 GetTeamCleanableObjectSpawnRegion() 
-    {
+	private Vector3 GetTeamCleanableObjectSpawnRegion()
+	{
 		const float SPAWN_HEIGHT = 5.5f;
 
-		if(NetworkManager.localPlayerInformation.team > 1)
+		if (NetworkManager.localPlayerInformation.team > 1)
 		{
-			if(spawnRegions.Length > 1) 
+			if (spawnRegions.Length > 1)
 			{
 				SpawnRegionAnchors anchors = spawnRegions[NetworkManager.localPlayerInformation.team];
 				float randomizedXPos = UnityEngine.Random.Range(anchors.topleftAnchor.x, anchors.bottomRightAnchor.x);
@@ -432,8 +437,8 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	}
 
 #if UNITY_EDITOR
-	public void OnDrawGizmos() 
-    {
+	public void OnDrawGizmos()
+	{
 		const float RADIUS = 0.5f;
 
 		if (shouldDisplaySpawnAnchors)
@@ -452,6 +457,6 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		}
 	}
 #endif
-#endregion
+	#endregion
 
 }
