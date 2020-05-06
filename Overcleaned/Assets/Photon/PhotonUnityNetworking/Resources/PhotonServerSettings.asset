@@ -28,5 +28,53 @@ MonoBehaviour:
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
-  RpcList: []
+  RpcList:
+  - Cast_PickupObject
+  - Cast_ThrowObject
+  - DestroySpaceship
+  - Fire
+  - HasWonOrLost
+  - PlayAudioRPC
+  - PlayParticleRPC
+  - RecieveProgressionInformation
+  - RespawnSpaceship
+  - SetReadyRPC
+  - StartCountdown
+  - StartGameEvent
+  - StartGameRPC
+  - StartTimeTracking
+  - StopAllPlayingClipsRPC
+  - StopAudioRPC
+  - Stream_BreakableProgressBarCreation
+  - Stream_BreakableProgressbarFinish
+  - Stream_BreakObjectCompletely
+  - Stream_DisplayStateTooltip
+  - Stream_ForceFinishProgression
+  - Stream_GameObjectEnableState
+  - Stream_GrabItemFromObject
+  - Stream_LockingState
+  - Stream_NoToolNoteEnabled
+  - Stream_ObjectStateToClean
+  - Stream_ObjectStateToDirty
+  - Stream_ObjectToAddToPool
+  - Stream_ObjectTransform
+  - Stream_OnDirtyObject
+  - Stream_OnInteractionComplete
+  - Stream_OnSetEnableStateCollider
+  - Stream_PlayerColorOverNetwork
+  - Stream_PlayerTeamOverNetwork
+  - Stream_ProgressBarCreation
+  - Stream_ProgressBarEnableState
+  - Stream_ProgressbarPopup
+  - Stream_RepairProgressbarEnableState
+  - Stream_RigidbodyState
+  - Stream_SetRepairState
+  - Stream_StateOfObject
+  - Stream_StoreObject
+  - Stream_StunParticlesAtPosition
+  - Stream_StunPlayer
+  - SyncCleaningProgressionUIToTeams
+  - SyncProgressionAcrossClients
+  - ThisClientIsReady
+  - UpdatePlayerElementRPC
   DisableAutoOpenWizard: 1
