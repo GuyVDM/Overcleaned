@@ -499,6 +499,13 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
         }
     }
 
+    public override void OnDisable() 
+    {
+        base.OnDisable();
+        progressBar.enabled = false;
+        progressBar_Warning.enabled = false;
+    }
+
     private void Update() 
     {
         if(currentState == StateOfObject.Washing) 
