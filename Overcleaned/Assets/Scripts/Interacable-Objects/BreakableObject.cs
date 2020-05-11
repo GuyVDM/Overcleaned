@@ -207,6 +207,8 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
         onBreakObject?.Invoke();
         base.DirtyObject();
+
+        ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("Machine Break");
     }
 
     public override void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) 

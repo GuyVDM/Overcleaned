@@ -32,7 +32,9 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
 
     // TODO: Display all dishes on the rack, make animations of opening the door and rack rolling out.
 
-
+    //Audio variables
+    public AudioClip activeNormal, activePressure;
+    private int activeSoundNumber;
 
     private static Vector3 toPoolObject = new Vector3(1000, 0, 1000);
 
@@ -272,6 +274,8 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
             Set_ProgressbarPopup(true);
 
             StartCoroutine(nameof(CleaningLoop));
+
+            activeSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio(activeNormal, loop: true, fade: true, step: 0.25f);
         }
     }
 
@@ -293,6 +297,8 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
 
         Set_ProgressbarPopup(false);
         Set_StateOfObject(StateOfObject.Done);
+
+        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudio(activeSoundNumber, fade: true, step: 0.25f);
     }
 
     private float progressbarFill = 0;

@@ -153,8 +153,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: e8c3df28540bc694e9a173ad06a8f163, type: 2}
-  allAudioclips: []
-  playOnStartClips: []
+  allAudioclips:
+  - {fileID: 8300000, guid: 4f2dcbfd3ca2cd94b9a64b64598482cc, type: 3}
+  playOnStartClips:
+  - audioName: Breaktime Looped
+    loop: 1
+    volume: 0.38
+    delay: 0
   startSources: 1
   allParticleSystemPrefabs: []
 --- !u!114 &5833387
@@ -781,7 +786,7 @@ PrefabInstance:
     - target: {fileID: 5454421318346151449, guid: fa3f421950f170546b4278a3d0031c7d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000060297338
+      value: -0.000038544393
       objectReference: {fileID: 0}
     - target: {fileID: 5454421318694764614, guid: fa3f421950f170546b4278a3d0031c7d,
         type: 3}
@@ -1066,7 +1071,7 @@ PrefabInstance:
     - target: {fileID: 8132368983643653675, guid: fa3f421950f170546b4278a3d0031c7d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000060297338
+      value: -0.000038544393
       objectReference: {fileID: 0}
     - target: {fileID: 8132368983706757963, guid: fa3f421950f170546b4278a3d0031c7d,
         type: 3}
@@ -1106,7 +1111,7 @@ PrefabInstance:
     - target: {fileID: 8132368983978665094, guid: fa3f421950f170546b4278a3d0031c7d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000060297338
+      value: -0.000038544393
       objectReference: {fileID: 0}
     - target: {fileID: 8132368984027542037, guid: fa3f421950f170546b4278a3d0031c7d,
         type: 3}

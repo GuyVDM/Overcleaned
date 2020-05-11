@@ -411,6 +411,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			Vector3 instancePos = GetTeamCleanableObjectSpawnRegion();
 
 			ObjectPool.Set_ObjectFromPool(WIELDABLE_POOL_ID, instancePos, Vector3.zero);
+			ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Pop");
 
 			return;
 		}
