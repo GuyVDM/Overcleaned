@@ -91,19 +91,20 @@ public class WieldableCleanableObject : WieldableObject
     {
         base.Awake();
 
+        starting_ToolID = toolID;
+
         if ((int)ownedByTeam == NetworkManager.localPlayerInformation.team) 
         {
             HouseManager.AddInteractableToObservedLists(this);
         }
 
-        starting_ToolID = toolID;
+        DirtyObject();
     }
 
     public void CleanObject() 
     {
         toolID = cleanedToolID;
         isCleaned = true;
-        Debug.LogWarning("[WieldableCleanableObject] This script still needs to assign penalty on instance, and remove when this function is called.");
 
         object_Renderer.material = cleaned_Material;
     }
@@ -134,12 +135,9 @@ public class WieldableCleanableObject : WieldableObject
     {
         base.OnEnable();
 
-        toolID = starting_ToolID;
-
-        isCleaned = false;
         isStored = false;
 
-        object_Renderer.material = cleaned_Material;
+        DirtyObject();
 
         HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
     }

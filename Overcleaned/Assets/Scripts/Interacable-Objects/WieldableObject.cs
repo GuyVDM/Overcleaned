@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Photon.Pun;
-using System.Linq;
 
 [RequireComponent(typeof(Rigidbody))]
 public class WieldableObject : InteractableObject, IPunObservable {
@@ -24,8 +23,6 @@ public class WieldableObject : InteractableObject, IPunObservable {
     private Vector3 rotation_Offset;
 
     #region ### Private Variables ###
-    private Collider triggerField;
-
     private Collider nonTriggerCollider;
     #endregion
 
@@ -70,45 +67,8 @@ public class WieldableObject : InteractableObject, IPunObservable {
 
     protected virtual void Awake()
     {
-        nonTriggerCollider  = GetComponentsInChildren<Collider>().Where(o => o.isTrigger == false).First();
-
-        if(nonTriggerCollider == null) 
-        {
-            nonTriggerCollider = GetComponents<Collider>().Where(o => o.isTrigger == false).First();
-        }
-
-        Debug.Log(nonTriggerCollider);
-
-        GetTriggerField();
+        nonTriggerCollider  = GetComponent<Collider>();
     } 
-
-    private void GetTriggerField() 
-    {
-        Collider[] allColliders = GetComponentsInChildren<Collider>();
-
-        foreach (Collider col in allColliders) 
-        {
-            if (col.isTrigger == true)
-            {
-                triggerField = col;
-                return;
-            }
-        }
-
-        allColliders = GetComponents<Collider>();
-
-        foreach (Collider col in allColliders)
-        {
-            if (col.isTrigger == true)
-            {
-                triggerField = col;
-                return;
-            }
-        }
-
-        Debug.LogWarning($"[Wieldable] Object of name { gameObject.name } has no trigger collider attached for detection, thus cannot be interacted with.");
-        this.enabled = false;
-    }
 
     public override void Interact(PlayerInteractionController interactionController)
     {

@@ -76,6 +76,8 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     }
     #endregion
 
+    private void Awake() => playerAnimator.SetLayerWeight(HAND_LAYER, 0);
+
     private void Update()
     {
         CheckForInteractables();
@@ -218,13 +220,12 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
 
     public void PickupObject(WieldableObject wieldableObject, Vector3 localHandOffset, Vector3 localRotationOffset) 
     {
-        const string H1_PICKUP = "1h";
-        const string H2_PICKUP = "2h";
+        const string HANDED_BOOL_NAME = "is2h";
 
         int targetViewID = wieldableObject.handedType == WieldableObject.Handed_Type.H1Handed ? 0 : 1;
-        string targetTrigger = wieldableObject.handedType == WieldableObject.Handed_Type.H1Handed ? H1_PICKUP : H2_PICKUP;
+        bool targetHandedState = wieldableObject.handedType != WieldableObject.Handed_Type.H1Handed;
 
-        playerAnimator.SetTrigger(targetTrigger);
+        playerAnimator.SetBool(HANDED_BOOL_NAME, targetHandedState);
 
         if(currentlyWielding == null) 
         {

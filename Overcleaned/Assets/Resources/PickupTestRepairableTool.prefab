@@ -34,19 +34,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bf4dec133a1d2a40a1346f5561a104b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsLocked: 0
   ownedByTeam: 2
   toolID: 0
   handedType: 0
   pickup_Offset: {x: 0, y: 0, z: 0}
   rotation_Offset: {x: 0, y: 0, z: 0}
   cleaningWeight: 0
-  isStored: 0
   cleanedToolID: 1
   isBreakable: 0
-  uncleaned_Variant: {fileID: 4292086670448341686}
-  cleaned_Variant: {fileID: 4292086670032526439}
-  isCleaned: 0
+  dirty_Material: {fileID: 0}
+  cleaned_Material: {fileID: 0}
+  object_Renderer: {fileID: 0}
 --- !u!1001 &5069928934729529680
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -120,18 +118,6 @@ PrefabInstance:
 --- !u!1 &4292086671430758465 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9064778030653016337, guid: f3cefb2812d38804faa779c95d666e10,
-    type: 3}
-  m_PrefabInstance: {fileID: 5069928934729529680}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &4292086670448341686 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 9064778029737446374, guid: f3cefb2812d38804faa779c95d666e10,
-    type: 3}
-  m_PrefabInstance: {fileID: 5069928934729529680}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &4292086670032526439 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 9064778029355328823, guid: f3cefb2812d38804faa779c95d666e10,
     type: 3}
   m_PrefabInstance: {fileID: 5069928934729529680}
   m_PrefabAsset: {fileID: 0}

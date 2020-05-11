@@ -144,8 +144,10 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 
-        Debug.Log("Stats: " + cleanableObjects.Count + " : " + wieldableCleanableObjects.Count);
-        return (weightCleaned / totalWeightOfAllCleanables);
+		weightCleaned -= NetworkManager.localPlayerInformation.team == 0 ? HouseDirtyTriggerZone.PenaltyTeam1 : HouseDirtyTriggerZone.PenaltyTeam2;
+		totalWeightOfAllCleanables += NetworkManager.localPlayerInformation.team == 0 ? HouseDirtyTriggerZone.PenaltyTeam1 : HouseDirtyTriggerZone.PenaltyTeam2;
+
+		return (weightCleaned / totalWeightOfAllCleanables);
 	}
 
     public static float Get_OtherTeamCleaningPercentage() 
