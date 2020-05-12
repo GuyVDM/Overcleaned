@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
+using System;
 
 public class BreakableObject : ToolInteractableObject, IPunObservable
 {
@@ -207,6 +208,11 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
         onBreakObject?.Invoke();
         base.DirtyObject();
+    }
+
+    public override void OnDisable() 
+    {
+        progressBar.Set_BarToFinished();
     }
 
     public override void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) 
