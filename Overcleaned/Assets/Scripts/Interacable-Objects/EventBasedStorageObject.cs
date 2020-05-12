@@ -117,7 +117,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
     {
         WieldableCleanableObject toStore = NetworkManager.GetViewByID(viewID).GetComponent<WieldableCleanableObject>();
 
-        toStore.Set_RigidbodyState(true);
+        toStore.Set_RigidbodyState(!isBeingPooledFrom);
         toStore.CanBeInteractedWith = isBeingPooledFrom;
 
         if (isBeingPooledFrom)
@@ -145,6 +145,30 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
         }
 
         Stream_StoreObject(viewID, isBeingPooledFrom);
+    }
+
+    [PunRPC]
+    private void Stream_PickupObject(int viewID) 
+    {
+        WieldableCleanableObject toStore = NetworkManager.GetViewByID(viewID).GetComponent<WieldableCleanableObject>();
+
+        toStore.Set_RigidbodyState(true);
+        toStore.CanBeInteractedWith = true;
+        toStore.transform.SetParent(null);
+        toStore.transform.localPosition = transform.position + transform.forward + transform.up;
+        toStore.GetComponent<Collider>().enabled = true;
+        timer = 0;
+        return;
+    }
+
+    private void Set_PickupObject(int viewID)
+    {
+        if (NetworkManager.IsConnectedAndInRoom)
+        {
+            photonView.RPC(nameof(Stream_PickupObject), RpcTarget.OthersBuffered, viewID);
+        }
+
+        Stream_PickupObject(viewID);
     }
 
     [PunRPC]
@@ -387,8 +411,8 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
                     Set_DishwasherOpenState(true);
 
                     WieldableCleanableObject toStore = NetworkManager.GetViewByID(allContainedObjects[0].gameObject.GetPhotonView().ViewID).GetComponent<WieldableCleanableObject>();
-
-                    Set_StoreObject(allContainedObjects[0].gameObject.GetPhotonView().ViewID, true);
+                    
+                    Set_PickupObject(allContainedObjects[0].gameObject.GetPhotonView().ViewID);
                     Set_GrabItemFromObject(allContainedObjects[0].gameObject.GetPhotonView().ViewID);
 
                     toStore.transform.localPosition = Vector3.zero;
@@ -484,6 +508,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
     private void EjectAll() 
     {
         Set_StateOfObject(StateOfObject.Inactive);
+        Set_DisableKineticsOfStoredObjects();
 
         for (int i = allContainedObjects.Count - 1; i > -1; i--) 
         {
@@ -493,7 +518,6 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
 
             Set_StoreObject(allContainedObjects[i].gameObject.GetPhotonView().ViewID, true);
             Set_GrabItemFromObject(allContainedObjects[i].gameObject.GetPhotonView().ViewID);
-            body.GetComponent<WieldableCleanableObject>().Set_RigidbodyState(false);
             Set_AddForceToObject(body.gameObject.GetPhotonView().ViewID);
 
         }

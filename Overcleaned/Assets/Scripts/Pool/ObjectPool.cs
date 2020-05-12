@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using UnityEngine.XR.WSA.Input;
 
 [Serializable]
 public struct ObjectPoolData
