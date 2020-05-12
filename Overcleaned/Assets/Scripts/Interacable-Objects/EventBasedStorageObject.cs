@@ -117,7 +117,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
     {
         WieldableCleanableObject toStore = NetworkManager.GetViewByID(viewID).GetComponent<WieldableCleanableObject>();
 
-        toStore.Set_RigidbodyState(!isBeingPooledFrom);
+        toStore.Set_RigidbodyState(true);
         toStore.CanBeInteractedWith = isBeingPooledFrom;
 
         if (isBeingPooledFrom)
@@ -168,7 +168,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
     }
 
     [PunRPC]
-    private void Stream_ForceToObject(int viewID) 
+    private void Stream_AddForceToObject(int viewID) 
     {
         const float EJECT_FORCE = 4f;
 
@@ -176,14 +176,14 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
         body.AddForce((transform.forward + transform.up) * EJECT_FORCE, ForceMode.Impulse);
     }
 
-    private void Set_ForceToObject(int viewID) 
+    private void Set_AddForceToObject(int viewID) 
     {
         if(NetworkManager.IsConnectedAndInRoom) 
         {
-            photonView.RPC(nameof(Stream_ForceToObject), RpcTarget.OthersBuffered, viewID);
+            photonView.RPC(nameof(Stream_AddForceToObject), RpcTarget.OthersBuffered, viewID);
         }
 
-        Stream_ForceToObject(viewID);
+        Stream_AddForceToObject(viewID);
     }
 
     [PunRPC]
@@ -392,7 +392,6 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
                     Set_GrabItemFromObject(allContainedObjects[0].gameObject.GetPhotonView().ViewID);
 
                     toStore.transform.localPosition = Vector3.zero;
-                    toStore.GetComponent<Rigidbody>().isKinematic = true;
 
                     interactionController.currentSelected = this;
 
@@ -495,7 +494,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
 
             Set_StoreObject(allContainedObjects[i].gameObject.GetPhotonView().ViewID, true);
             Set_GrabItemFromObject(allContainedObjects[i].gameObject.GetPhotonView().ViewID);
-            Set_ForceToObject(body.gameObject.GetPhotonView().ViewID);
+            Set_AddForceToObject(body.gameObject.GetPhotonView().ViewID);
 
         }
     }
