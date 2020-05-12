@@ -484,7 +484,6 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
     private void EjectAll() 
     {
         Set_StateOfObject(StateOfObject.Inactive);
-        Set_DisableKineticsOfStoredObjects();
 
         for (int i = allContainedObjects.Count - 1; i > -1; i--) 
         {
@@ -494,6 +493,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
 
             Set_StoreObject(allContainedObjects[i].gameObject.GetPhotonView().ViewID, true);
             Set_GrabItemFromObject(allContainedObjects[i].gameObject.GetPhotonView().ViewID);
+            body.GetComponent<WieldableCleanableObject>().Set_RigidbodyState(false);
             Set_AddForceToObject(body.gameObject.GetPhotonView().ViewID);
 
         }
