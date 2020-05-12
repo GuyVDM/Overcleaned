@@ -392,6 +392,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
                     Set_GrabItemFromObject(allContainedObjects[0].gameObject.GetPhotonView().ViewID);
 
                     toStore.transform.localPosition = Vector3.zero;
+                    toStore.GetComponent<Rigidbody>().isKinematic = true;
 
                     interactionController.currentSelected = this;
 
