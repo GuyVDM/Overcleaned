@@ -84,6 +84,6 @@ public class TitlescreenScene : MonoBehaviour
         frontdoor.AddForce(-fridgeDoor.transform.forward * FORCE, ForceMode.Impulse);
 
         frontdoor_Man.isKinematic = false;
-        frontdoor_Man.AddForce(frontdoor_Man.transform.forward * FORCE, ForceMode.Impulse);
+        frontdoor_Man.AddForce(frontdoor_Man.transform.forward * 20, ForceMode.Impulse);
     }
 }
