@@ -5065,6 +5065,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Kitchen Dishwasher - Breakable
       objectReference: {fileID: 0}
+    - target: {fileID: 9168248450691679479, guid: bb6b239a0bb83cd429e0078de6381f1d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2817900734711851656, guid: bb6b239a0bb83cd429e0078de6381f1d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bb6b239a0bb83cd429e0078de6381f1d, type: 3}
@@ -5118,7 +5123,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1238620361}
+      - m_Target: {fileID: 720698664}
         m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
@@ -5143,18 +5148,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 956177904}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1238620361}
+      - m_Target: {fileID: 720698664}
         m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
@@ -5177,7 +5171,7 @@ MonoBehaviour:
   onBreakObject:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1192137057}
+      - m_Target: {fileID: 1238620361}
         m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
@@ -5966,6 +5960,11 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 2643774725568082732, guid: bb6b239a0bb83cd429e0078de6381f1d,
+        type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 821430915}
     - target: {fileID: 2817900734711851656, guid: bb6b239a0bb83cd429e0078de6381f1d,
         type: 3}
       propertyPath: m_Enabled
@@ -6022,17 +6021,6 @@ MonoBehaviour:
   OnCleaned:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1192137057}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 821430912}
         m_MethodName: SetActive
         m_Mode: 6
@@ -6043,32 +6031,21 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1192137057}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
   OnDirtyObject:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1192137057}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1388702534}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 821430912}
         m_MethodName: SetActive
         m_Mode: 6
@@ -6079,6 +6056,17 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1192137057}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
         m_CallState: 2
   actionName: Cleaning up the last bits and pieces
   tooltip: Cleaning the dishwasher
