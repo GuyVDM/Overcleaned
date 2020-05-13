@@ -9598,6 +9598,11 @@ PrefabInstance:
       propertyPath: toolID
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7940195008121737235, guid: fa4503a72f4480c43b971d101a8b73b4,
+        type: 3}
+      propertyPath: ownedByTeam
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8630100980364931121, guid: fa4503a72f4480c43b971d101a8b73b4,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -9621,6 +9626,10 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7098697254516115458, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
     - {fileID: 7098697254516115459, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
+    - {fileID: 8937543840708404572, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
+    - {fileID: 4689362163184535406, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
+    - {fileID: 7963723626871056746, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
+    - {fileID: 5723826353257961422, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
 --- !u!4 &1156453885 stripped
 Transform:
@@ -16707,6 +16716,10 @@ PrefabInstance:
     - {fileID: 7098697254516115458, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
     - {fileID: 7098697254516115459, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
     - {fileID: 1152134498402774397, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
+    - {fileID: 8937543840708404572, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
+    - {fileID: 4689362163184535406, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
+    - {fileID: 5723826353257961422, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
+    - {fileID: 7963723626871056746, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
 --- !u!1 &7098697254516115486 stripped
 GameObject:

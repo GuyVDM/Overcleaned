@@ -87,10 +87,8 @@ public class WieldableCleanableObject : WieldableObject
     private int starting_ToolID;
     #endregion
 
-    protected override void Awake() 
+    protected void Awake() 
     {
-        base.Awake();
-
         starting_ToolID = toolID;
 
         if ((int)ownedByTeam == NetworkManager.localPlayerInformation.team) 

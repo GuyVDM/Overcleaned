@@ -22,10 +22,6 @@ public class WieldableObject : InteractableObject, IPunObservable {
     [SerializeField]
     private Vector3 rotation_Offset;
 
-    #region ### Private Variables ###
-    private Collider nonTriggerCollider;
-    #endregion
-
     #region ### RPC Calls ###
     [PunRPC]
     protected virtual void Stream_OnInteractionComplete() {
@@ -46,7 +42,7 @@ public class WieldableObject : InteractableObject, IPunObservable {
     [PunRPC]
     protected void Stream_OnSetEnableStateCollider(bool isEnabled) 
     {
-        nonTriggerCollider.enabled = isEnabled;
+        GetComponent<Collider>().enabled = isEnabled;
     }
 
     protected void Set_OnSetEnableStateCollider(bool isEnabled) 
@@ -64,11 +60,6 @@ public class WieldableObject : InteractableObject, IPunObservable {
     #region ### Properties ###
     public bool CanBeInteractedWith { get; set; } = true;
     #endregion
-
-    protected virtual void Awake()
-    {
-        nonTriggerCollider  = GetComponent<Collider>();
-    } 
 
     public override void Interact(PlayerInteractionController interactionController)
     {

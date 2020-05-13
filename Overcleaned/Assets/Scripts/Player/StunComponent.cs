@@ -82,6 +82,9 @@ public class StunComponent : MonoBehaviour
             if (OwningObject.GetType() == typeof(WieldableCleanableObject)) 
             {
                 WieldableCleanableObject currentCleanableWieldable = (WieldableCleanableObject)OwningObject;
+                PlayerManager manager = ServiceLocator.GetServiceOfType<PlayerManager>();
+
+                manager.player_InteractionController.DropObject(manager.player_InteractionController.currentlyWielding);
                 currentCleanableWieldable.BreakObject();
             }
         }

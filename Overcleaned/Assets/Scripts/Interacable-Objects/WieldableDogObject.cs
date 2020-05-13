@@ -27,10 +27,8 @@ public class WieldableDogObject : WieldableObject
     #endregion
 
 
-    protected override void Awake() 
+    protected void Awake() 
     {
-        base.Awake();
-
         countdownText.text = secondsTillExplosion.ToString();
         StartCoroutine(ExplodeTimer());
         countdownText.color = Color.green;
@@ -86,9 +84,13 @@ public class WieldableDogObject : WieldableObject
             playerManager.player_InteractionController.DropObject(toDrop);
         }
 
-        if (PhotonNetwork.IsMasterClient) 
+        if(PhotonNetwork.LocalPlayer.IsMasterClient) 
         {
             PhotonNetwork.InstantiateSceneObject(POOP_OBJ_NAME, transform.position, Quaternion.identity);
+        }
+
+        if (photonView.IsMine) 
+        {
             PhotonNetwork.Destroy(photonView);
         }
     }
