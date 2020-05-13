@@ -36,7 +36,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private float zoomOffset;
 
-    private const float LERP_SPEED = 2f;
+    private const float LERP_SPEED = 4f;
     private const float TIME_BEFORE_UI = 2;
 
     private const string TRIGGER_NAME = "Popup";
@@ -108,10 +108,12 @@ public class PlayerCameraController : MonoBehaviour
     /// </summary>
     private void Zoom() 
     {
+        const float SCROLL_SENSITIVITY = 450;
+
         const int MIN_ZOOM = -5;
         const int MAX_ZOOM = 13;
 
-        zoomOffset += (Input.GetKey(zoomOutKey) ? ZoomSpeed : (Input.GetKey(zoomInKey) ? -ZoomSpeed : 0)) * Time.deltaTime;
+        zoomOffset += Input.GetAxis("Mouse ScrollWheel") * SCROLL_SENSITIVITY * Time.deltaTime;
         zoomOffset = Mathf.Clamp(zoomOffset, MIN_ZOOM, MAX_ZOOM);
     }
 
@@ -129,7 +131,8 @@ public class PlayerCameraController : MonoBehaviour
             last_Pos.z = WithinYBoundries(boundries[0].y, boundries[1].y, player_Target.position.z) ? player_Target.position.z : last_Pos.z;
 
             transform.position = Vector3.Lerp(transform.position, current_Target_Pos + (camera_Offset + (transform.forward * zoomOffset)), LERP_SPEED * Time.deltaTime);
-        }
+            
+        } 
         else 
         {
             Debug.LogWarning("[PlayerCamera] A (Max and Min) of 2 boundry points need to be defined for the camera to work.");

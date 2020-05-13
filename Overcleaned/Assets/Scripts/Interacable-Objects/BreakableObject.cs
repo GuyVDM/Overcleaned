@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using Photon.Pun;
+using System;
 
 public class BreakableObject : ToolInteractableObject, IPunObservable
 {
@@ -209,6 +210,11 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         base.DirtyObject();
 
         ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("Machine Break");
+    }
+
+    public override void OnDisable() 
+    {
+        progressBar.Set_BarToFinished();
     }
 
     public override void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) 

@@ -62,14 +62,18 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private SpawnRegionAnchors[] spawnRegions;
 
 	[SerializeField]
+	private SpawnRegionAnchors dogspawnRegion;
+
+	[SerializeField]
 	private bool shouldDisplaySpawnAnchors = true;
 
 	#region Initalize Service
 	private void Awake()
 	{
 		OnInitialise();
+		StartCoroutine(DogSpawnLoop());
 
-		OnCleanableObjectStatusChanged += OnObjectStatusChanged;
+        OnCleanableObjectStatusChanged += OnObjectStatusChanged;
 	}
 
 	private void OnDestroy()
@@ -144,7 +148,8 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 
-		Debug.Log("Stats: " + cleanableObjects.Count + " : " + wieldableCleanableObjects.Count);
+		weightCleaned -= NetworkManager.localPlayerInformation.team == 0 ? HouseDirtyTriggerZone.PenaltyTeam1 : HouseDirtyTriggerZone.PenaltyTeam2;
+		totalWeightOfAllCleanables += NetworkManager.localPlayerInformation.team == 0 ? HouseDirtyTriggerZone.PenaltyTeam1 : HouseDirtyTriggerZone.PenaltyTeam2;
 		return (weightCleaned / totalWeightOfAllCleanables);
 	}
 
@@ -343,6 +348,35 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	#region Events
 
+	private IEnumerator DogSpawnLoop() 
+    {
+		if (PhotonNetwork.IsMasterClient) 
+	    {
+			const int SPAWN_IN_SECONDS = 60;
+
+			yield return new WaitForSeconds(SPAWN_IN_SECONDS);
+
+			SpawnDog();
+
+			StartCoroutine(DogSpawnLoop());
+		}
+
+		yield break;
+	}
+
+	private void SpawnDog() 
+    {
+		string PREFAB_NAME = "Dog [Interactable]";
+
+		float xPos = UnityEngine.Random.Range(dogspawnRegion.topleftAnchor.x, dogspawnRegion.bottomRightAnchor.x);
+		float zPos = UnityEngine.Random.Range(dogspawnRegion.topleftAnchor.z, dogspawnRegion.bottomRightAnchor.z);
+
+		const float HEIGHT = 5.5f;
+
+		GameObject dog = PhotonNetwork.InstantiateSceneObject(PREFAB_NAME, new Vector3(xPos, HEIGHT, zPos), Quaternion.identity);
+		dog.GetPhotonView().TransferOwnership(PhotonNetwork.LocalPlayer);
+	}
+
 	private IEnumerator EventLoop()
 	{
 		int currentTeam = 1;
@@ -455,6 +489,12 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 					UnityEditor.Handles.Label(spawnRegions[i].bottomRightAnchor, "Spawnregion Anchor [Bottomright]");
 				}
 			}
+
+			Gizmos.DrawSphere(dogspawnRegion.bottomRightAnchor, RADIUS);
+			Gizmos.DrawSphere(dogspawnRegion.topleftAnchor, RADIUS);
+
+			UnityEditor.Handles.Label(dogspawnRegion.bottomRightAnchor, "Spawnregion Dog Object [Bottomright]");
+			UnityEditor.Handles.Label(dogspawnRegion.topleftAnchor, "Spawnregion Anchor [Topleft]");
 		}
 	}
 #endif

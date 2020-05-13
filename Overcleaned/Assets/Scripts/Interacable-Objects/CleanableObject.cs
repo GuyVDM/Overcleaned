@@ -139,7 +139,6 @@ public class CleanableObject : InteractableObject, IPunObservable
 
     protected virtual void Awake()
     {
-        Debug.Log(NetworkManager.localPlayerInformation.team == (int)ownedByTeam);
         if (NetworkManager.localPlayerInformation.team == (int)ownedByTeam) 
         {
             HouseManager.AddInteractableToObservedLists(null, this);

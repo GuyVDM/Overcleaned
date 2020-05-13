@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Photon.Pun;
-using System.Linq;
 
 [RequireComponent(typeof(Rigidbody))]
 public class WieldableObject : InteractableObject, IPunObservable {
@@ -23,12 +22,6 @@ public class WieldableObject : InteractableObject, IPunObservable {
     [SerializeField]
     private Vector3 rotation_Offset;
 
-    #region ### Private Variables ###
-    private Collider triggerField;
-
-    private Collider nonTriggerCollider;
-    #endregion
-
     #region ### RPC Calls ###
     [PunRPC]
     protected virtual void Stream_OnInteractionComplete() {
@@ -49,7 +42,7 @@ public class WieldableObject : InteractableObject, IPunObservable {
     [PunRPC]
     protected void Stream_OnSetEnableStateCollider(bool isEnabled) 
     {
-        nonTriggerCollider.enabled = isEnabled;
+        GetComponent<Collider>().enabled = isEnabled;
     }
 
     protected void Set_OnSetEnableStateCollider(bool isEnabled) 
@@ -67,48 +60,6 @@ public class WieldableObject : InteractableObject, IPunObservable {
     #region ### Properties ###
     public bool CanBeInteractedWith { get; set; } = true;
     #endregion
-
-    protected virtual void Awake()
-    {
-        nonTriggerCollider  = GetComponentsInChildren<Collider>().Where(o => o.isTrigger == false).First();
-
-        if(nonTriggerCollider == null) 
-        {
-            nonTriggerCollider = GetComponents<Collider>().Where(o => o.isTrigger == false).First();
-        }
-
-        Debug.Log(nonTriggerCollider);
-
-        GetTriggerField();
-    } 
-
-    private void GetTriggerField() 
-    {
-        Collider[] allColliders = GetComponentsInChildren<Collider>();
-
-        foreach (Collider col in allColliders) 
-        {
-            if (col.isTrigger == true)
-            {
-                triggerField = col;
-                return;
-            }
-        }
-
-        allColliders = GetComponents<Collider>();
-
-        foreach (Collider col in allColliders)
-        {
-            if (col.isTrigger == true)
-            {
-                triggerField = col;
-                return;
-            }
-        }
-
-        Debug.LogWarning($"[Wieldable] Object of name { gameObject.name } has no trigger collider attached for detection, thus cannot be interacted with.");
-        this.enabled = false;
-    }
 
     public override void Interact(PlayerInteractionController interactionController)
     {

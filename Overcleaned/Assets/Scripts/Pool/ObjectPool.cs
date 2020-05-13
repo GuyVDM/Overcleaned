@@ -136,7 +136,10 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
             {
                 if (data.pooledObjects[i].gameObject.activeSelf == false)
                 {
-                    objectToReturn = data.pooledObjects[i];
+                    if ((int)data.pooledObjects[i].transform.GetComponent<InteractableObject>().ownedByTeam == NetworkManager.localPlayerInformation.team) 
+                    {
+                        objectToReturn = data.pooledObjects[i];
+                    }
                     break;
                 }
             }
@@ -183,9 +186,12 @@ public class ObjectPool : MonoBehaviourPunCallbacks, IServiceOfType
             {
                 if (data.pooledObjects[i] != null)
                 {
-                    if (data.pooledObjects[i].gameObject.activeSelf == false)
+                    if ((int)data.pooledObjects[i].GetComponent<InteractableObject>().ownedByTeam == NetworkManager.localPlayerInformation.team)
                     {
-                        return true;
+                        if (data.pooledObjects[i].gameObject.activeSelf == false)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
