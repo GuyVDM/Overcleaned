@@ -11,8 +11,10 @@ GameObject:
   - component: {fileID: 2152896726654393783}
   - component: {fileID: 6970348009323833217}
   - component: {fileID: 3712989189186444152}
-  m_Layer: 0
-  m_Name: Kitchen Sink Drawer
+  - component: {fileID: -8393346993673229408}
+  - component: {fileID: -6767315406064181479}
+  m_Layer: 8
+  m_Name: Kitchen_Sink_Drawer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,6 +83,40 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &-8393346993673229408
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3151387184095883172}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.57192093, z: 1}
+  m_Center: {x: 0, y: 0.035960466, z: 0}
+--- !u!114 &-6767315406064181479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3151387184095883172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 179
+  InstantiationId: 179
+  isRuntimeInstantiated: 0
 --- !u!1001 &1904086510486899098
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -152,6 +188,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WaterTap-01
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 335baf1ecd3d1b149985477c48bbdaf6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 335baf1ecd3d1b149985477c48bbdaf6, type: 3}
@@ -232,6 +273,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Kitchen_Counter_Drawer-01
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 82134f2925d815a48a12240e23d64d3d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82134f2925d815a48a12240e23d64d3d, type: 3}

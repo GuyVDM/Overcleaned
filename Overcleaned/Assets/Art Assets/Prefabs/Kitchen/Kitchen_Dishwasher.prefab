@@ -11,8 +11,10 @@ GameObject:
   - component: {fileID: 199136591160896942}
   - component: {fileID: 9194238361662019480}
   - component: {fileID: 3216967033063844705}
+  - component: {fileID: -477951020215952867}
+  - component: {fileID: 353063804712845492}
   m_Layer: 0
-  m_Name: Kitchen Dishwasher
+  m_Name: Kitchen_Dishwasher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,6 +83,41 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &-477951020215952867
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3789814770605727677}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.571921, z: 1}
+  m_Center: {x: 0, y: 0.03596045, z: 0}
+--- !u!114 &353063804712845492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3789814770605727677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 199
+  InstantiationId: 199
+  isRuntimeInstantiated: 0
 --- !u!1001 &8318797547188333551
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -88,6 +125,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 199136591160896942}
     m_Modifications:
+    - target: {fileID: -7527360966209589756, guid: ca779dfb8c104564bbdfbb6377c3adc3,
+        type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7527360966209589756, guid: ca779dfb8c104564bbdfbb6377c3adc3,
+        type: 3}
+      propertyPath: viewIdField
+      value: 211
+      objectReference: {fileID: 0}
+    - target: {fileID: -7527360966209589756, guid: ca779dfb8c104564bbdfbb6377c3adc3,
+        type: 3}
+      propertyPath: InstantiationId
+      value: 211
+      objectReference: {fileID: 0}
     - target: {fileID: 1880443965158692031, guid: ca779dfb8c104564bbdfbb6377c3adc3,
         type: 3}
       propertyPath: m_Name
@@ -178,6 +230,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 199136591160896942}
     m_Modifications:
+    - target: {fileID: -3397622858310916077, guid: fb7051962f8101f49a1d312391791f96,
+        type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3397622858310916077, guid: fb7051962f8101f49a1d312391791f96,
+        type: 3}
+      propertyPath: viewIdField
+      value: 212
+      objectReference: {fileID: 0}
+    - target: {fileID: -3397622858310916077, guid: fb7051962f8101f49a1d312391791f96,
+        type: 3}
+      propertyPath: InstantiationId
+      value: 212
+      objectReference: {fileID: 0}
     - target: {fileID: 654286650649840256, guid: fb7051962f8101f49a1d312391791f96,
         type: 3}
       propertyPath: m_Name

@@ -8960,6 +8960,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownedByTeam: 0
+  activeNormal: {fileID: 0}
+  activePressure: {fileID: 0}
   currentState: 0
   storagePlaces: []
   acceptedItemIds: 01000000
@@ -8998,8 +9000,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 7098697254516115507}
-  viewIdField: 0
-  InstantiationId: 45
+  viewIdField: 210
+  InstantiationId: 210
   isRuntimeInstantiated: 0
 --- !u!1 &2134650513314058411
 GameObject:
@@ -18998,6 +19000,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4350153586448486661}
     m_Modifications:
+    - target: {fileID: -3967976444275098782, guid: 45d63869200afbf4bb397d9637a8b566,
+        type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3967976444275098782, guid: 45d63869200afbf4bb397d9637a8b566,
+        type: 3}
+      propertyPath: viewIdField
+      value: 213
+      objectReference: {fileID: 0}
+    - target: {fileID: -3967976444275098782, guid: 45d63869200afbf4bb397d9637a8b566,
+        type: 3}
+      propertyPath: InstantiationId
+      value: 213
+      objectReference: {fileID: 0}
     - target: {fileID: 863348712655606919, guid: 45d63869200afbf4bb397d9637a8b566,
         type: 3}
       propertyPath: m_Material
@@ -20770,6 +20787,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 7375106688305746171, guid: 9c28ef572569a874a91eb97db42779a9,
+        type: 3}
+      propertyPath: viewIdField
+      value: 214
+      objectReference: {fileID: 0}
+    - target: {fileID: 7375106688305746171, guid: 9c28ef572569a874a91eb97db42779a9,
+        type: 3}
+      propertyPath: InstantiationId
+      value: 214
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c28ef572569a874a91eb97db42779a9, type: 3}

@@ -11,8 +11,10 @@ GameObject:
   - component: {fileID: 6331479414171021134}
   - component: {fileID: 3064391976814351736}
   - component: {fileID: 8771430079056603521}
-  m_Layer: 0
-  m_Name: Kitchen Sink
+  - component: {fileID: 5048177080216172874}
+  - component: {fileID: -4646972355565400670}
+  m_Layer: 8
+  m_Name: Kitchen_Sink
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,6 +82,40 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &5048177080216172874
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7027505632325033309}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.57192093, z: 1}
+  m_Center: {x: 0, y: 0.035960466, z: 0}
+--- !u!114 &-4646972355565400670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7027505632325033309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 193
+  InstantiationId: 193
+  isRuntimeInstantiated: 0
 --- !u!1001 &3349616293529355719
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -151,6 +187,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WaterTap-01
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 335baf1ecd3d1b149985477c48bbdaf6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 335baf1ecd3d1b149985477c48bbdaf6, type: 3}

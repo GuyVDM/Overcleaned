@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 6175107985338902637}
   - component: {fileID: 2947998764377477723}
   - component: {fileID: 8923297904014749346}
-  m_Layer: 0
+  - component: {fileID: -5399737930985608079}
+  - component: {fileID: 2937237101145311384}
+  m_Layer: 8
   m_Name: Kitchen_Salt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,3 +81,37 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &-5399737930985608079
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7199349415090018942}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.16095391, y: 0.6569331, z: 0.16095388}
+  m_Center: {x: -0.000000018626451, y: 0.32847396, z: 0.000000029802322}
+--- !u!114 &2937237101145311384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7199349415090018942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 190
+  InstantiationId: 190
+  isRuntimeInstantiated: 0
