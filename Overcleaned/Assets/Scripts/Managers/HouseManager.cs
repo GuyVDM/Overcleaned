@@ -46,6 +46,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private TimeSpan lastTimeSpan;
 	private bool endOfTimerWasReached;
 	private bool targetTimeIsCalculated;
+	private bool updateTimer;
 
 	//Events
 	public Vector2 gameEventWaitTime;
@@ -91,12 +92,6 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	{
 		totalWeightOfAllCleanables = GetTotalWeight();
 
-		if (PhotonNetwork.IsMasterClient)
-		{
-			StartCoroutine(EventLoop());
-			photonView.RPC(nameof(StartTimeTracking), RpcTarget.AllBuffered);
-		}
-
 		OnTimeChanged += EndGame;
 	}
 
@@ -104,6 +99,21 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	{
 		if (!endOfTimerWasReached && targetTimeIsCalculated)
 			UpdateTimer();
+	}
+
+	public void CountdownIsFinished()
+	{
+		photonView.RPC(nameof(StartGame), RpcTarget.MasterClient);
+	}
+
+	[PunRPC]
+	private void StartGame()
+	{
+		if (PhotonNetwork.IsMasterClient)
+		{
+			StartCoroutine(EventLoop());
+			photonView.RPC(nameof(StartTimeTracking), RpcTarget.AllBuffered);
+		}
 	}
 
 	public static void InvokeOnObjectStatusCallback(int teamID) => OnCleanableObjectStatusChanged?.Invoke(teamID);

@@ -91,6 +91,7 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 		yield return new WaitForSeconds(1);
 
 		ServiceLocator.GetServiceOfType<PlayerManager>().Set_PlayerLockingstate(false);
+		ServiceLocator.GetServiceOfType<HouseManager>().CountdownIsFinished();
 		uiManager.HideAllWindows();
 	}
 
