@@ -4752,7 +4752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c19590d18736b14980d7f3d99e64aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameTimeInMinutes: 30
+  gameTimeInMinutes: 1
   gameEventWaitTime: {x: 45, y: 60}
   spawnRegions:
   - topleftAnchor: {x: -28.4, y: 2.57, z: 7.5}
@@ -9971,6 +9971,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownedByTeam: 0
+  activeNormal: {fileID: 0}
+  activePressure: {fileID: 0}
   currentState: 0
   storagePlaces: []
   acceptedItemIds: 01000000
@@ -16930,6 +16932,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownedByTeam: 0
+  activeNormal: {fileID: 0}
+  activePressure: {fileID: 0}
   currentState: 0
   storagePlaces: []
   acceptedItemIds: 01000000
