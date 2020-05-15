@@ -100,7 +100,8 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 
 		SceneManager.UnloadSceneAsync(1);
 
-		onSceneIsLoadedAndReady.Invoke(buildName);
+		if (onSceneIsLoadedAndReady != null)
+			onSceneIsLoadedAndReady.Invoke(buildName);
 
 		FadeIn();
 	}
