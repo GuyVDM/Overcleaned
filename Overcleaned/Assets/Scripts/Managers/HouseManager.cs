@@ -103,11 +103,11 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	public void CountdownIsFinished()
 	{
-		photonView.RPC(nameof(StartGame), RpcTarget.MasterClient);
+		photonView.RPC(nameof(StartGameFromMaster), RpcTarget.MasterClient);
 	}
 
 	[PunRPC]
-	private void StartGame()
+	private void StartGameFromMaster()
 	{
 		if (PhotonNetwork.IsMasterClient)
 		{
