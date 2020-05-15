@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 		if (!PhotonNetwork.IsMasterClient) return;
 
 		clientsReady++;
-		if (clientsReady == PhotonNetwork.CountOfPlayers)
+		if (clientsReady == PhotonNetwork.CurrentRoom.PlayerCount)
 		{
 			photonView.RPC(nameof(StartCountdown), RpcTarget.All);
 		}
