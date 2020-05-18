@@ -7,8 +7,8 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BOTH_progression_advance
-  m_Speed: 1
+  m_Name: Header_Bounce
+  m_Speed: 0.6
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -62,20 +62,17 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -8239385664502328025}
-    m_Position: {x: -240, y: 130, z: 0}
-  - serializedVersion: 1
-    m_State: {fileID: -1652923011803301419}
-    m_Position: {x: 20, y: 110, z: 0}
+    m_Position: {x: 30, y: 60, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 30, y: -130, z: 0}
-  m_EntryPosition: {x: 40, y: 230, z: 0}
+  m_AnyStatePosition: {x: 50, y: 20, z: 0}
+  m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: -1652923011803301419}
+  m_DefaultState: {fileID: -8239385664502328025}
 --- !u!1102 &-1652923011803301419
 AnimatorState:
   serializedVersion: 5
@@ -123,7 +120,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 15ed7fe4ada41b64b976a1e7ff290c61, type: 2}
+  m_Motion: {fileID: 7400000, guid: 1dc84e9444f2e9b49a799efce827c1d8, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -217,7 +214,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 15ed7fe4ada41b64b976a1e7ff290c61, type: 2}
+  m_Motion: {fileID: 7400000, guid: 1dc84e9444f2e9b49a799efce827c1d8, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -290,7 +287,7 @@ AnimatorStateMachine:
     m_Position: {x: 270, y: 110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4332347293534483}
-    m_Position: {x: 270, y: -90, z: 0}
+    m_Position: {x: 270, y: -80, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
