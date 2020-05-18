@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             MyRigidBody.velocity = new Vector3(0, MyRigidBody.velocity.y, 0);
         }
 
-        if (InputAxes == Vector2.zero)
+        if (!InputFound)
         {
             Set_PlayerAnimationState(AnimationState.Idle);
             return;
