@@ -31,7 +31,7 @@ public class UI_OptionsWindow : UIWindow
 	private string fileName;
 	private string fileExtension;
 
-	public override void Awake()
+	public void Start()
 	{
 		path = Application.dataPath;
 		fileName = "Settings";
