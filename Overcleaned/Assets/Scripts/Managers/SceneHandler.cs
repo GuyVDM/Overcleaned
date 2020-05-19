@@ -34,7 +34,13 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 	public bool logMode;
 
 	#region Initalize Service
-	private void Awake() => OnInitialise();
+	private void Awake()
+	{
+		if (ServiceLocator.TryAddServiceOfType(this))
+			OnInitialise();
+		else
+			Destroy(gameObject);
+	}
 	private void OnDestroy() => OnDeinitialise();
 	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
 	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
