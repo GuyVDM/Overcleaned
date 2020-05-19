@@ -150,7 +150,7 @@ public class PlayerCameraController : MonoBehaviour
             enabled = false;
         }
 
-        current_Target_Pos = Input.GetKey(spyBaseKey) ? enemy_Base_Pos : last_Pos;
+        current_Target_Pos = Input.GetKey(spyBaseKey) ? StaticAssignedHousePositions.Get_EnemyHousePosition() : last_Pos;
 
         if (shouldDisplayProgressBar != Input.GetKey(spyBaseKey)) 
         {
