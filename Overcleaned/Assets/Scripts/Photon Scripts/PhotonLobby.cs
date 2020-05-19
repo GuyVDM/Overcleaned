@@ -13,6 +13,8 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 	[Header("UI")]
 	public UI_ServerBrowser serverBrowser;
 
+	private static bool hasJoinedLobbyBefore;
+
 	[Header("Debugging")]
 	public bool logMode;
 
@@ -102,7 +104,10 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 			if (NetworkManager.onlineRooms[i].Name == roomName)
 			{
 				string passwordOfRoom = (string)NetworkManager.onlineRooms[i].CustomProperties["PW"];
-				print(passwordOfRoom);
+
+				if (logMode)
+					print(passwordOfRoom);
+
 				return passwordOfRoom == password;
 			}
 		}
@@ -141,7 +146,10 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 		if (logMode)
 			Debug.Log("Connected to Lobby");
 
-		ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Titlescreen");
+		if (!hasJoinedLobbyBefore)
+			ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Titlescreen");
+
+		hasJoinedLobbyBefore = true;
 	}
 
 	public override void OnJoinedRoom()
