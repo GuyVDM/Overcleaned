@@ -86,7 +86,8 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
 
     private void Interact() 
     {
-        const string INTERACT_TRIGGER = "Interact";
+        const string INTERACT_BOOL_NAME = "Interacting";
+        playerAnimator.SetBool(INTERACT_BOOL_NAME, false);
 
         #region ### When starting to interact ###
         if (currentSelected != null)
@@ -98,7 +99,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
                     arrow_Selection_UX.gameObject.SetActive(false);
                     currentlyInteracting = currentSelected;
                     currentlyInteracting.Interact(this);
-                    playerAnimator.SetBool(INTERACT_TRIGGER, true);
+                    playerAnimator.SetBool(INTERACT_BOOL_NAME, true);
                     return;
                 }
             }
@@ -120,7 +121,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
             if (Input.GetKey(interactKey) == false || (currentSelected != currentlyInteracting))
             {
                 currentlyInteracting.DeInteract(this);
-                playerAnimator.SetBool(INTERACT_TRIGGER, false);
+                playerAnimator.SetBool(INTERACT_BOOL_NAME, false);
             }
         }
         #endregion

@@ -38,12 +38,19 @@ public class PlayerUIController : MonoBehaviour
 
         HouseManager.OnTimeChanged += UpdateTimer;
         HouseManager.OnCleaningProgressionVisualChanged += UpdateCleaningProgressionUI;
+        HouseManager.OnFinishedCountdown += DisplayCleaningProgressionUI;
     }
 
     private void OnDestroy() 
     {
         HouseManager.OnTimeChanged -= UpdateTimer;
         HouseManager.OnCleaningProgressionVisualChanged -= UpdateCleaningProgressionUI;
+    }
+
+    private void DisplayCleaningProgressionUI() 
+    {
+        const string BOOL_POPUP_NAME = "Popup";
+        anim_OurProgressBar.SetBool(BOOL_POPUP_NAME, true);
     }
 
     private void UpdateCleaningProgressionUI(int teamID) 

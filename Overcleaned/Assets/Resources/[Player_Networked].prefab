@@ -117,8 +117,8 @@ MonoBehaviour:
   timerFront: {fileID: 182578156617130932}
   timerBack: {fileID: 683386990352037767}
   clockArmHinge: {fileID: 7189994042112885883}
-  fill_CleanAmount: {fileID: 9043285913767415755}
-  fill_CleanAmount_OtherTeam: {fileID: 2048210733477196435}
+  fill_CleanAmount: {fileID: 9043285914309671915}
+  fill_CleanAmount_OtherTeam: {fileID: 2048210732953290419}
   anim_OpponentProgressBar: {fileID: 7323823537606762272}
   anim_OurProgressBar: {fileID: 2190120255642861156}
 --- !u!1 &284349175910239706
@@ -2453,7 +2453,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5469295867444898050}
-  m_LocalRotation: {x: 0.38905886, y: -0, z: -0, w: 0.9212129}
+  m_LocalRotation: {x: 0.5390648, y: 0, z: 0, w: 0.84226435}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2461,7 +2461,7 @@ Transform:
   - {fileID: 8471234167943995130}
   m_Father: {fileID: 3343622068766143276}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 45.792004, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 65.24, y: 0, z: 0}
 --- !u!20 &6083869540261123114
 Camera:
   m_ObjectHideFlags: 0
@@ -2525,7 +2525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a53b9fbd3accfbe42a105ad04bd61e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera_Offset: {x: 0, y: 11.06, z: -11.05}
+  camera_Offset: {x: 0, y: 11.97, z: -5.7}
   boundries:
   - {x: -28.69, y: -8.6}
   - {x: 29.1, y: 9}

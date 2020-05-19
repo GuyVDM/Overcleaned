@@ -575,7 +575,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
         if(currentState == StateOfObject.Done) 
         {
             progressbarFill = Mathf.Lerp(progressbarFill, timer, 0.3f * Time.deltaTime);
-            progressBar_Warning.Set_CurrentProgress(timer / waitingTimeInSeconds);
+            progressBar_Warning.Set_CurrentProgress(timer / timeTillRejectionOfObjects);
         }
     }
 

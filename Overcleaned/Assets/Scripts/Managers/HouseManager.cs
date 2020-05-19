@@ -28,7 +28,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	//Events
 	public static event TimeChanged OnTimeChanged;
-	public static event Void countdownIsFinished;
+	public static event Void OnFinishedCountdown;
 	public static event Action<int> OnCleanableObjectStatusChanged;
 	public static event Action<int> OnCleaningProgressionVisualChanged;
 
@@ -105,8 +105,8 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	public void CountdownIsFinished()
 	{
-		if (countdownIsFinished != null)
-			countdownIsFinished.Invoke();
+		if (OnFinishedCountdown != null)
+			OnFinishedCountdown.Invoke();
 
 		photonView.RPC(nameof(StartGame), RpcTarget.MasterClient);
 	}
