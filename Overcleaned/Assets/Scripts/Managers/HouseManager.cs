@@ -28,11 +28,13 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	//Events
 	public static event TimeChanged OnTimeChanged;
+	public static event Void countdownIsFinished;
 	public static event Action<int> OnCleanableObjectStatusChanged;
 	public static event Action<int> OnCleaningProgressionVisualChanged;
 
 	//Delegates for events
 	public delegate void TimeChanged(TimeSpan newtime);
+	public delegate void Void();
 
 	//Progression tracking
 	private static List<CleanableObject> cleanableObjects = new List<CleanableObject>();
@@ -103,6 +105,9 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	public void CountdownIsFinished()
 	{
+		if (countdownIsFinished != null)
+			countdownIsFinished.Invoke();
+
 		photonView.RPC(nameof(StartGame), RpcTarget.MasterClient);
 	}
 

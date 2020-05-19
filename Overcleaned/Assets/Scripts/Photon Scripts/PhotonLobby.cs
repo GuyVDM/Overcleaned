@@ -102,7 +102,10 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 			if (NetworkManager.onlineRooms[i].Name == roomName)
 			{
 				string passwordOfRoom = (string)NetworkManager.onlineRooms[i].CustomProperties["PW"];
-				print(passwordOfRoom);
+
+				if (logMode)
+					print(passwordOfRoom);
+
 				return passwordOfRoom == password;
 			}
 		}

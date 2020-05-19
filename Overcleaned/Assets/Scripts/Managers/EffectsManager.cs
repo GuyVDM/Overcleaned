@@ -81,6 +81,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     public struct PlayOnStart
     {
         public string audioName;
+        public string audioMixerGroup;
         public bool loop;
         [Range(0, 1)]
         public float volume;
@@ -131,7 +132,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
             if (playOnStart.delay > 0)
                 StartCoroutine(AudioOnStartDelay(playOnStart));
             else
-                PlayAudio(playOnStart.audioName, volume: playOnStart.volume, loop: playOnStart.loop);
+                PlayAudio(playOnStart.audioName, volume: playOnStart.volume, loop: playOnStart.loop, audioMixerGroup: playOnStart.audioMixerGroup);
         }
     }
 
@@ -176,7 +177,15 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         }
 
         if (audioMixer != null)
-            source.outputAudioMixerGroup = audioMixer.FindMatchingGroups(audioMixerGroup)[0];
+        {
+            AudioMixerGroup[] audioMixerGroups = audioMixer.FindMatchingGroups(audioMixerGroup);
+            if (audioMixerGroups.Length <= 0)
+            {
+                audioMixerGroups = audioMixer.FindMatchingGroups("Master");
+            }
+
+            source.outputAudioMixerGroup = audioMixerGroups[0];
+        }
 
         source.Play();
 
@@ -205,7 +214,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         return PlayAudio(FindAudioClip(audioName), volume, loop, pitch, spatialBlend, audioPosition, parent, fade, step, audioMixerGroup);
     }
 
-    public int PlayAudioMultiplayer(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, bool fade = false, float step = 0.1f, string audioMixerGroup = null)
+    public int PlayAudioMultiplayer(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
     {
         int audioSourceID = PlayAudio(FindAudioClip(audioName), volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, audioPosition: audioPosition, fade: fade, step: step, audioMixerGroup: audioMixerGroup);
 
