@@ -605,6 +605,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1906540262 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4403200043130283497, guid: fa3f421950f170546b4278a3d0031c7d,
+    type: 3}
+  m_PrefabInstance: {fileID: 8132368982952501091}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2014338323
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,6 +758,16 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1959823939328165299, guid: fa3f421950f170546b4278a3d0031c7d,
+        type: 3}
+      propertyPath: m_Name
+      value: Servername Inputfield (Host)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1959823939630237891, guid: fa3f421950f170546b4278a3d0031c7d,
+        type: 3}
+      propertyPath: m_Name
+      value: Password InputField (Join)
+      objectReference: {fileID: 0}
     - target: {fileID: 7284918230274740043, guid: fa3f421950f170546b4278a3d0031c7d,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -850,6 +872,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132368982460216731, guid: fa3f421950f170546b4278a3d0031c7d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132368982577181577, guid: fa3f421950f170546b4278a3d0031c7d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8132368982713114273, guid: fa3f421950f170546b4278a3d0031c7d,
         type: 3}
@@ -961,6 +993,21 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8132368982982993634, guid: fa3f421950f170546b4278a3d0031c7d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132368983127659714, guid: fa3f421950f170546b4278a3d0031c7d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132368983966885208, guid: fa3f421950f170546b4278a3d0031c7d,
+        type: 3}
+      propertyPath: passwordInputfield
+      value: 
+      objectReference: {fileID: 1906540262}
     - target: {fileID: 8132368984027542037, guid: fa3f421950f170546b4278a3d0031c7d,
         type: 3}
       propertyPath: viewIdField
@@ -970,6 +1017,16 @@ PrefabInstance:
         type: 3}
       propertyPath: InstantiationId
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8132368984027542039, guid: fa3f421950f170546b4278a3d0031c7d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8186848050567684549, guid: fa3f421950f170546b4278a3d0031c7d,
+        type: 3}
+      propertyPath: m_Name
+      value: ToDisable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa3f421950f170546b4278a3d0031c7d, type: 3}
