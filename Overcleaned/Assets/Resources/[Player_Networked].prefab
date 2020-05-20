@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1501085998
 RectTransform:
   m_ObjectHideFlags: 0
@@ -117,8 +117,8 @@ MonoBehaviour:
   timerFront: {fileID: 182578156617130932}
   timerBack: {fileID: 683386990352037767}
   clockArmHinge: {fileID: 7189994042112885883}
-  fill_CleanAmount: {fileID: 9043285913767415755}
-  fill_CleanAmount_OtherTeam: {fileID: 2048210733477196435}
+  fill_CleanAmount: {fileID: 9043285914309671915}
+  fill_CleanAmount_OtherTeam: {fileID: 2048210732953290419}
   anim_OpponentProgressBar: {fileID: 7323823537606762272}
   anim_OurProgressBar: {fileID: 2190120255642861156}
 --- !u!1 &284349175910239706
@@ -273,8 +273,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 8100939995989278516}
   - {fileID: 6393120765383580608}
-  viewIdField: 4
-  InstantiationId: 4
+  viewIdField: 5
+  InstantiationId: 5
   isRuntimeInstantiated: 0
 --- !u!1 &977362385202431396
 GameObject:
@@ -367,8 +367,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 5
-  InstantiationId: 5
+  viewIdField: 4
+  InstantiationId: 4
   isRuntimeInstantiated: 0
 --- !u!65 &3020005488989559044
 BoxCollider:
@@ -483,8 +483,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 6
-  InstantiationId: 6
+  viewIdField: 3
+  InstantiationId: 3
   isRuntimeInstantiated: 0
 --- !u!1 &1400336582128681891
 GameObject:
@@ -738,7 +738,7 @@ Animator:
   m_GameObject: {fileID: 2048210731775406792}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 402abbdd966e262488c84b27cea192cd, type: 2}
+  m_Controller: {fileID: 9100000, guid: a7ab82e121e23c541a1f657b5d86f8df, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1333,7 +1333,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -160, y: -160}
+  m_AnchoredPosition: {x: -160, y: -45}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2980832626944446882
@@ -1656,7 +1656,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3317667563566164469}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00000023841858}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 0.52892, y: 0.52892, z: 0.52892}
   m_Children: []
   m_Father: {fileID: 5264463734075593040}
@@ -1664,7 +1664,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -397.40002, y: -303.09995}
+  m_AnchoredPosition: {x: -397.6, y: -303.5}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4361278262151341276
@@ -2453,7 +2453,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5469295867444898050}
-  m_LocalRotation: {x: 0.38905886, y: -0, z: -0, w: 0.9212129}
+  m_LocalRotation: {x: 0.5390648, y: 0, z: 0, w: 0.84226435}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2461,7 +2461,7 @@ Transform:
   - {fileID: 8471234167943995130}
   m_Father: {fileID: 3343622068766143276}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 45.792004, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 65.24, y: 0, z: 0}
 --- !u!20 &6083869540261123114
 Camera:
   m_ObjectHideFlags: 0
@@ -2525,7 +2525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a53b9fbd3accfbe42a105ad04bd61e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera_Offset: {x: 0, y: 11.06, z: -11.05}
+  camera_Offset: {x: 0, y: 11.97, z: -5.7}
   boundries:
   - {x: -28.69, y: -8.6}
   - {x: 29.1, y: 9}
@@ -2699,8 +2699,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 8
-  InstantiationId: 8
+  viewIdField: 1
+  InstantiationId: 1
   isRuntimeInstantiated: 0
 --- !u!1 &6755039247536879640
 GameObject:
@@ -2953,8 +2953,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 7
-  InstantiationId: 7
+  viewIdField: 2
+  InstantiationId: 2
   isRuntimeInstantiated: 0
 --- !u!114 &8100939995989278516
 MonoBehaviour:
@@ -3736,7 +3736,7 @@ Animator:
   m_GameObject: {fileID: 9043285915219775376}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 402abbdd966e262488c84b27cea192cd, type: 2}
+  m_Controller: {fileID: 9100000, guid: 70c7f41387e35e049a2c82ce33fe1be5, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

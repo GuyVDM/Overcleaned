@@ -46,9 +46,18 @@ public static class ServiceLocator
     {
         if (services.ContainsKey(service.GetType()))
         {
-            services.Remove(service.GetType());
-            OnRemovedService?.Invoke();
-            return true;
+            IServiceOfType containedService;
+            services.TryGetValue(typeof(T), out containedService);
+
+            if (containedService.Equals(service))
+            {
+                services.Remove(service.GetType());
+                OnRemovedService?.Invoke();
+                return true;
+            }
+
+            Debug.LogWarningFormat($"The service of type {typeof(T)} could not be removed due to it not matching the one stored in the dictionary.");
+            return false;
         }
 
         Debug.LogWarningFormat($"A service of type { typeof(T) }, couldn't be removed due to it not existing within the ServiceLocator.");

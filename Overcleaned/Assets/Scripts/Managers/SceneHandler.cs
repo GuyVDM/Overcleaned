@@ -34,7 +34,13 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 	public bool logMode;
 
 	#region Initalize Service
-	private void Awake() => OnInitialise();
+	private void Awake()
+	{
+		if (ServiceLocator.TryAddServiceOfType(this))
+			OnInitialise();
+		else
+			Destroy(gameObject);
+	}
 	private void OnDestroy() => OnDeinitialise();
 	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
 	public void OnDeinitialise() => ServiceLocator.TryRemoveServiceOfType(this);
@@ -54,7 +60,7 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 
 	#region Scene Loading
 
-	public void LoadScene(string buildName)
+	public void LoadScene(string buildName, bool showLoadingScreen = true)
 	{
 		currentSceneSetting = GetSceneSettingIndex(buildName);
 
@@ -64,10 +70,10 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 		}
 
 		FadeOut();
-		sceneLoadingRoutine = StartCoroutine(SceneLoading(buildName));
+		sceneLoadingRoutine = StartCoroutine(SceneLoading(buildName, showLoadingScreen));
 	}
 
-	public void LoadScene(int arrayIndex)
+	public void LoadScene(int arrayIndex, bool showLoadingScreen = true)
 	{
 		currentSceneSetting = arrayIndex;
 
@@ -77,30 +83,34 @@ public class SceneHandler : MonoBehaviour, IServiceOfType
 		}
 
 		FadeOut();
-		sceneLoadingRoutine = StartCoroutine(SceneLoading(sceneSettings[arrayIndex].sceneName));
+		sceneLoadingRoutine = StartCoroutine(SceneLoading(sceneSettings[arrayIndex].sceneName, showLoadingScreen));
 	}
 
-	private IEnumerator SceneLoading(string buildName)
+	private IEnumerator SceneLoading(string buildName, bool showLoadingScreen = true)
 	{
 		yield return new WaitUntil(() => isFading == false);
 
-		SceneManager.LoadScene(1, LoadSceneMode.Single);
+		if (showLoadingScreen)
+			SceneManager.LoadScene(1, LoadSceneMode.Single);
 
 		fadeScreen = null;
 		isLoadingScene = true;
 
-		yield return new WaitForSeconds(waitInLoadingScreen);
+		if (showLoadingScreen)
+			yield return new WaitForSeconds(waitInLoadingScreen);
 
 		if (logMode)
 			Debug.Log("Loading the scene with the name: " + buildName);
 
-		SceneManager.LoadScene(buildName, LoadSceneMode.Additive);
+		SceneManager.LoadScene(buildName, showLoadingScreen ? LoadSceneMode.Additive : LoadSceneMode.Single);
 
 		yield return new WaitUntil(() => isLoadingScene == false);
 
-		SceneManager.UnloadSceneAsync(1);
+		if (showLoadingScreen)
+			SceneManager.UnloadSceneAsync(1);
 
-		onSceneIsLoadedAndReady.Invoke(buildName);
+		if (onSceneIsLoadedAndReady != null)
+			onSceneIsLoadedAndReady.Invoke(buildName);
 
 		FadeIn();
 	}

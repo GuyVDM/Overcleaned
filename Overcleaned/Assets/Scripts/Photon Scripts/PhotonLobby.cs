@@ -13,6 +13,8 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 	[Header("UI")]
 	public UI_ServerBrowser serverBrowser;
 
+	private static bool hasJoinedLobbyBefore;
+
 	[Header("Debugging")]
 	public bool logMode;
 
@@ -33,6 +35,14 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 			ConnectWithPhoton();
 
 		NetworkManager.onRoomListChange += ShowRoomsOnUI;
+
+		if (hasJoinedLobbyBefore)
+			Invoke(nameof(ReturnedFromGameScene), 0.5f);
+	}
+
+	private void ReturnedFromGameScene()
+	{
+		ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Server Browser");
 	}
 
 	public bool HostRoom(string roomName, string password = "")
@@ -102,7 +112,10 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 			if (NetworkManager.onlineRooms[i].Name == roomName)
 			{
 				string passwordOfRoom = (string)NetworkManager.onlineRooms[i].CustomProperties["PW"];
-				print(passwordOfRoom);
+
+				if (logMode)
+					print(passwordOfRoom);
+
 				return passwordOfRoom == password;
 			}
 		}
@@ -141,7 +154,12 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 		if (logMode)
 			Debug.Log("Connected to Lobby");
 
-		ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Titlescreen");
+		if (!hasJoinedLobbyBefore)
+			ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Titlescreen");
+		else
+			ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Server Browser");
+
+		hasJoinedLobbyBefore = true;
 	}
 
 	public override void OnJoinedRoom()

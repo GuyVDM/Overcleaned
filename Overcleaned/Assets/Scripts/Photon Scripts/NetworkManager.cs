@@ -10,7 +10,13 @@ using System.Text.RegularExpressions;
 public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 {
 	#region Initalize Service
-	private void Awake() => OnInitialise();
+	private void Awake()
+	{
+		if (ServiceLocator.TryAddServiceOfType(this))
+			OnInitialise();
+		else
+			Destroy(gameObject);
+	}
 	private void OnDestroy()
 	{
 		OnDeinitialise();
@@ -53,7 +59,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 	private void Start()
 	{
 		DontDestroyOnLoad(gameObject);
-		allProfanity = GetAllProfanity(); 
+		allProfanity = GetAllProfanity();
+		Invoke(nameof(OnGameInitialized), 0.5f);
 	}
 
 	public static void SetLocalPlayerInfo(int team, int numberInTeam)
@@ -64,8 +71,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IServiceOfType
 
 	public void ReturnToMainMenu()
 	{
+		PhotonNetwork.LeaveRoom();
 		SceneHandler sceneHandler = ServiceLocator.GetServiceOfType<SceneHandler>();
 		sceneHandler.LoadScene(0);
+	}
+
+	private void OnGameInitialized()
+	{
+		ServiceLocator.GetServiceOfType<SceneHandler>().LoadScene("MainMenu", false);
 	}
 
 	#region Joining and Leaving Servers
