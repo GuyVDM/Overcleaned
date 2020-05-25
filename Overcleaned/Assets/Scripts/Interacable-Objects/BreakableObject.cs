@@ -125,7 +125,17 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         base.Awake();
     }
 
-    private void Start() => Set_RepairProgressBar();
+    protected override void Start()
+    {
+        Set_RepairProgressBar();
+
+        base.Start();
+    }
+
+    protected override void Set_IndicatorStartState()
+    {
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Broken);
+    }
 
     public override void Interact(PlayerInteractionController interactionController)
     {
@@ -191,6 +201,16 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
     public virtual void RepairObject() 
     {
         onRepairObject?.Invoke();
+        
+        if(toolInteractableType == ToolInteractableType.ToBeCleaned) 
+        {
+            indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Dirty);
+        }
+        else 
+        {
+            indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Clean);
+        }
+
         noToolTip_IsDelayed = true;
         delayTimer_NoToolTip = DELAY_BASE_NOTOOLTIP;
 
@@ -209,6 +229,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         onBreakObject?.Invoke();
         base.DirtyObject();
 
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Broken);
         ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("Machine Break");
     }
 
