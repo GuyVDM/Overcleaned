@@ -220,7 +220,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         Set_ObjectStateToClean();
         HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
 
-        ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Cleaned");
+        ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Cleaned", volume: 0.5f);
     }
 
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

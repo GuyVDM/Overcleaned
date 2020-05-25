@@ -108,6 +108,8 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		if (OnFinishedCountdown != null)
 			OnFinishedCountdown.Invoke();
 
+		ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("If I Had a Chicken Looped", volume: 0.7f, loop: true);
+
 		photonView.RPC(nameof(StartGame), RpcTarget.MasterClient);
 	}
 
