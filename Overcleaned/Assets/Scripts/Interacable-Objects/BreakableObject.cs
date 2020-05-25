@@ -137,6 +137,23 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Broken);
     }
 
+    protected override void OnStartInteraction()
+    {
+        if (passedFirstFrame == false) 
+        {
+            passedFirstFrame = true;
+        }
+
+        if(IsBroken) 
+        {
+            //play repair audio
+        }
+        else 
+        {
+            //play clean audio
+        }
+    }
+
     public override void Interact(PlayerInteractionController interactionController)
     {
         if (IsLocked == true) 

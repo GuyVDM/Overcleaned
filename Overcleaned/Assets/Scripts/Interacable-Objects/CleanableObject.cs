@@ -50,6 +50,8 @@ public class CleanableObject : InteractableObject, IPunObservable
     protected ProgressBar progressBar;
 
     protected ObjectStateIndicator indicator;
+
+    protected bool passedFirstFrame = false;
     #endregion
 
     #region ### RPC Calls ###
@@ -186,6 +188,16 @@ public class CleanableObject : InteractableObject, IPunObservable
         HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
     }
 
+    protected virtual void OnStartInteraction() 
+    {
+        if(passedFirstFrame == false) 
+        {
+            passedFirstFrame = true;
+        }
+
+        //Play cleaning audio
+    }
+
     public override void Interact(PlayerInteractionController interactionController)
     {
         if(IsLocked) 
@@ -193,6 +205,8 @@ public class CleanableObject : InteractableObject, IPunObservable
             interactionController.DeinteractWithCurrentObject();
             return;
         }
+
+        OnStartInteraction();
 
         if(lockedForOthers == false) 
         {
@@ -225,6 +239,7 @@ public class CleanableObject : InteractableObject, IPunObservable
     public override void DeInteract(PlayerInteractionController interactionController) 
     {
         IsLocked = false;
+        passedFirstFrame = false;
         CleaningProgression = 0;
 
         if (progressBar.enabled == true)
