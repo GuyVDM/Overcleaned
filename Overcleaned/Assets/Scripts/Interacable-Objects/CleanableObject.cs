@@ -48,6 +48,8 @@ public class CleanableObject : InteractableObject, IPunObservable
 
     #region ### Private Variables ###
     protected ProgressBar progressBar;
+
+    protected ObjectStateIndicator indicator;
     #endregion
 
     #region ### RPC Calls ###
@@ -133,8 +135,25 @@ public class CleanableObject : InteractableObject, IPunObservable
         IsCleaned = true;
         IsLocked = true;
 
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Clean);
+
         object_Renderer.material = cleaned_Material;
         Debug.Log("Succesfully cleaned object!");
+    }
+
+    protected void SetupIndicator() 
+    {
+        GameObject indicatorObject = GameObject.Instantiate(Resources.Load("[Indicator_Prefab]") as GameObject, Vector3.zero, Quaternion.identity);
+
+        indicatorObject.transform.SetParent(transform);
+        indicatorObject.transform.localPosition = Vector3.zero + Vector3.up;
+        indicator = indicatorObject.GetComponent<ObjectStateIndicator>();
+        indicator.Set_TeamOwner((int)ownedByTeam);
+    }
+
+    protected virtual void Set_IndicatorStartState() 
+    {
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Dirty);
     }
 
     protected virtual void Awake()
@@ -145,6 +164,13 @@ public class CleanableObject : InteractableObject, IPunObservable
         }
 
         Create_ProgressBar();
+
+    }
+
+    protected virtual void Start() 
+    {
+        SetupIndicator();
+        Set_IndicatorStartState();
     }
 
     protected virtual void DirtyObject() 
@@ -154,6 +180,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         IsLocked = false;
 
         object_Renderer.material = dirty_Material;
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Dirty);
         Debug.Log("Succesfully dirtied object!");
 
         HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);

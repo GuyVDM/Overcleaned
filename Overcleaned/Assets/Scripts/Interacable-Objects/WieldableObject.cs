@@ -24,7 +24,8 @@ public class WieldableObject : InteractableObject, IPunObservable {
 
     #region ### RPC Calls ###
     [PunRPC]
-    protected virtual void Stream_OnInteractionComplete() {
+    protected virtual void Stream_OnInteractionComplete()
+    {
         Debug.Log("Completed interaction!");
     }
 
