@@ -59,6 +59,9 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
         thrownObject.transform.SetParent(null);
         thrownObject.transform.GetComponent<Rigidbody>().isKinematic = false;
         thrownObject.transform.GetComponent<Rigidbody>().AddForceAtPosition(throwVelocity, transform.position, ForceMode.Impulse);
+
+        if (hasForceDropped)
+            ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("Throw");
     }
 
     [PunRPC()]
