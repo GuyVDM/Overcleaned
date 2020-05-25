@@ -93,6 +93,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
     }
 
+    public override void OnDisable()
+    {
+        Set_PlayerAnimationState(AnimationState.Idle);
+    }
+
     private void MovePlayer()
     {
         currentVelo = MyRigidBody.velocity;

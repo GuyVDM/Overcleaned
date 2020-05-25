@@ -347,16 +347,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		UIManager uiManager = ServiceLocator.GetServiceOfType<UIManager>();
 		EffectsManager effectsManager = ServiceLocator.GetServiceOfType<EffectsManager>();
 
-		if (winningTeam == NetworkManager.localPlayerInformation.team)
-		{
-			uiManager.ShowWindow("Win Window");
-			effectsManager.PlayAudio("Game Win");
-		}
-		else
-		{
-			uiManager.ShowWindow("Lose Window");
-			effectsManager.PlayAudio("Game Lost");
-		}
+		uiManager.ShowWindow("Win Window");
 	}
 
 	#endregion
