@@ -40,6 +40,8 @@ public class CleanableObject : InteractableObject, IPunObservable
     [SerializeField]
     protected Vector3 object_ui_Offset;
 
+    protected int interactionSoundNumber;
+
     #region ### Properties ###
     public bool IsCleaned { get; set; }
 
@@ -195,7 +197,7 @@ public class CleanableObject : InteractableObject, IPunObservable
             passedFirstFrame = true;
         }
 
-        //Play cleaning audio
+        interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Clean Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
     }
 
     public override void Interact(PlayerInteractionController interactionController)
@@ -255,6 +257,8 @@ public class CleanableObject : InteractableObject, IPunObservable
 
         progressBar.Set_CurrentProgress(0);
         interactionController.DeinteractWithCurrentObject();
+
+        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudio(interactionSoundNumber);
     }
 
     public virtual void OnCleanedObject(PlayerInteractionController interactionController) 
