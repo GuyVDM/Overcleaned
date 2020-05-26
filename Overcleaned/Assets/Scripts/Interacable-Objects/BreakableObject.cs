@@ -247,7 +247,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         base.DirtyObject();
 
         indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Broken);
-        ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("Machine Break");
+        ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("Machine Break", audioMixerGroup: "Sfx");
     }
 
     public override void OnDisable() 

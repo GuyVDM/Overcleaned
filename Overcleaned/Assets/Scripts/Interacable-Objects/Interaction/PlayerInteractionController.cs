@@ -61,7 +61,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
         thrownObject.transform.GetComponent<Rigidbody>().AddForceAtPosition(throwVelocity, transform.position, ForceMode.Impulse);
 
         if (hasForceDropped)
-            ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("Throw");
+            ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("Throw", audioMixerGroup: "Sfx");
     }
 
     [PunRPC()]

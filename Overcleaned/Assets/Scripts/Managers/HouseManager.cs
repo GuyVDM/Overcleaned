@@ -108,7 +108,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		if (OnFinishedCountdown != null)
 			OnFinishedCountdown.Invoke();
 
-		ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("If I Had a Chicken Looped", volume: 0.7f, loop: true);
+		ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("If I Had a Chicken Looped", volume: 0.7f, loop: true, audioMixerGroup: "Music");
 
 		photonView.RPC(nameof(StartGame), RpcTarget.MasterClient);
 	}
@@ -453,7 +453,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			Vector3 instancePos = GetTeamCleanableObjectSpawnRegion();
 
 			ObjectPool.Set_ObjectFromPool(WIELDABLE_POOL_ID, instancePos, Vector3.zero);
-			ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Pop");
+			ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Pop", audioMixerGroup: "Sfx");
 
 			return;
 		}
