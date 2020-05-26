@@ -517,13 +517,16 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <param name="toPlay">The particlesystem that will be played</param>
     /// <param name="position">position in world space where the particle will be played at</param>
     /// <param name="rotation">rotation in world space how the particle will be played.</param>
-    public int PlayParticle(ParticleSystem toPlay, Vector3 position, Quaternion rotation)
+    public int PlayParticle(ParticleSystem toPlay, Vector3 position, Quaternion rotation, Transform toFollow = null)
     {
         ParticleTracker system = CreateNewParticleSystem(toPlay);
 
         system.reference.transform.position = position;
         system.reference.transform.rotation = rotation;
         system.reference.Play();
+
+        if (toFollow != null)
+            system.reference.transform.SetParent(toFollow);
 
         if (!system.reference.main.loop)
             system.deathTimer = StartCoroutine(system.ParticleDeathTimer());
@@ -538,17 +541,25 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <param name="particleName">name of the particle that will be played</param>
     /// <param name="position">position in world space where the particle will be played at</param>
     /// <param name="rotation">rotation in world space how the particle will be played.</param>
-    public int PlayParticle(string particleName, Vector3 position, Quaternion rotation)
+    public int PlayParticle(string particleName, Vector3 position, Quaternion rotation, Transform toFollow = null)
     {
-        return PlayParticle(FindParticlePrefab(particleName), position, rotation);
+        return PlayParticle(FindParticlePrefab(particleName), position, rotation, toFollow);
     }
 
-    public int PlayParticleMultiplayer(string particleName, Vector3 position, Quaternion rotation)
+    public int PlayParticleMultiplayer(string particleName, Vector3 position, Quaternion rotation, int objectToFollowPhotonID = -1)
     {
         if (PhotonNetwork.InRoom)
-            photonView.RPC("PlayParticleRPC", RpcTarget.Others, particleName, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, rotation.w);
+            photonView.RPC(nameof(PlayParticleRPC), RpcTarget.Others, particleName, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, rotation.w, objectToFollowPhotonID);
 
-        return PlayParticle(FindParticlePrefab(particleName), position, rotation);
+        if (objectToFollowPhotonID > -1)
+        {
+            Transform toFollow = NetworkManager.GetViewByID(objectToFollowPhotonID).transform;
+            return PlayParticle(FindParticlePrefab(particleName), position, rotation, toFollow);
+        }
+        else
+        {
+           return PlayParticle(FindParticlePrefab(particleName), position, rotation);
+        }
     }
 
     public void StopParticle(int particleID)
@@ -563,7 +574,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     public void StopParticleMultiplayer(int particleID)
     {
         if (PhotonNetwork.InRoom)
-            photonView.RPC("StopParticleRPC", RpcTarget.Others, particleID);
+            photonView.RPC(nameof(StopParticleRPC), RpcTarget.Others, particleID);
 
         StopParticle(particleID);
     }
@@ -643,9 +654,17 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     #region Particle RPCs
 
     [PunRPC]
-    private void PlayParticleRPC(string particleName, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float rotW)
+    private void PlayParticleRPC(string particleName, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float rotW, int objectToFollowPhotonID)
     {
-        PlayParticle(FindParticlePrefab(particleName), new Vector3(posX, posY, posZ), new Quaternion(rotX, rotY, rotZ, rotW));
+        if (objectToFollowPhotonID > -1)
+        {
+            Transform toFollow = NetworkManager.GetViewByID(objectToFollowPhotonID).transform;
+            PlayParticle(FindParticlePrefab(particleName), new Vector3(posX, posY, posZ), new Quaternion(rotX, rotY, rotZ, rotW), toFollow);
+        }
+        else
+        {
+            PlayParticle(FindParticlePrefab(particleName), new Vector3(posX, posY, posZ), new Quaternion(rotX, rotY, rotZ, rotW));
+        }
     }
 
     private void StopParticleRPC(int particleID)
