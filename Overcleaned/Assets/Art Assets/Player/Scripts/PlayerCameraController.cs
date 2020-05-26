@@ -115,12 +115,12 @@ public class PlayerCameraController : MonoBehaviour
     private void Zoom() 
     {
         const float SCROLL_SENSITIVITY = 450;
-
-        const int MIN_ZOOM = -5;
-        const int MAX_ZOOM = 13;
+        const float ZOOM_SPYAMOUNT = -5;
 
         zoomOffset += Input.GetAxis("Mouse ScrollWheel") * SCROLL_SENSITIVITY * Time.deltaTime;
         zoomOffset = Mathf.Clamp(zoomOffset, testmin, testMax);
+
+        zoomOffset = Input.GetKey(spyBaseKey) ? ZOOM_SPYAMOUNT : zoomOffset;
     }
 
     /// <summary>

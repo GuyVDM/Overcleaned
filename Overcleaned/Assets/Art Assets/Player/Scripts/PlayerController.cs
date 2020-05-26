@@ -59,17 +59,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
     #endregion
 
     #region ### RPC Calls ###
-    [PunRPC]
-    private void Stream_StunParticlesAtPosition(Vector3 offset) => effectsManager.PlayParticle(PARTICLE_VFX_ID, offset, Quaternion.identity);
+    //[PunRPC]
+    //private void Stream_StunParticlesAtPosition(Vector3 offset) => effectsManager.PlayParticle(PARTICLE_VFX_ID, offset, Quaternion.identity);
 
     private void Set_StunParticlesAtPosition(Vector3 offset)
     {
-        effectsManager.PlayParticle(PARTICLE_VFX_ID, offset, Quaternion.identity);
+        effectsManager.PlayParticleMultiplayer(PARTICLE_VFX_ID, offset, Quaternion.identity, photonView.ViewID);
 
-        if (NetworkManager.IsConnectedAndInRoom)
+        /*if (NetworkManager.IsConnectedAndInRoom)
         {
             photonView.RPC(nameof(Stream_StunParticlesAtPosition), RpcTarget.Others, offset);
-        }
+        }*/
     }
 
     [PunRPC]
