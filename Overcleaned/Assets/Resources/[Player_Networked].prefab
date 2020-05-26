@@ -2625,6 +2625,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a53b9fbd3accfbe42a105ad04bd61e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testmin: 5
+  testMax: 10
   camera_Offset: {x: 0, y: 11.97, z: -5.7}
   boundries:
   - {x: -28.69, y: -8.6}
@@ -3032,7 +3034,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentVelo: {x: 0, y: 0, z: 0}
-  speed: 190
+  speed: 340
   maxTurnSpeed: 650
 --- !u!114 &1080600953416085825
 MonoBehaviour:
