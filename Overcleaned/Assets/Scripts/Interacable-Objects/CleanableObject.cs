@@ -194,7 +194,6 @@ public class CleanableObject : InteractableObject, IPunObservable
     {
         if(passedFirstFrame == false) 
         {
-            Debug.Log("Calling first frame of interaction.");
             passedFirstFrame = true;
             interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Clean Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
         }
@@ -230,6 +229,8 @@ public class CleanableObject : InteractableObject, IPunObservable
 
             if (CleaningProgression >= cleaningTime)
             {
+                passedFirstFrame = false;
+                ServiceLocator.GetServiceOfType<EffectsManager>().StopAudioMultiplayer(interactionSoundNumber);
                 progressBar.Set_BarToFinished();
                 OnCleanedObject(interactionController);
                 interactionController.DeinteractWithCurrentObject();
@@ -242,6 +243,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         IsLocked = false;
         passedFirstFrame = false;
         CleaningProgression = 0;
+        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudioMultiplayer(interactionSoundNumber);
 
         if (progressBar.enabled == true)
         {

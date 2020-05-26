@@ -145,10 +145,12 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
             if (IsBroken) 
             {
+                Debug.Log("Playing repair loop");
                 interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Repair Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
             }
             else
             {
+                Debug.Log("Playing clean loop");
                 interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Clean Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
             }
         }
@@ -168,6 +170,8 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
             {
                 if (interactionController.currentlyWielding.toolID == repair_ToolID)
                 {
+                    OnStartInteraction();
+
                     if (lockedForOthers == false)
                     {
                         lockedForOthers = true;
@@ -186,6 +190,8 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
                     if(RepairProgression >= repairTime) 
                     {
+                        passedFirstFrame = false;
+                        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudioMultiplayer(interactionSoundNumber);
                         RepairObject();
                         Set_BreakableProgressbarFinish();
                     }
@@ -203,7 +209,9 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
     public override void DeInteract(PlayerInteractionController interactionController)
     {
-        if(IsBroken) 
+        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudioMultiplayer(interactionSoundNumber);
+
+        if (IsBroken) 
         {
             if (IsLocked == false)
             {
