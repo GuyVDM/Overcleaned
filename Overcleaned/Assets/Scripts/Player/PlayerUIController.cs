@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -83,12 +84,22 @@ public class PlayerUIController : MonoBehaviour
         totalSeconds = clockSet == false ? (int)timeRemaining.TotalSeconds : totalSeconds;
         clockSet = true;
 
+        int ceiledTotalSeconds = Mathf.CeilToInt((float)timeRemaining.TotalSeconds);
+        int minutes = 0;
+
+        if(ceiledTotalSeconds >= 60)
+        {
+            minutes = Mathf.FloorToInt(ceiledTotalSeconds / 60f);
+            ceiledTotalSeconds -= minutes * 60;
+        }
+
         const int END_ROTATION = -360;
         const string DIGITALTIMER_TRIGGER = "BounceTimer";
 
         float second_based_rotation = 360f / totalSeconds;
 
-        string timeLeftText = timeRemaining.Minutes.ToString() + ':' + (timeRemaining.Seconds < 10 ? 0.ToString() : "") + timeRemaining.Seconds.ToString();
+        string timeLeftText = minutes.ToString() + ':' + (ceiledTotalSeconds < 10 ? 0.ToString() : "") + (ceiledTotalSeconds).ToString();
+        Debug.Log(timeRemaining.TotalSeconds);
 
         if(timeRemaining.Seconds < 6) 
         {
