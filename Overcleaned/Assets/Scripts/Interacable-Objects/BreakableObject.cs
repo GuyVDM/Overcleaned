@@ -142,15 +142,15 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         if (passedFirstFrame == false) 
         {
             passedFirstFrame = true;
-        }
 
-        if(IsBroken) 
-        {
-            interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Repair Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
-        }
-        else 
-        {
-            interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Clean Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
+            if (IsBroken) 
+            {
+                interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Repair Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
+            }
+            else
+            {
+                interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Clean Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
+            }
         }
     }
 
