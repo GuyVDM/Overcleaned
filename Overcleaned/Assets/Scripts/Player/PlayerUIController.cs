@@ -90,7 +90,7 @@ public class PlayerUIController : MonoBehaviour
 
         string timeLeftText = timeRemaining.Minutes.ToString() + ':' + (timeRemaining.Seconds < 10 ? 0.ToString() : "") + timeRemaining.Seconds.ToString();
 
-        if(timeRemaining.Seconds < 6) 
+        if(timeRemaining.TotalSeconds < 6) 
         {
             timerBack.color = Color.red;
             digitalAnim.SetTrigger(DIGITALTIMER_TRIGGER);

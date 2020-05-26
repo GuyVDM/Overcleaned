@@ -6,6 +6,12 @@ using System;
 public class PlayerCameraController : MonoBehaviour 
 {
 
+    [SerializeField]
+    private float testmin = -5;
+
+    [SerializeField]
+    private float testMax = 13;
+
     [Header("Tweaking Variables:")]
     [SerializeField]
     private Vector3 camera_Offset = new Vector3(0, 11.06f, -11.05f);
@@ -114,7 +120,7 @@ public class PlayerCameraController : MonoBehaviour
         const int MAX_ZOOM = 13;
 
         zoomOffset += Input.GetAxis("Mouse ScrollWheel") * SCROLL_SENSITIVITY * Time.deltaTime;
-        zoomOffset = Mathf.Clamp(zoomOffset, MIN_ZOOM, MAX_ZOOM);
+        zoomOffset = Mathf.Clamp(zoomOffset, testmin, testMax);
     }
 
     /// <summary>
