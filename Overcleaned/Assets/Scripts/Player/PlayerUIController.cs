@@ -6,6 +6,12 @@ public class PlayerUIController : MonoBehaviour
 {
     [Header("References:")]
     [SerializeField]
+    private AudioSource source;
+
+    [SerializeField]
+    private Animator digitalAnim;
+
+    [SerializeField]
     private Text timerFront;
 
     [SerializeField]
@@ -78,9 +84,18 @@ public class PlayerUIController : MonoBehaviour
         clockSet = true;
 
         const int END_ROTATION = -360;
+        const string DIGITALTIMER_TRIGGER = "BounceTimer";
+
         float second_based_rotation = 360f / totalSeconds;
 
         string timeLeftText = timeRemaining.Minutes.ToString() + ':' + (timeRemaining.Seconds < 10 ? 0.ToString() : "") + timeRemaining.Seconds.ToString();
+
+        if(timeRemaining.Seconds < 6) 
+        {
+            timerBack.color = Color.red;
+            digitalAnim.SetTrigger(DIGITALTIMER_TRIGGER);
+            source.PlayOneShot(source.clip);
+        }
 
         Vector3 rotation = Vector3.zero;
         rotation.z = -END_ROTATION + (second_based_rotation * (float)timeRemaining.TotalSeconds);
