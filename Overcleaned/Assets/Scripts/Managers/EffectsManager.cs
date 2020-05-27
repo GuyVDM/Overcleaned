@@ -100,8 +100,6 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
 
     private readonly List<EffectTracker<AudioSource>> audioSources = new List<EffectTracker<AudioSource>>();
 
-    //private int lastID;
-
     #endregion
 
     #region Particle Variables
@@ -133,15 +131,6 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
                 StartCoroutine(AudioOnStartDelay(playOnStart));
             else
                 PlayAudio(playOnStart.audioName, volume: playOnStart.volume, loop: playOnStart.loop, audioMixerGroup: playOnStart.audioMixerGroup);
-        }
-    }
-
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            PlayAudio("If I Had a Chicken Looped");
         }
     }
 
