@@ -7,7 +7,7 @@ using Photon.Pun;
 [RequireComponent(typeof(PhotonView))]
 public class EffectsManager : MonoBehaviourPun, IServiceOfType
 {
-    #region Structs & Sub classes
+    #region Structs & Sub classes & enums
     public class EffectTracker<T>
     {
         public EffectTracker(int newId)
@@ -88,6 +88,12 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         public float delay;
     }
 
+    public enum SyncMode
+    {
+        Singleplayer,
+        Multiplayer,
+    }
+
 	#endregion
 
 	#region Audio Variables
@@ -98,7 +104,8 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     public PlayOnStart[] playOnStartClips;
     public int startSources;
 
-    private readonly List<EffectTracker<AudioSource>> audioSources = new List<EffectTracker<AudioSource>>();
+    private List<EffectTracker<AudioSource>> localAudioSources = new List<EffectTracker<AudioSource>>();
+    private List<EffectTracker<AudioSource>> syncedAudioSources = new List<EffectTracker<AudioSource>>();
 
     #endregion
 
@@ -122,7 +129,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     {
         for (int i = 0; i < startSources; i++)
         {
-            CreateNewAudioSource();
+            CreateNewAudioSource(SyncMode.Singleplayer);
         }
 
         foreach (PlayOnStart playOnStart in playOnStartClips)
@@ -133,6 +140,20 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
                 PlayAudio(playOnStart.audioName, volume: playOnStart.volume, loop: playOnStart.loop, audioMixerGroup: playOnStart.audioMixerGroup);
         }
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            PlayAudio("Cleaned");
+        }
+        
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            PlayAudioMultiplayer("Cleaned");
+        }
+    }
+
 
     #region Public Audio Functions
 
@@ -155,7 +176,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <returns>Returns AudioSource ID used to stop that specific audioSource.</returns>
     public int PlayAudio(AudioClip toPlay, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, Transform parent = null, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
     {
-        EffectTracker<AudioSource> tracker = FindAvailableSource();
+        EffectTracker<AudioSource> tracker = FindAvailableSource(SyncMode.Singleplayer);
         AudioSource source = tracker.reference;
 
         source.clip = toPlay;
@@ -214,10 +235,10 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
 
     public int PlayAudioMultiplayer(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
     {
-        int audioSourceID = PlayAudio(FindAudioClip(audioName), volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, audioPosition: audioPosition, fade: fade, step: step, audioMixerGroup: audioMixerGroup);
+        int audioSourceID = PlayAudioFromRPC(FindAudioClip(audioName), volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, audioPosition: audioPosition, fade: fade, step: step, audioMixerGroup: audioMixerGroup);
 
         if (PhotonNetwork.InRoom)
-            photonView.RPC(nameof(PlayAudioRPC), RpcTarget.Others, audioName, audioSourceID, volume, loop, pitch, spatialBlend, audioPosition.x, audioPosition.y, audioPosition.z, fade, step, audioMixerGroup);
+            photonView.RPC(nameof(PlayAudioRPC), RpcTarget.Others, audioName, volume, loop, pitch, spatialBlend, audioPosition.x, audioPosition.y, audioPosition.z, fade, step, audioMixerGroup);
 
         return audioSourceID;
     }
@@ -255,8 +276,10 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// </summary>
     /// <param name="toCheck"></param>
     /// <returns></returns>
-    public bool AudioClipIsPlaying(AudioClip toCheck)
+    public bool AudioClipIsPlaying(AudioClip toCheck, SyncMode syncMode)
     {
+        List<EffectTracker<AudioSource>> audioSources = GetCorrectList(syncMode);
+
         for (int i = 0; i < audioSources.Count; i++)
         {
             if (audioSources[i].reference.clip != null)
@@ -279,19 +302,21 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// </summary>
     /// <param name="clipName">Name of the AudioClip that will be checked</param>
     /// <returns></returns>
-    public bool AudioClipIsPlaying(string clipName)
+    public bool AudioClipIsPlaying(string clipName, SyncMode syncMode)
     {
         AudioClip toCheck = FindAudioClip(clipName);
 
-        return AudioClipIsPlaying(toCheck);
+        return AudioClipIsPlaying(toCheck, syncMode);
     }
 
     /// <summary>
     /// Stops the audio that is being played on the audiosource with audioSourceID.
     /// </summary>
     /// <param name="audiosourceID">ID of the Audio Source that will be checked.</param>
-    public void StopAudio(int audioSourceID, bool fade = false, float step = 0.1f)
+    public void StopAudio(int audioSourceID, SyncMode syncMode, bool fade = false, float step = 0.1f)
     {
+        List<EffectTracker<AudioSource>> audioSources = GetCorrectList(syncMode);
+
         for (int i = 0; i < audioSources.Count; i++)
         {
             if (audioSources[i].ID == audioSourceID)
@@ -307,9 +332,9 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     public void StopAudioMultiplayer(int audioSourceID, bool fade = false, float step = 0.1f)
     {
         if (PhotonNetwork.InRoom)
-            photonView.RPC("StopAudioRPC", RpcTarget.Others, audioSourceID, fade, step);
+            photonView.RPC(nameof(StopAudioRPC), RpcTarget.Others, audioSourceID, fade, step);
 
-        StopAudio(audioSourceID, fade, step);
+        StopAudio(audioSourceID, SyncMode.Multiplayer, fade, step);
     }
 
     /// <summary>
@@ -318,11 +343,11 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <param name="toStop">All playing instances of the audioclip will be stopped.</param>
     public void StopAllPlayingClips(AudioClip toStop)
     {
-        for (int i = 0; i < audioSources.Count; i++)
+        for (int i = 0; i < localAudioSources.Count; i++)
         {
-            if (audioSources[i].reference.clip.name == toStop.name)
+            if (localAudioSources[i].reference.clip.name == toStop.name)
             {
-                audioSources[i].reference.Stop();
+                localAudioSources[i].reference.Stop();
                 // audioSources[i].clip = null;
             }
         }
@@ -352,8 +377,10 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// </summary>
     /// <param name="audioSourceID">ID of the audio source you want to adjust.</param>
     /// <param name="volume">volume you want to set the audiosource to.</param>
-    public void AdjustVolume(int audioSourceID, float volume)
+    public void AdjustVolume(int audioSourceID, float volume, SyncMode syncMode)
     {
+        List<EffectTracker<AudioSource>> audioSources = GetCorrectList(syncMode);
+
         for (int i = 0; i < audioSources.Count; i++)
         {
             if (audioSources[i].ID == audioSourceID)
@@ -383,9 +410,10 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <param name="step">Amount that will be added to volume when fading</param>
     /// <param name="audioMixerGroup">Thhe AudioMixerGroup that will be added to the AudioSource that will play the audioclip</param>
     /// <returns>Returns AudioSource ID used to stop that specific audioSource.</returns>
-    private void PlayAudioSourceOverride(AudioClip toPlay, int audioSourceOverride, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, Transform parent = null, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
+    private int PlayAudioFromRPC(AudioClip toPlay, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, Transform parent = null, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
     {
-        AudioSource source = FindSourceByID(audioSourceOverride);
+        EffectTracker<AudioSource> tracker = FindAvailableSource(SyncMode.Multiplayer);
+        AudioSource source = tracker.reference;
 
         source.clip = toPlay;
         source.volume = fade ? 0 : volume;
@@ -404,16 +432,28 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         }
 
         if (audioMixer != null)
-            source.outputAudioMixerGroup = audioMixer.FindMatchingGroups(audioMixerGroup)[0];
+        {
+            AudioMixerGroup[] audioMixerGroups = audioMixer.FindMatchingGroups(audioMixerGroup);
+            if (audioMixerGroups.Length <= 0)
+            {
+                audioMixerGroups = audioMixer.FindMatchingGroups("Master");
+            }
+
+            source.outputAudioMixerGroup = audioMixerGroups[0];
+        }
 
         source.Play();
 
         if (fade)
             StartCoroutine(AudioFadeIn(source, volume, step));
+
+        return tracker.ID;
     }
 
-    private EffectTracker<AudioSource> FindAvailableSource()
+    private EffectTracker<AudioSource> FindAvailableSource(SyncMode syncMode)
     {
+        List<EffectTracker<AudioSource>> audioSources = GetCorrectList(syncMode);
+
         for (int s = 0; s < audioSources.Count; s++)
         {
             if (!audioSources[s].reference.isPlaying)
@@ -422,11 +462,13 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
             }
         }
 
-        return CreateNewAudioSource();
+        return CreateNewAudioSource(syncMode);
     }
 
-    private AudioSource FindSourceByID(int id)
+    private AudioSource FindSourceByID(int id, SyncMode syncMode)
     {
+        List<EffectTracker<AudioSource>> audioSources = GetCorrectList(syncMode);
+
         for (int i = 0; i < audioSources.Count; i++)
         {
             if (audioSources[i].ID == id)
@@ -438,12 +480,17 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         return null;
     }
 
-    private EffectTracker<AudioSource> CreateNewAudioSource()
+    private EffectTracker<AudioSource> CreateNewAudioSource(SyncMode syncMode)
     {
+        List<EffectTracker<AudioSource>> audioSources = GetCorrectList(syncMode);
+
+        string sync = syncMode == SyncMode.Singleplayer ? "Singleplayer" : "Multiplayer";
+
         GameObject newSource = new GameObject
         {
-            name = "AudioSource " + audioSources.Count
+            name = "AudioSource " + sync + " " + audioSources.Count
         };
+
         newSource.transform.SetParent(transform);
 
         AudioSource source = newSource.AddComponent<AudioSource>();
@@ -480,20 +527,34 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         PlayAudio(audio.audioName, volume: audio.volume, loop: audio.loop);
     }
 
+    private List<EffectTracker<AudioSource>> GetCorrectList(SyncMode syncMode)
+    {
+        if (syncMode == SyncMode.Singleplayer)
+        {
+            return localAudioSources;
+        }
+        else if (syncMode == SyncMode.Multiplayer)
+        {
+            return syncedAudioSources;
+        }
+
+        return localAudioSources;
+    }
+
 	#endregion
 
 	#region Audio RPCs
 
     [PunRPC]
-    private void PlayAudioRPC(string audioName, int sourceOverride, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, float posX = 0, float posY = 0, float posZ = 0, bool fade = false, float step = 0.1f, string audioMixerGroup = null)
+    private void PlayAudioRPC(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, float posX = 0, float posY = 0, float posZ = 0, bool fade = false, float step = 0.1f, string audioMixerGroup = null)
     {
-        PlayAudioSourceOverride(FindAudioClip(audioName), sourceOverride, volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, audioPosition: new Vector3(posX, posY, posZ), fade: fade, step: step, audioMixerGroup: audioMixerGroup);
+        PlayAudioFromRPC(FindAudioClip(audioName), volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, audioPosition: new Vector3(posX, posY, posZ), fade: fade, step: step, audioMixerGroup: audioMixerGroup);
     }
 
     [PunRPC]
     private void StopAudioRPC(int audioID, bool fade = false, float step = 0.1f)
     {
-        StopAudio(audioID, fade, step);
+        StopAudio(audioID, SyncMode.Multiplayer, fade, step);
     }
 
     [PunRPC]

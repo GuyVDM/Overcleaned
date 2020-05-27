@@ -98,7 +98,6 @@ public class PlayerUIController : MonoBehaviour
         float second_based_rotation = 360f / totalSeconds;
 
         string timeLeftText = minutes.ToString() + ':' + (ceiledTotalSeconds < 10 ? 0.ToString() : "") + (ceiledTotalSeconds).ToString();
-        Debug.Log(timeRemaining.TotalSeconds);
 
         if (timeRemaining.TotalSeconds < 6) 
         {
