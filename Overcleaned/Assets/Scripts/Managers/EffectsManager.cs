@@ -174,7 +174,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <param name="step">Amount that will be added to volume when fading</param>
     /// <param name="audioMixerGroup">Thhe AudioMixerGroup that will be added to the AudioSource that will play the audioclip</param>
     /// <returns>Returns AudioSource ID used to stop that specific audioSource.</returns>
-    public int PlayAudio(AudioClip toPlay, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, Transform parent = null, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
+    public int PlayAudio(AudioClip toPlay, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, float minDistance = 1, float maxDistance = 20,  Vector3 audioPosition = default, Transform parent = null, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
     {
         EffectTracker<AudioSource> tracker = FindAvailableSource(SyncMode.Singleplayer);
         AudioSource source = tracker.reference;
@@ -184,6 +184,8 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         source.loop = loop;
         source.pitch = pitch;
         source.spatialBlend = spatialBlend;
+        source.minDistance = minDistance;
+        source.maxDistance = maxDistance;
 
         if (parent != null)
         {
@@ -228,17 +230,17 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <param name="step">Amount that will be added to volume when fading</param>
     /// <param name="audioMixerGroup">Thhe AudioMixerGroup that will be added to the AudioSource that will play the audioclip</param>
     /// <returns>Returns AudioSource ID used to stop that specific audioSource.</returns>
-    public int PlayAudio(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, Transform parent = null, bool fade = false, float step = 0.1f, string audioMixerGroup = null)
+    public int PlayAudio(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, float minDistance = 1, float maxDistance = 20, Vector3 audioPosition = default, Transform parent = null, bool fade = false, float step = 0.1f, string audioMixerGroup = null)
     {
-        return PlayAudio(FindAudioClip(audioName), volume, loop, pitch, spatialBlend, audioPosition, parent, fade, step, audioMixerGroup);
+        return PlayAudio(FindAudioClip(audioName), volume, loop, pitch, spatialBlend, minDistance, maxDistance, audioPosition, parent, fade, step, audioMixerGroup);
     }
 
-    public int PlayAudioMultiplayer(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
+    public int PlayAudioMultiplayer(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, float minDistance = 1, float maxDistance = 20, Vector3 audioPosition = default, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
     {
-        int audioSourceID = PlayAudioFromRPC(FindAudioClip(audioName), volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, audioPosition: audioPosition, fade: fade, step: step, audioMixerGroup: audioMixerGroup);
+        int audioSourceID = PlayAudioFromRPC(FindAudioClip(audioName), volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, minDistance: minDistance, maxDistance: maxDistance, audioPosition: audioPosition, fade: fade, step: step, audioMixerGroup: audioMixerGroup);
 
         if (PhotonNetwork.InRoom)
-            photonView.RPC(nameof(PlayAudioRPC), RpcTarget.Others, audioName, volume, loop, pitch, spatialBlend, audioPosition.x, audioPosition.y, audioPosition.z, fade, step, audioMixerGroup);
+            photonView.RPC(nameof(PlayAudioRPC), RpcTarget.Others, audioName, volume, loop, pitch, spatialBlend, minDistance, maxDistance, audioPosition.x, audioPosition.y, audioPosition.z, fade, step, audioMixerGroup);
 
         return audioSourceID;
     }
@@ -410,7 +412,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <param name="step">Amount that will be added to volume when fading</param>
     /// <param name="audioMixerGroup">Thhe AudioMixerGroup that will be added to the AudioSource that will play the audioclip</param>
     /// <returns>Returns AudioSource ID used to stop that specific audioSource.</returns>
-    private int PlayAudioFromRPC(AudioClip toPlay, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, Transform parent = null, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
+    private int PlayAudioFromRPC(AudioClip toPlay, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, float minDistance = 1, float maxDistance = 20, Vector3 audioPosition = default, Transform parent = null, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
     {
         EffectTracker<AudioSource> tracker = FindAvailableSource(SyncMode.Multiplayer);
         AudioSource source = tracker.reference;
@@ -420,6 +422,8 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         source.loop = loop;
         source.pitch = pitch;
         source.spatialBlend = spatialBlend;
+        source.minDistance = minDistance;
+        source.maxDistance = maxDistance;
 
         if (parent != null)
         {
@@ -546,9 +550,9 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
 	#region Audio RPCs
 
     [PunRPC]
-    private void PlayAudioRPC(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, float posX = 0, float posY = 0, float posZ = 0, bool fade = false, float step = 0.1f, string audioMixerGroup = null)
+    private void PlayAudioRPC(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, float minDistance = 1, float maxDistance = 20, float posX = 0, float posY = 0, float posZ = 0, bool fade = false, float step = 0.1f, string audioMixerGroup = null)
     {
-        PlayAudioFromRPC(FindAudioClip(audioName), volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, audioPosition: new Vector3(posX, posY, posZ), fade: fade, step: step, audioMixerGroup: audioMixerGroup);
+        PlayAudioFromRPC(FindAudioClip(audioName), volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, minDistance: minDistance, maxDistance: maxDistance, audioPosition: new Vector3(posX, posY, posZ), fade: fade, step: step, audioMixerGroup: audioMixerGroup);
     }
 
     [PunRPC]
