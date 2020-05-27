@@ -100,7 +100,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
 
     private readonly List<EffectTracker<AudioSource>> audioSources = new List<EffectTracker<AudioSource>>();
 
-    private int lastID;
+    //private int lastID;
 
     #endregion
 
@@ -133,6 +133,15 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
                 StartCoroutine(AudioOnStartDelay(playOnStart));
             else
                 PlayAudio(playOnStart.audioName, volume: playOnStart.volume, loop: playOnStart.loop, audioMixerGroup: playOnStart.audioMixerGroup);
+        }
+    }
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            PlayAudio("If I Had a Chicken Looped");
         }
     }
 
@@ -444,7 +453,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     {
         GameObject newSource = new GameObject
         {
-            name = "AudioSource " + lastID
+            name = "AudioSource " + audioSources.Count
         };
         newSource.transform.SetParent(transform);
 
