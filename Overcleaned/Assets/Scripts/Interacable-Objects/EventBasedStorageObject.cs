@@ -211,7 +211,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
         if (isEnabled)
             alarmSoundNumber = effectsManager.PlayAudio("Machine is breaking alarm", loop: true, volume: 0.7f, spatialBlend: 1, audioPosition: transform.position, audioMixerGroup: "Sfx");
         else
-            effectsManager.StopAudio(alarmSoundNumber);
+            effectsManager.StopAudio(alarmSoundNumber, EffectsManager.SyncMode.Singleplayer);
     }
 
     private void Set_EnableStateWarningProgressbar(bool isEnabled) 
@@ -507,7 +507,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
 
         Set_StateOfObject(StateOfObject.Done);
 
-        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudio(activeSoundNumber, fade: true, step: 0.25f);
+        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudio(activeSoundNumber,  EffectsManager.SyncMode.Singleplayer, fade: true, step: 0.25f);
         postcleanLoop = StartCoroutine(PostCleaningLoop());
     }
 

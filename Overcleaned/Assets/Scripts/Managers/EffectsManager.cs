@@ -313,16 +313,18 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// Stops the audio that is being played on the audiosource with audioSourceID.
     /// </summary>
     /// <param name="audiosourceID">ID of the Audio Source that will be checked.</param>
-    public void StopAudio(int audioSourceID, bool fade = false, float step = 0.1f)
+    public void StopAudio(int audioSourceID, SyncMode syncMode, bool fade = false, float step = 0.1f)
     {
-        for (int i = 0; i < localAudioSources.Count; i++)
+        List<EffectTracker<AudioSource>> audioSources = GetCorrectList(syncMode);
+
+        for (int i = 0; i < audioSources.Count; i++)
         {
-            if (localAudioSources[i].ID == audioSourceID)
+            if (audioSources[i].ID == audioSourceID)
             {
                 if (!fade)
-                    localAudioSources[i].reference.Stop();
+                    audioSources[i].reference.Stop();
                 else
-                    StartCoroutine(AudioFadeOut(localAudioSources[i].reference, step));
+                    StartCoroutine(AudioFadeOut(audioSources[i].reference, step));
             }
         }
     }
@@ -330,9 +332,9 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     public void StopAudioMultiplayer(int audioSourceID, bool fade = false, float step = 0.1f)
     {
         if (PhotonNetwork.InRoom)
-            photonView.RPC("StopAudioRPC", RpcTarget.Others, audioSourceID, fade, step);
+            photonView.RPC(nameof(StopAudioRPC), RpcTarget.Others, audioSourceID, fade, step);
 
-        StopAudio(audioSourceID, fade, step);
+        StopAudio(audioSourceID, SyncMode.Multiplayer, fade, step);
     }
 
     /// <summary>
@@ -548,7 +550,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     [PunRPC]
     private void StopAudioRPC(int audioID, bool fade = false, float step = 0.1f)
     {
-        StopAudio(audioID, fade, step);
+        StopAudio(audioID, SyncMode.Multiplayer, fade, step);
     }
 
     [PunRPC]
