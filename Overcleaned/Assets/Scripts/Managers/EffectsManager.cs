@@ -217,7 +217,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         int audioSourceID = PlayAudio(FindAudioClip(audioName), volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, audioPosition: audioPosition, fade: fade, step: step, audioMixerGroup: audioMixerGroup);
 
         if (PhotonNetwork.InRoom)
-            photonView.RPC("PlayAudioRPC", RpcTarget.Others, audioName, audioSourceID, volume, loop, pitch, spatialBlend, audioPosition.x, audioPosition.y, audioPosition.z, fade, step, audioMixerGroup);
+            photonView.RPC(nameof(PlayAudioRPC), RpcTarget.Others, audioName, audioSourceID, volume, loop, pitch, spatialBlend, audioPosition.x, audioPosition.y, audioPosition.z, fade, step, audioMixerGroup);
 
         return audioSourceID;
     }
