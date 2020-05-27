@@ -259,7 +259,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         progressBar.Set_CurrentProgress(0);
         interactionController.DeinteractWithCurrentObject();
 
-        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudio(interactionSoundNumber, EffectsManager.SyncMode.Singleplayer);
+        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudio(interactionSoundNumber, EffectsManager.SyncMode.Multiplayer);
     }
 
     public virtual void OnCleanedObject(PlayerInteractionController interactionController) 

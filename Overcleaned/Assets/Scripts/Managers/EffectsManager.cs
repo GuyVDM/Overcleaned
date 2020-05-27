@@ -530,9 +530,13 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     private List<EffectTracker<AudioSource>> GetCorrectList(SyncMode syncMode)
     {
         if (syncMode == SyncMode.Singleplayer)
+        {
             return localAudioSources;
+        }
         else if (syncMode == SyncMode.Multiplayer)
+        {
             return syncedAudioSources;
+        }
 
         return localAudioSources;
     }
