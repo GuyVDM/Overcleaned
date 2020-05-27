@@ -540,7 +540,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
 	#region Audio RPCs
 
     [PunRPC]
-    private void PlayAudioRPC(string audioName, int sourceOverride, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, float posX = 0, float posY = 0, float posZ = 0, bool fade = false, float step = 0.1f, string audioMixerGroup = null)
+    private void PlayAudioRPC(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, float posX = 0, float posY = 0, float posZ = 0, bool fade = false, float step = 0.1f, string audioMixerGroup = null)
     {
         PlayAudioFromRPC(FindAudioClip(audioName), volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, audioPosition: new Vector3(posX, posY, posZ), fade: fade, step: step, audioMixerGroup: audioMixerGroup);
     }
