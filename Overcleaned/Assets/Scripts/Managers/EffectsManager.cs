@@ -186,6 +186,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         source.spatialBlend = spatialBlend;
         source.minDistance = minDistance;
         source.maxDistance = maxDistance;
+        source.rolloffMode = AudioRolloffMode.Linear;
 
         if (parent != null)
         {
