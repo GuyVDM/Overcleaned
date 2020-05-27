@@ -141,20 +141,6 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            PlayAudio("Cleaned");
-        }
-        
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            PlayAudioMultiplayer("Cleaned");
-        }
-    }
-
-
     #region Public Audio Functions
 
     //------------------------------------------------------ Public Audio Functions ----------------------------------------------\\
