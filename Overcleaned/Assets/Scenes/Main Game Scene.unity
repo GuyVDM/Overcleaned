@@ -4633,7 +4633,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c19590d18736b14980d7f3d99e64aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameTimeInMinutes: 30
+  gameTimeInMinutes: 5
   gameEventWaitTime: {x: 45, y: 60}
   spawnRegions:
   - topleftAnchor: {x: -28.4, y: 2.57, z: 7.5}
@@ -10229,6 +10229,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1156453884}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1156453898 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7614213091681343795, guid: fa4503a72f4480c43b971d101a8b73b4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1156453884}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1156453899 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3859882221270067012, guid: fa4503a72f4480c43b971d101a8b73b4,
@@ -10626,6 +10632,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: -0.07, z: 1}
   m_Center: {x: 0, y: 0.22, z: 0}
+--- !u!65 &1156453930
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156453898}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9999999, y: 4.523086, z: 1.9999999}
+  m_Center: {x: 0, y: 2.261543, z: 0}
 --- !u!65 &1156453932
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17233,6 +17252,10 @@ PrefabInstance:
       propertyPath: toolID
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 54983329, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
+      propertyPath: ownedByTeam
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 54983330, guid: fa4503a72f4480c43b971d101a8b73b4, type: 3}
       propertyPath: viewIdField
       value: 24
@@ -18331,6 +18354,11 @@ PrefabInstance:
       propertyPath: InstantiationId
       value: 31
       objectReference: {fileID: 0}
+    - target: {fileID: 5953177267140795709, guid: fa4503a72f4480c43b971d101a8b73b4,
+        type: 3}
+      propertyPath: ownedByTeam
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5959748713669054811, guid: fa4503a72f4480c43b971d101a8b73b4,
         type: 3}
       propertyPath: m_RootOrder
@@ -19157,6 +19185,25 @@ MonoBehaviour:
   viewIdField: 61
   InstantiationId: 2
   isRuntimeInstantiated: 0
+--- !u!1 &7098697254516115509 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7614213091681343795, guid: fa4503a72f4480c43b971d101a8b73b4,
+    type: 3}
+  m_PrefabInstance: {fileID: 7098697254516115485}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &7098697254516115510
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7098697254516115509}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9999999, y: 4.523086, z: 1.9999999}
+  m_Center: {x: 0.0000019073486, y: 2.261543, z: 0}
 --- !u!1 &7098697254516115512 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 145230653927591341, guid: fa4503a72f4480c43b971d101a8b73b4,
@@ -19447,7 +19494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4c050af223f2ae4c849f0d97f6ecd90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ownedByTeam: 0
+  ownedByTeam: 2
   toolID: 4
   handedType: 1
   pickup_Offset: {x: 0, y: 0, z: 0}
@@ -19528,7 +19575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4c050af223f2ae4c849f0d97f6ecd90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ownedByTeam: 0
+  ownedByTeam: 2
   toolID: 4
   handedType: 1
   pickup_Offset: {x: 0, y: 0, z: 0}

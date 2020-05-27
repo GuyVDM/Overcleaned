@@ -33,7 +33,7 @@ public class PlayerInteractionController : MonoBehaviourPunCallbacks
     #region ### Private Variables ###
     private readonly KeyCode interactKey = KeyCode.E;
     private readonly KeyCode dropWieldableKey = KeyCode.F;
-    private readonly KeyCode useWieldableKey = KeyCode.Return;
+    private readonly KeyCode useWieldableKey = KeyCode.Space;
 
     private Vector3 arrow_UX_Offset = new Vector3(0, 2, 0);
     private Vector3 boxcast_HalfExtends = new Vector3(0.4f, 0.75f, 0.07f);
