@@ -82,12 +82,12 @@ public class GameManager : MonoBehaviourPun, IServiceOfType
 		for (int i = 3; i > 0; i--)
 		{
 			countdownWindow.ShowText(i.ToString());
-			effectsManager.PlayAudio("Countdown 2");
+			effectsManager.PlayAudio("Countdown 2", audioMixerGroup: "Sfx");
 			yield return new WaitForSeconds(1);
 		}
 
 		countdownWindow.ShowText("GO!");
-		effectsManager.PlayAudio("Countdown 1");
+		effectsManager.PlayAudio("Countdown 1", audioMixerGroup: "Sfx");
 		yield return new WaitForSeconds(1);
 
 		ServiceLocator.GetServiceOfType<PlayerManager>().Set_PlayerLockingstate(false);

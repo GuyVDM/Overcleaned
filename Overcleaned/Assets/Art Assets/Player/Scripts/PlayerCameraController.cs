@@ -6,6 +6,12 @@ using System;
 public class PlayerCameraController : MonoBehaviour 
 {
 
+    [SerializeField]
+    private float testmin = -5;
+
+    [SerializeField]
+    private float testMax = 13;
+
     [Header("Tweaking Variables:")]
     [SerializeField]
     private Vector3 camera_Offset = new Vector3(0, 11.06f, -11.05f);
@@ -109,12 +115,12 @@ public class PlayerCameraController : MonoBehaviour
     private void Zoom() 
     {
         const float SCROLL_SENSITIVITY = 450;
-
-        const int MIN_ZOOM = -5;
-        const int MAX_ZOOM = 13;
+        const float ZOOM_SPYAMOUNT = -5;
 
         zoomOffset += Input.GetAxis("Mouse ScrollWheel") * SCROLL_SENSITIVITY * Time.deltaTime;
-        zoomOffset = Mathf.Clamp(zoomOffset, MIN_ZOOM, MAX_ZOOM);
+        zoomOffset = Mathf.Clamp(zoomOffset, testmin, testMax);
+
+        zoomOffset = Input.GetKey(spyBaseKey) ? ZOOM_SPYAMOUNT : zoomOffset;
     }
 
     /// <summary>
@@ -150,7 +156,7 @@ public class PlayerCameraController : MonoBehaviour
             enabled = false;
         }
 
-        current_Target_Pos = Input.GetKey(spyBaseKey) ? enemy_Base_Pos : last_Pos;
+        current_Target_Pos = Input.GetKey(spyBaseKey) ? StaticAssignedHousePositions.Get_EnemyHousePosition() : last_Pos;
 
         if (shouldDisplayProgressBar != Input.GetKey(spyBaseKey)) 
         {

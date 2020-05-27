@@ -37,6 +37,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
     //Audio variables
     public AudioClip activeNormal, activePressure;
     private int activeSoundNumber;
+    private int alarmSoundNumber;
 
     private static Vector3 toPoolObject = new Vector3(1000, 0, 1000);
 
@@ -204,6 +205,13 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
 
         progressBar_Warning.enabled = isEnabled;
         warning_Icon.enabled = isEnabled;
+
+        EffectsManager effectsManager = ServiceLocator.GetServiceOfType<EffectsManager>();
+
+        if (isEnabled)
+            alarmSoundNumber = effectsManager.PlayAudio("Machine is breaking alarm", loop: true, volume: 0.7f, spatialBlend: 1, audioPosition: transform.position, audioMixerGroup: "Sfx");
+        else
+            effectsManager.StopAudio(alarmSoundNumber);
     }
 
     private void Set_EnableStateWarningProgressbar(bool isEnabled) 
@@ -475,7 +483,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
 
             StartCoroutine(nameof(CleaningLoop));
 
-            activeSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio(activeNormal, loop: true, fade: true, step: 0.25f);
+            activeSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio(activeNormal, loop: true, fade: true, step: 0.25f, spatialBlend: 1, audioPosition: transform.position);
         }
     }
 
@@ -554,8 +562,14 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
     public override void OnDisable() 
     {
         base.OnDisable();
+
         progressBar.enabled = false;
         progressBar_Warning.enabled = false;
+
+        if(currentState == StateOfObject.Washing) 
+        {
+            currentState = StateOfObject.Inactive;
+        }
     }
 
     private void Update() 
@@ -569,7 +583,7 @@ public class EventBasedStorageObject : InteractableObject, IPunObservable
         if(currentState == StateOfObject.Done) 
         {
             progressbarFill = Mathf.Lerp(progressbarFill, timer, 0.3f * Time.deltaTime);
-            progressBar_Warning.Set_CurrentProgress(timer / waitingTimeInSeconds);
+            progressBar_Warning.Set_CurrentProgress(timer / timeTillRejectionOfObjects);
         }
     }
 

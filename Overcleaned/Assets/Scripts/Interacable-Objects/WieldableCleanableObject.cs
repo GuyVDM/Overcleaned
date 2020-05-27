@@ -85,11 +85,14 @@ public class WieldableCleanableObject : WieldableObject
     private const int dirty_LayerMask = 10;
 
     private int starting_ToolID;
+
+    private ObjectStateIndicator indicator;
     #endregion
 
     protected void Awake() 
     {
         starting_ToolID = toolID;
+        SetupIndicator();
 
         if ((int)ownedByTeam == NetworkManager.localPlayerInformation.team) 
         {
@@ -99,10 +102,21 @@ public class WieldableCleanableObject : WieldableObject
         DirtyObject();
     }
 
+    protected void SetupIndicator() 
+    {
+        GameObject indicatorObject = GameObject.Instantiate(Resources.Load("[Indicator_Prefab]") as GameObject, Vector3.zero, Quaternion.identity);
+
+        indicatorObject.transform.SetParent(transform);
+        indicatorObject.transform.localPosition = Vector3.zero;
+        indicator = indicatorObject.GetComponent<ObjectStateIndicator>();
+        indicator.Set_TeamOwner((int)ownedByTeam);
+    }
+
     public void CleanObject() 
     {
         toolID = cleanedToolID;
         isCleaned = true;
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.ToBeStored);
 
         object_Renderer.material = cleaned_Material;
     }
@@ -112,6 +126,7 @@ public class WieldableCleanableObject : WieldableObject
         toolID = starting_ToolID;
         isCleaned = false;
 
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Dirty);
         object_Renderer.material = dirty_Material;
     }
 

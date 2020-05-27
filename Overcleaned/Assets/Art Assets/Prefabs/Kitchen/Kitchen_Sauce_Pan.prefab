@@ -11,7 +11,11 @@ GameObject:
   - component: {fileID: 7209280648891422530}
   - component: {fileID: 1826073527787875700}
   - component: {fileID: 5362394459789169037}
-  m_Layer: 0
+  - component: {fileID: -9008174747930439380}
+  - component: {fileID: -6665625447347468187}
+  - component: {fileID: -4515502295155028518}
+  - component: {fileID: -4944563420546708294}
+  m_Layer: 8
   m_Name: Kitchen_Sauce_Pan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,3 +83,77 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &-9008174747930439380
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5933452192954688849}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.27870664, y: 0.0721579, z: 0.4707936}
+  m_Center: {x: 0.00033032894, y: 0.035299774, z: 0.09600025}
+--- !u!114 &-6665625447347468187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5933452192954688849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 203
+  InstantiationId: 203
+  isRuntimeInstantiated: 0
+--- !u!54 &-4515502295155028518
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5933452192954688849}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 2
+--- !u!114 &-4944563420546708294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5933452192954688849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bf4dec133a1d2a40a1346f5561a104b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownedByTeam: 2
+  toolID: 0
+  handedType: 1
+  pickup_Offset: {x: 0, y: 0, z: 0}
+  rotation_Offset: {x: 0, y: 0, z: 0}
+  cleaningWeight: 0
+  cleanedToolID: 0
+  isBreakable: 0
+  dirty_Material: {fileID: 0}
+  cleaned_Material: {fileID: 0}
+  object_Renderer: {fileID: 0}

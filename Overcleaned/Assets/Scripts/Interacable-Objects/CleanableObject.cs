@@ -40,6 +40,8 @@ public class CleanableObject : InteractableObject, IPunObservable
     [SerializeField]
     protected Vector3 object_ui_Offset;
 
+    protected int interactionSoundNumber;
+
     #region ### Properties ###
     public bool IsCleaned { get; set; }
 
@@ -48,6 +50,10 @@ public class CleanableObject : InteractableObject, IPunObservable
 
     #region ### Private Variables ###
     protected ProgressBar progressBar;
+
+    protected ObjectStateIndicator indicator;
+
+    protected bool passedFirstFrame = false;
     #endregion
 
     #region ### RPC Calls ###
@@ -133,8 +139,25 @@ public class CleanableObject : InteractableObject, IPunObservable
         IsCleaned = true;
         IsLocked = true;
 
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Clean);
+
         object_Renderer.material = cleaned_Material;
         Debug.Log("Succesfully cleaned object!");
+    }
+
+    protected void SetupIndicator() 
+    {
+        GameObject indicatorObject = GameObject.Instantiate(Resources.Load("[Indicator_Prefab]") as GameObject, Vector3.zero, Quaternion.identity);
+
+        indicatorObject.transform.SetParent(transform);
+        indicatorObject.transform.localPosition = Vector3.zero + Vector3.up;
+        indicator = indicatorObject.GetComponent<ObjectStateIndicator>();
+        indicator.Set_TeamOwner((int)ownedByTeam);
+    }
+
+    protected virtual void Set_IndicatorStartState() 
+    {
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Dirty);
     }
 
     protected virtual void Awake()
@@ -145,6 +168,13 @@ public class CleanableObject : InteractableObject, IPunObservable
         }
 
         Create_ProgressBar();
+
+    }
+
+    protected virtual void Start() 
+    {
+        SetupIndicator();
+        Set_IndicatorStartState();
     }
 
     protected virtual void DirtyObject() 
@@ -154,9 +184,19 @@ public class CleanableObject : InteractableObject, IPunObservable
         IsLocked = false;
 
         object_Renderer.material = dirty_Material;
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Dirty);
         Debug.Log("Succesfully dirtied object!");
 
         HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
+    }
+
+    protected virtual void OnStartInteraction() 
+    {
+        if(passedFirstFrame == false) 
+        {
+            passedFirstFrame = true;
+            interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Clean Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
+        }
     }
 
     public override void Interact(PlayerInteractionController interactionController)
@@ -177,6 +217,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         if (IsCleaned == false) 
         {
             CleaningProgression += Time.deltaTime;
+            OnStartInteraction();
 
             if (progressBar.enabled == false) 
             {
@@ -188,6 +229,8 @@ public class CleanableObject : InteractableObject, IPunObservable
 
             if (CleaningProgression >= cleaningTime)
             {
+                passedFirstFrame = false;
+                ServiceLocator.GetServiceOfType<EffectsManager>().StopAudioMultiplayer(interactionSoundNumber);
                 progressBar.Set_BarToFinished();
                 OnCleanedObject(interactionController);
                 interactionController.DeinteractWithCurrentObject();
@@ -198,7 +241,9 @@ public class CleanableObject : InteractableObject, IPunObservable
     public override void DeInteract(PlayerInteractionController interactionController) 
     {
         IsLocked = false;
+        passedFirstFrame = false;
         CleaningProgression = 0;
+        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudioMultiplayer(interactionSoundNumber);
 
         if (progressBar.enabled == true)
         {
@@ -213,6 +258,8 @@ public class CleanableObject : InteractableObject, IPunObservable
 
         progressBar.Set_CurrentProgress(0);
         interactionController.DeinteractWithCurrentObject();
+
+        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudio(interactionSoundNumber);
     }
 
     public virtual void OnCleanedObject(PlayerInteractionController interactionController) 
@@ -220,7 +267,7 @@ public class CleanableObject : InteractableObject, IPunObservable
         Set_ObjectStateToClean();
         HouseManager.InvokeOnObjectStatusCallback((int)ownedByTeam);
 
-        ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Cleaned");
+        ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Cleaned", volume: 0.5f, audioMixerGroup: "Sfx");
     }
 
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

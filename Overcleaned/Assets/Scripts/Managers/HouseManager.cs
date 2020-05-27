@@ -28,11 +28,13 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	//Events
 	public static event TimeChanged OnTimeChanged;
+	public static event Void OnFinishedCountdown;
 	public static event Action<int> OnCleanableObjectStatusChanged;
 	public static event Action<int> OnCleaningProgressionVisualChanged;
 
 	//Delegates for events
 	public delegate void TimeChanged(TimeSpan newtime);
+	public delegate void Void();
 
 	//Progression tracking
 	private static List<CleanableObject> cleanableObjects = new List<CleanableObject>();
@@ -103,6 +105,11 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 
 	public void CountdownIsFinished()
 	{
+		if (OnFinishedCountdown != null)
+			OnFinishedCountdown.Invoke();
+
+		ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("If I Had a Chicken Looped", volume: 0.7f, loop: true, audioMixerGroup: "Music");
+
 		photonView.RPC(nameof(StartGame), RpcTarget.MasterClient);
 	}
 
@@ -342,16 +349,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		UIManager uiManager = ServiceLocator.GetServiceOfType<UIManager>();
 		EffectsManager effectsManager = ServiceLocator.GetServiceOfType<EffectsManager>();
 
-		if (winningTeam == NetworkManager.localPlayerInformation.team)
-		{
-			uiManager.ShowWindow("Win Window");
-			effectsManager.PlayAudio("Game Win");
-		}
-		else
-		{
-			uiManager.ShowWindow("Lose Window");
-			effectsManager.PlayAudio("Game Lost");
-		}
+		uiManager.ShowWindow("Win Window");
 	}
 
 	#endregion
@@ -455,7 +453,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			Vector3 instancePos = GetTeamCleanableObjectSpawnRegion();
 
 			ObjectPool.Set_ObjectFromPool(WIELDABLE_POOL_ID, instancePos, Vector3.zero);
-			ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Pop");
+			ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Pop", audioMixerGroup: "Sfx");
 
 			return;
 		}

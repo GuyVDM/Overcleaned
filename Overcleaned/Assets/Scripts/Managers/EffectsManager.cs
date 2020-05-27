@@ -81,6 +81,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     public struct PlayOnStart
     {
         public string audioName;
+        public string audioMixerGroup;
         public bool loop;
         [Range(0, 1)]
         public float volume;
@@ -98,8 +99,6 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     public int startSources;
 
     private readonly List<EffectTracker<AudioSource>> audioSources = new List<EffectTracker<AudioSource>>();
-
-    private int lastID;
 
     #endregion
 
@@ -131,7 +130,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
             if (playOnStart.delay > 0)
                 StartCoroutine(AudioOnStartDelay(playOnStart));
             else
-                PlayAudio(playOnStart.audioName, volume: playOnStart.volume, loop: playOnStart.loop);
+                PlayAudio(playOnStart.audioName, volume: playOnStart.volume, loop: playOnStart.loop, audioMixerGroup: playOnStart.audioMixerGroup);
         }
     }
 
@@ -176,7 +175,15 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         }
 
         if (audioMixer != null)
-            source.outputAudioMixerGroup = audioMixer.FindMatchingGroups(audioMixerGroup)[0];
+        {
+            AudioMixerGroup[] audioMixerGroups = audioMixer.FindMatchingGroups(audioMixerGroup);
+            if (audioMixerGroups.Length <= 0)
+            {
+                audioMixerGroups = audioMixer.FindMatchingGroups("Master");
+            }
+
+            source.outputAudioMixerGroup = audioMixerGroups[0];
+        }
 
         source.Play();
 
@@ -205,12 +212,12 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         return PlayAudio(FindAudioClip(audioName), volume, loop, pitch, spatialBlend, audioPosition, parent, fade, step, audioMixerGroup);
     }
 
-    public int PlayAudioMultiplayer(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, bool fade = false, float step = 0.1f, string audioMixerGroup = null)
+    public int PlayAudioMultiplayer(string audioName, float volume = 1, bool loop = false, float pitch = 1, float spatialBlend = 0, Vector3 audioPosition = default, bool fade = false, float step = 0.1f, string audioMixerGroup = "Master")
     {
         int audioSourceID = PlayAudio(FindAudioClip(audioName), volume: volume, loop: loop, pitch: pitch, spatialBlend: spatialBlend, audioPosition: audioPosition, fade: fade, step: step, audioMixerGroup: audioMixerGroup);
 
         if (PhotonNetwork.InRoom)
-            photonView.RPC("PlayAudioRPC", RpcTarget.Others, audioName, audioSourceID, volume, loop, pitch, spatialBlend, audioPosition.x, audioPosition.y, audioPosition.z, fade, step, audioMixerGroup);
+            photonView.RPC(nameof(PlayAudioRPC), RpcTarget.Others, audioName, audioSourceID, volume, loop, pitch, spatialBlend, audioPosition.x, audioPosition.y, audioPosition.z, fade, step, audioMixerGroup);
 
         return audioSourceID;
     }
@@ -435,7 +442,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     {
         GameObject newSource = new GameObject
         {
-            name = "AudioSource " + lastID
+            name = "AudioSource " + audioSources.Count
         };
         newSource.transform.SetParent(transform);
 
@@ -508,13 +515,16 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <param name="toPlay">The particlesystem that will be played</param>
     /// <param name="position">position in world space where the particle will be played at</param>
     /// <param name="rotation">rotation in world space how the particle will be played.</param>
-    public int PlayParticle(ParticleSystem toPlay, Vector3 position, Quaternion rotation)
+    public int PlayParticle(ParticleSystem toPlay, Vector3 position, Quaternion rotation, Transform toFollow = null)
     {
         ParticleTracker system = CreateNewParticleSystem(toPlay);
 
         system.reference.transform.position = position;
         system.reference.transform.rotation = rotation;
         system.reference.Play();
+
+        if (toFollow != null)
+            system.reference.transform.SetParent(toFollow);
 
         if (!system.reference.main.loop)
             system.deathTimer = StartCoroutine(system.ParticleDeathTimer());
@@ -529,17 +539,25 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <param name="particleName">name of the particle that will be played</param>
     /// <param name="position">position in world space where the particle will be played at</param>
     /// <param name="rotation">rotation in world space how the particle will be played.</param>
-    public int PlayParticle(string particleName, Vector3 position, Quaternion rotation)
+    public int PlayParticle(string particleName, Vector3 position, Quaternion rotation, Transform toFollow = null)
     {
-        return PlayParticle(FindParticlePrefab(particleName), position, rotation);
+        return PlayParticle(FindParticlePrefab(particleName), position, rotation, toFollow);
     }
 
-    public int PlayParticleMultiplayer(string particleName, Vector3 position, Quaternion rotation)
+    public int PlayParticleMultiplayer(string particleName, Vector3 position, Quaternion rotation, int objectToFollowPhotonID = -1)
     {
         if (PhotonNetwork.InRoom)
-            photonView.RPC("PlayParticleRPC", RpcTarget.Others, particleName, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, rotation.w);
+            photonView.RPC(nameof(PlayParticleRPC), RpcTarget.Others, particleName, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, rotation.w, objectToFollowPhotonID);
 
-        return PlayParticle(FindParticlePrefab(particleName), position, rotation);
+        if (objectToFollowPhotonID > -1)
+        {
+            Transform toFollow = NetworkManager.GetViewByID(objectToFollowPhotonID).transform;
+            return PlayParticle(FindParticlePrefab(particleName), position, rotation, toFollow);
+        }
+        else
+        {
+           return PlayParticle(FindParticlePrefab(particleName), position, rotation);
+        }
     }
 
     public void StopParticle(int particleID)
@@ -554,7 +572,7 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     public void StopParticleMultiplayer(int particleID)
     {
         if (PhotonNetwork.InRoom)
-            photonView.RPC("StopParticleRPC", RpcTarget.Others, particleID);
+            photonView.RPC(nameof(StopParticleRPC), RpcTarget.Others, particleID);
 
         StopParticle(particleID);
     }
@@ -634,9 +652,17 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     #region Particle RPCs
 
     [PunRPC]
-    private void PlayParticleRPC(string particleName, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float rotW)
+    private void PlayParticleRPC(string particleName, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float rotW, int objectToFollowPhotonID)
     {
-        PlayParticle(FindParticlePrefab(particleName), new Vector3(posX, posY, posZ), new Quaternion(rotX, rotY, rotZ, rotW));
+        if (objectToFollowPhotonID > -1)
+        {
+            Transform toFollow = NetworkManager.GetViewByID(objectToFollowPhotonID).transform;
+            PlayParticle(FindParticlePrefab(particleName), new Vector3(posX, posY, posZ), new Quaternion(rotX, rotY, rotZ, rotW), toFollow);
+        }
+        else
+        {
+            PlayParticle(FindParticlePrefab(particleName), new Vector3(posX, posY, posZ), new Quaternion(rotX, rotY, rotZ, rotW));
+        }
     }
 
     private void StopParticleRPC(int particleID)

@@ -14,7 +14,7 @@ public class ToolInteractableObject : CleanableObject
     private int required_ToolID;
 
     [SerializeField]
-    private ToolInteractableType toolInteractableType;
+    protected ToolInteractableType toolInteractableType;
 
     #region ### Private Variables ###
     private const float TIME_TILL_NOTE_VANISHES_BASE = 3;
@@ -64,6 +64,17 @@ public class ToolInteractableObject : CleanableObject
     }
 
     #endregion
+
+    protected override void Set_IndicatorStartState()
+    {
+        if (toolInteractableType == ToolInteractableType.ToBeCleaned)
+        {
+            indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Dirty);
+            return;
+        }
+
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Clean);
+    }
 
     protected override void Awake()
     {

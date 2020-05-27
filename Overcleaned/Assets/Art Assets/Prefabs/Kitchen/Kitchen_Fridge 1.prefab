@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2195741717733531725}
   - component: {fileID: 928295650381705930}
   - component: {fileID: 2865478046503344647}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Kitchen_Fridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1931842755698570950}
   - component: {fileID: -6145395624003841426}
-  m_Layer: 0
+  - component: {fileID: 5893930318707421878}
+  m_Layer: 8
   m_Name: Kitchen_Fridge 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,6 +126,28 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5893930318707421878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3212211232501515477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 207
+  InstantiationId: 207
+  isRuntimeInstantiated: 0
 --- !u!1 &8362081624164199634
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,7 +159,7 @@ GameObject:
   - component: {fileID: 3413390876445594758}
   - component: {fileID: 7760789841203067752}
   - component: {fileID: 5845219957623514094}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Kitchen_Fridge_Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}

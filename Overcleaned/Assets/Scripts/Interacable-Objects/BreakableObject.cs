@@ -125,7 +125,36 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         base.Awake();
     }
 
-    private void Start() => Set_RepairProgressBar();
+    protected override void Start()
+    {
+        Set_RepairProgressBar();
+
+        base.Start();
+    }
+
+    protected override void Set_IndicatorStartState()
+    {
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Broken);
+    }
+
+    protected override void OnStartInteraction()
+    {
+        if (passedFirstFrame == false) 
+        {
+            passedFirstFrame = true;
+
+            if (IsBroken) 
+            {
+                Debug.Log("Playing repair loop");
+                interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Repair Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
+            }
+            else
+            {
+                Debug.Log("Playing clean loop");
+                interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Clean Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
+            }
+        }
+    }
 
     public override void Interact(PlayerInteractionController interactionController)
     {
@@ -141,6 +170,8 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
             {
                 if (interactionController.currentlyWielding.toolID == repair_ToolID)
                 {
+                    OnStartInteraction();
+
                     if (lockedForOthers == false)
                     {
                         lockedForOthers = true;
@@ -159,6 +190,8 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
                     if(RepairProgression >= repairTime) 
                     {
+                        passedFirstFrame = false;
+                        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudioMultiplayer(interactionSoundNumber);
                         RepairObject();
                         Set_BreakableProgressbarFinish();
                     }
@@ -176,7 +209,9 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
 
     public override void DeInteract(PlayerInteractionController interactionController)
     {
-        if(IsBroken) 
+        ServiceLocator.GetServiceOfType<EffectsManager>().StopAudioMultiplayer(interactionSoundNumber);
+
+        if (IsBroken) 
         {
             if (IsLocked == false)
             {
@@ -191,6 +226,16 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
     public virtual void RepairObject() 
     {
         onRepairObject?.Invoke();
+        
+        if(toolInteractableType == ToolInteractableType.ToBeCleaned) 
+        {
+            indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Dirty);
+        }
+        else 
+        {
+            indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Clean);
+        }
+
         noToolTip_IsDelayed = true;
         delayTimer_NoToolTip = DELAY_BASE_NOTOOLTIP;
 
@@ -209,7 +254,8 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
         onBreakObject?.Invoke();
         base.DirtyObject();
 
-        ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("Machine Break");
+        indicator.Set_IndicatorState(ObjectStateIndicator.IndicatorState.Broken);
+        ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudio("Machine Break", audioMixerGroup: "Sfx");
     }
 
     public override void OnDisable() 

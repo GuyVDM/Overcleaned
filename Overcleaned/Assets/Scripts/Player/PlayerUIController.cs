@@ -6,6 +6,12 @@ public class PlayerUIController : MonoBehaviour
 {
     [Header("References:")]
     [SerializeField]
+    private AudioSource source;
+
+    [SerializeField]
+    private Animator digitalAnim;
+
+    [SerializeField]
     private Text timerFront;
 
     [SerializeField]
@@ -38,12 +44,19 @@ public class PlayerUIController : MonoBehaviour
 
         HouseManager.OnTimeChanged += UpdateTimer;
         HouseManager.OnCleaningProgressionVisualChanged += UpdateCleaningProgressionUI;
+        HouseManager.OnFinishedCountdown += DisplayCleaningProgressionUI;
     }
 
     private void OnDestroy() 
     {
         HouseManager.OnTimeChanged -= UpdateTimer;
         HouseManager.OnCleaningProgressionVisualChanged -= UpdateCleaningProgressionUI;
+    }
+
+    private void DisplayCleaningProgressionUI() 
+    {
+        const string BOOL_POPUP_NAME = "Popup";
+        anim_OurProgressBar.SetBool(BOOL_POPUP_NAME, true);
     }
 
     private void UpdateCleaningProgressionUI(int teamID) 
@@ -70,10 +83,29 @@ public class PlayerUIController : MonoBehaviour
         totalSeconds = clockSet == false ? (int)timeRemaining.TotalSeconds : totalSeconds;
         clockSet = true;
 
+        int ceiledTotalSeconds = Mathf.CeilToInt((float)timeRemaining.TotalSeconds);
+        int minutes = 0;
+
+        if (ceiledTotalSeconds >= 60)
+        {
+            minutes = Mathf.FloorToInt(ceiledTotalSeconds / 60f);
+            ceiledTotalSeconds -= minutes * 60;
+        }
+
         const int END_ROTATION = -360;
+        const string DIGITALTIMER_TRIGGER = "BounceTimer";
+
         float second_based_rotation = 360f / totalSeconds;
 
-        string timeLeftText = timeRemaining.Minutes.ToString() + ':' + (timeRemaining.Seconds < 10 ? 0.ToString() : "") + timeRemaining.Seconds.ToString();
+        string timeLeftText = minutes.ToString() + ':' + (ceiledTotalSeconds < 10 ? 0.ToString() : "") + (ceiledTotalSeconds).ToString();
+        Debug.Log(timeRemaining.TotalSeconds);
+
+        if (timeRemaining.TotalSeconds < 6) 
+        {
+            timerBack.color = Color.red;
+            digitalAnim.SetTrigger(DIGITALTIMER_TRIGGER);
+            source.PlayOneShot(source.clip);
+        }
 
         Vector3 rotation = Vector3.zero;
         rotation.z = -END_ROTATION + (second_based_rotation * (float)timeRemaining.TotalSeconds);
