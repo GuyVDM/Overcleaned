@@ -146,7 +146,7 @@ public class BreakableObject : ToolInteractableObject, IPunObservable
             if (IsBroken) 
             {
                 Debug.Log("Playing repair loop");
-                interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Repair Loop", audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
+                interactionSoundNumber = ServiceLocator.GetServiceOfType<EffectsManager>().PlayAudioMultiplayer("Repair Loop", volume: 0.5f, audioMixerGroup: "Sfx", spatialBlend: 1, audioPosition: transform.position);
             }
             else
             {
