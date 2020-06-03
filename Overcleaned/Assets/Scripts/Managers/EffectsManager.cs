@@ -568,20 +568,27 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <param name="toPlay">The particlesystem that will be played</param>
     /// <param name="position">position in world space where the particle will be played at</param>
     /// <param name="rotation">rotation in world space how the particle will be played.</param>
-    public int PlayParticle(ParticleSystem toPlay, Vector3 position, Quaternion rotation, Transform toFollow = null, bool useToFollowAsPosition = false)
+    public int PlayParticle(ParticleSystem toPlay, Vector3 position, Quaternion rotation, Transform toFollow = null, bool posInWorldSpace = true)
     {
         ParticleTracker system = CreateNewParticleSystem(toPlay);
 
-        if (!useToFollowAsPosition || toFollow == null)
+        if (posInWorldSpace || toFollow == null)
+        {
+            print("1");
             system.reference.transform.position = position;
-        else if (useToFollowAsPosition && toFollow != null)
-            system.reference.transform.position = toFollow.position;
+        }
 
         system.reference.transform.rotation = rotation;
         system.reference.Play();
 
         if (toFollow != null)
             system.reference.transform.SetParent(toFollow);
+
+        if (!posInWorldSpace && toFollow != null)
+        {
+            system.reference.transform.localPosition = toFollow.position;
+        }
+
 
         if (!system.reference.main.loop)
             system.deathTimer = StartCoroutine(system.ParticleDeathTimer());
@@ -596,20 +603,20 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     /// <param name="particleName">name of the particle that will be played</param>
     /// <param name="position">position in world space where the particle will be played at</param>
     /// <param name="rotation">rotation in world space how the particle will be played.</param>
-    public int PlayParticle(string particleName, Vector3 position, Quaternion rotation, Transform toFollow = null, bool useToFollowAsPosition = false)
+    public int PlayParticle(string particleName, Vector3 position, Quaternion rotation, Transform toFollow = null, bool posInWorldSpace = true)
     {
-        return PlayParticle(FindParticlePrefab(particleName), position, rotation, toFollow, useToFollowAsPosition);
+        return PlayParticle(FindParticlePrefab(particleName), position, rotation, toFollow, posInWorldSpace);
     }
 
-    public int PlayParticleMultiplayer(string particleName, Vector3 position, Quaternion rotation, int objectToFollowPhotonID = -1, bool useToFollowAsPosition = false)
+    public int PlayParticleMultiplayer(string particleName, Vector3 position, Quaternion rotation, int objectToFollowPhotonID = -1, bool posInWorldSpace = true)
     {
         if (PhotonNetwork.InRoom)
-            photonView.RPC(nameof(PlayParticleRPC), RpcTarget.Others, particleName, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, rotation.w, objectToFollowPhotonID, useToFollowAsPosition);
+            photonView.RPC(nameof(PlayParticleRPC), RpcTarget.Others, particleName, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, rotation.w, objectToFollowPhotonID, posInWorldSpace);
 
         if (objectToFollowPhotonID > -1)
         {
             Transform toFollow = NetworkManager.GetViewByID(objectToFollowPhotonID).transform;
-            return PlayParticle(FindParticlePrefab(particleName), position, rotation, toFollow, useToFollowAsPosition);
+            return PlayParticle(FindParticlePrefab(particleName), position, rotation, toFollow, posInWorldSpace);
         }
         else
         {
@@ -709,12 +716,12 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     #region Particle RPCs
 
     [PunRPC]
-    private void PlayParticleRPC(string particleName, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float rotW, int objectToFollowPhotonID, bool useToFollowAsPosition = false)
+    private void PlayParticleRPC(string particleName, float posX, float posY, float posZ, float rotX, float rotY, float rotZ, float rotW, int objectToFollowPhotonID, bool posInWorldSpace = true)
     {
         if (objectToFollowPhotonID > -1)
         {
             Transform toFollow = NetworkManager.GetViewByID(objectToFollowPhotonID).transform;
-            PlayParticle(FindParticlePrefab(particleName), new Vector3(posX, posY, posZ), new Quaternion(rotX, rotY, rotZ, rotW), toFollow, useToFollowAsPosition);
+            PlayParticle(FindParticlePrefab(particleName), new Vector3(posX, posY, posZ), new Quaternion(rotX, rotY, rotZ, rotW), toFollow, posInWorldSpace);
         }
         else
         {
