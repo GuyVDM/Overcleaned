@@ -44,7 +44,9 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
         public IEnumerator ParticleDeathTimer()
         {
             yield return new WaitForSeconds(reference.main.duration);
-            reference.Stop();
+
+            if (reference != null)
+                reference.Stop();
 
             while(reference.particleCount > 0)
             {
@@ -575,7 +577,6 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
 
         if (posInWorldSpace || toFollow == null)
         {
-            print("AAAAAAAAAAAAAAAAAA");
             system.reference.transform.position = position;
         }
 
@@ -587,8 +588,6 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
 
         if (!posInWorldSpace && toFollow != null)
         {
-            print("BBBBBBBBBBBBB");
-            print(position);
             system.reference.transform.localPosition = position;
         }
 
