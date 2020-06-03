@@ -572,9 +572,10 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
     {
         ParticleTracker system = CreateNewParticleSystem(toPlay);
 
+
         if (posInWorldSpace || toFollow == null)
         {
-            print("1");
+            print("AAAAAAAAAAAAAAAAAA");
             system.reference.transform.position = position;
         }
 
@@ -586,7 +587,9 @@ public class EffectsManager : MonoBehaviourPun, IServiceOfType
 
         if (!posInWorldSpace && toFollow != null)
         {
-            system.reference.transform.localPosition = toFollow.position;
+            print("BBBBBBBBBBBBB");
+            print(position);
+            system.reference.transform.localPosition = position;
         }
 
 
