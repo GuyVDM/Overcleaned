@@ -4654,7 +4654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c19590d18736b14980d7f3d99e64aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameTimeInMinutes: 5
+  gameTimeInMinutes: 0
   gameEventWaitTime: {x: 45, y: 60}
   spawnRegions:
   - topleftAnchor: {x: -28.4, y: 2.57, z: 7.5}
@@ -6070,12 +6070,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: ed098fa362e30854e8d21ceb6b3e483b, type: 2}
+      objectReference: {fileID: 2100000, guid: 4d5a52cb18e09b843887aee389016b8d, type: 2}
     - target: {fileID: 199200332811060622, guid: 46876a2780737ec45a19d62f88e5ce56,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: ed098fa362e30854e8d21ceb6b3e483b, type: 2}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46876a2780737ec45a19d62f88e5ce56, type: 3}
 --- !u!198 &817195796 stripped

@@ -26,6 +26,11 @@ public class CarManager : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        HouseManager.OnFinishedCountdown -= StartLoop;
+    }
+
     public void StartLoop() 
     {
         StartCoroutine(CarLoop());

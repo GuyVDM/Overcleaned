@@ -84,6 +84,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 		OnDeinitialise();
 
 		OnCleanableObjectStatusChanged -= OnObjectStatusChanged;
+		OnTimeChanged -= EndGame;
 	}
 
 	public void OnInitialise() => ServiceLocator.TryAddServiceOfType(this);
@@ -329,6 +330,7 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 			}
 		}
 
+		print(photonView);
 		photonView.RPC(nameof(HasWonOrLost), RpcTarget.All, winner);
 	}
 
@@ -347,7 +349,6 @@ public class HouseManager : MonoBehaviourPun, IServiceOfType
 	private void HasWonOrLost(int winningTeam)
 	{
 		UIManager uiManager = ServiceLocator.GetServiceOfType<UIManager>();
-		EffectsManager effectsManager = ServiceLocator.GetServiceOfType<EffectsManager>();
 
 		uiManager.ShowWindow("Win Window");
 	}
