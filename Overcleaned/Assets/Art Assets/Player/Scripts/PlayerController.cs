@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void Set_StunParticlesAtPosition(Vector3 offset)
     {
-        effectsManager.PlayParticleMultiplayer(PARTICLE_VFX_ID, offset, Quaternion.identity, photonView.ViewID);
+        effectsManager.PlayParticleMultiplayer(PARTICLE_VFX_ID, offset, Quaternion.identity, photonView.ViewID, true);
 
         /*if (NetworkManager.IsConnectedAndInRoom)
         {
