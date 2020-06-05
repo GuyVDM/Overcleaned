@@ -110,7 +110,11 @@ public class PlayerUIController : MonoBehaviour
 
         Vector3 rotation = Vector3.zero;
 
-        rotation.z = float.IsNaN(-END_ROTATION + (second_based_rotation * (float)timeRemaining.TotalSeconds)) ? 0 : -END_ROTATION + (second_based_rotation * (float)timeRemaining.TotalSeconds);
+        rotation.z = -END_ROTATION + (second_based_rotation * (float)timeRemaining.TotalSeconds);
+
+        rotation.x = float.IsNaN(rotation.x) ? clockArmHinge.transform.localEulerAngles.x : rotation.x;
+        rotation.y = float.IsNaN(rotation.y) ? clockArmHinge.transform.localEulerAngles.y : rotation.y;
+        rotation.z = float.IsNaN(rotation.z) ? clockArmHinge.transform.localEulerAngles.z : rotation.z;
 
         clockArmHinge.transform.localEulerAngles = rotation;
 
