@@ -34,6 +34,8 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 		if (!PhotonNetwork.IsConnected)
 			ConnectWithPhoton();
 
+		print("START");
+
 		NetworkManager.onRoomListChange += ShowRoomsOnUI;
 
 		if (hasJoinedLobbyBefore)
@@ -136,6 +138,8 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 
 	private void ShowRoomsOnUI(List<RoomInfo> allRooms)
 	{
+		print("SHOW ROOMS IN UI");
+
 		serverBrowser.UpdateRoomInfoButtons(allRooms);
 	}
 
