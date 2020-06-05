@@ -381,6 +381,7 @@ public class UI_RoomInformationWindow : UIWindow
 	[PunRPC]
 	private void StartGameRPC()
 	{
+		PhotonNetwork.LeaveLobby();
 		PhotonNetwork.CurrentRoom.IsOpen = false;
 
 		PlayerUIElement local = FindLocalPlayerElement();

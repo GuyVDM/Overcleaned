@@ -36,9 +36,6 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 
 		print("START");
 
-		if (PhotonNetwork.CurrentLobby != null)
-			PhotonNetwork.LeaveLobby();
-
 		NetworkManager.onRoomListChange += ShowRoomsOnUI;
 
 		if (hasJoinedLobbyBefore)
