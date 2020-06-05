@@ -36,7 +36,7 @@ public class UI_ServerBrowser : UIWindow
 			print
 				(infos[i].Name);
 
-			if (infos[i].MaxPlayers > 0 || infos[i].IsOpen)
+			if (infos[i].MaxPlayers > 0 && infos[i].IsOpen)
 				ChangeInfoButton(CreateNewInfoButton(), infos[i]);
 		}
 	}

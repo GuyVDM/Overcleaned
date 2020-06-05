@@ -43,7 +43,6 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 
 		if (hasJoinedLobbyBefore)
 		{
-
 			Invoke(nameof(ReturnedFromGameScene), 0.5f);
 		}
 
