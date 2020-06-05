@@ -36,15 +36,22 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, IServiceOfType
 
 		print("START");
 
+		if (PhotonNetwork.CurrentLobby != null)
+			PhotonNetwork.LeaveLobby();
+
 		NetworkManager.onRoomListChange += ShowRoomsOnUI;
 
 		if (hasJoinedLobbyBefore)
+		{
+
 			Invoke(nameof(ReturnedFromGameScene), 0.5f);
+		}
+
 	}
 
 	private void ReturnedFromGameScene()
 	{
-		ServiceLocator.GetServiceOfType<UIManager>().ShowWindow("Server Browser");
+		PhotonNetwork.JoinLobby(new TypedLobby("Lobby 1", LobbyType.Default));
 	}
 
 	public bool HostRoom(string roomName, string password = "")
