@@ -33,7 +33,10 @@ public class UI_ServerBrowser : UIWindow
 
 		for (int i = 0; i < infos.Count; i++)
 		{
-			if (infos[i].MaxPlayers > 0)
+			print
+				(infos[i].Name);
+
+			if (infos[i].MaxPlayers > 0 || infos[i].IsOpen)
 				ChangeInfoButton(CreateNewInfoButton(), infos[i]);
 		}
 	}
