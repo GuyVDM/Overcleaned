@@ -155,7 +155,6 @@ public class UI_RoomInformationWindow : UIWindow
 	{
 		if (ServiceLocator.GetServiceOfType<NetworkManager>().debugMode|| CanStartGame())
 		{
-			PhotonNetwork.CurrentRoom.IsOpen = false;
 			photonView.RPC(nameof(StartGameRPC), RpcTarget.All);
 		}
 	}
@@ -382,6 +381,8 @@ public class UI_RoomInformationWindow : UIWindow
 	[PunRPC]
 	private void StartGameRPC()
 	{
+		PhotonNetwork.CurrentRoom.IsOpen = false;
+
 		PlayerUIElement local = FindLocalPlayerElement();
 		NetworkManager.SetLocalPlayerInfo(local.teamNumber, GetNumberInTeam(local.teamNumber));
 
