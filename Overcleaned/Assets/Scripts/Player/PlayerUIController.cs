@@ -111,6 +111,10 @@ public class PlayerUIController : MonoBehaviour
         Vector3 rotation = Vector3.zero;
         rotation.z = -END_ROTATION + (second_based_rotation * (float)timeRemaining.TotalSeconds);
 
+        rotation.x = float.IsNaN(rotation.x) ? 0 : rotation.x;
+        rotation.y = float.IsNaN(rotation.y) ? 0 : rotation.y;
+        rotation.z = float.IsNaN(rotation.z) ? 0 : rotation.z;
+
         clockArmHinge.transform.localEulerAngles = rotation;
 
         timerFront.text = timeLeftText;
